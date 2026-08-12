@@ -3,53 +3,128 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827">
-<meta name="telegram-web-app-capable" content="yes">
-<title>مسیر ۲۸ روزه</title>
-<script src="https://telegram.org/js/telegram-web-app.js?63"></script>
+<meta name="theme-color" content="#102a43">
+<title>مسیر ۲۸ روزه بازسازی ذهن</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f3f4f6;color:#172033;font-family:Tahoma,Arial,sans-serif}
-.app{max-width:520px;margin:auto;min-height:100vh;background:#fff;padding-bottom:70px}
-header{background:#111827;color:#fff;padding:22px 18px;border-radius:0 0 22px 22px}
-header h1{margin:0 0 6px;font-size:21px}header p{margin:0;font-size:12px;opacity:.8}
-main{padding:16px}.card{border:1px solid #e5e7eb;border-radius:18px;padding:17px;margin-bottom:14px}
-h2{font-size:18px;margin:0 0 12px}h3{font-size:14px;margin:17px 0 7px}
-.muted{font-size:13px;line-height:1.9;color:#667085}.btn{width:100%;border:0;border-radius:13px;padding:13px;margin-top:10px;font-size:14px;background:#111827;color:#fff}
-.btn.alt{background:#eef2f7;color:#172033}.progress{height:9px;background:#e5e7eb;border-radius:9px;overflow:hidden}.bar{height:100%;background:#111827}
-textarea,input{width:100%;padding:11px;border:1px solid #d5dae2;border-radius:11px;font:inherit}textarea{min-height:80px}
-nav{position:fixed;bottom:0;left:0;right:0;margin:auto;max-width:520px;background:#fff;border-top:1px solid #e5e7eb;display:flex;padding:7px;z-index:5}
-nav button{flex:1;border:0;background:#fff;padding:8px 2px;font-size:11px;color:#667085}nav button.active{color:#111827;font-weight:bold}
-.scale{display:flex;gap:5px;flex-wrap:wrap}.scale button{background:#fff;border:1px solid #d5dae2;border-radius:8px;padding:7px 9px}.scale button.sel{background:#111827;color:#fff}
-.tag{display:inline-block;padding:5px 9px;border-radius:20px;background:#eef2f7;font-size:11px;margin:2px}
-.notice{background:#f8fafc;padding:11px;border-radius:11px;font-size:12px;line-height:1.8}
-.user{font-size:12px;opacity:.8}
-</style></head>
+:root{--navy:#102a43;--gold:#c9a45c;--bg:#f5f7fa;--card:#fff;--text:#17202a;--muted:#667085;--ok:#2f855a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;color:var(--text)}
+.app{max-width:560px;margin:auto;min-height:100vh;padding:18px 16px 30px}
+.header{background:linear-gradient(145deg,#102a43,#1d4059);color:#fff;border-radius:24px;padding:22px 20px;box-shadow:0 10px 30px #102a4320}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:54px;height:54px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold);font-weight:800;font-size:18px}
+h1{font-size:22px;margin:4px 0}.subtitle{color:#d9e2ec;font-size:13px}
+.progress{height:9px;background:#ffffff2a;border-radius:20px;margin-top:18px;overflow:hidden}.bar{height:100%;background:var(--gold);width:0%;transition:.3s}
+.stats{display:flex;justify-content:space-between;margin-top:10px;font-size:12px;color:#d9e2ec}
+.card{background:var(--card);border-radius:20px;padding:20px;margin-top:16px;box-shadow:0 5px 20px #102a4310}
+.badge{display:inline-block;background:#eef6f1;color:var(--ok);padding:6px 10px;border-radius:99px;font-size:12px;font-weight:700}
+h2{font-size:20px;margin:12px 0 8px}.muted{color:var(--muted);line-height:1.9;font-size:14px}.exercise{background:#f8f4ea;border-right:4px solid var(--gold);padding:15px;border-radius:12px;line-height:2;margin:15px 0}
+textarea{width:100%;min-height:145px;border:1px solid #d0d5dd;border-radius:14px;padding:13px;font:inherit;resize:vertical;outline:none}textarea:focus{border-color:var(--gold)}
+button{border:0;border-radius:14px;padding:13px 16px;font:inherit;font-weight:700;cursor:pointer}.primary{background:var(--navy);color:#fff;width:100%;margin-top:12px}.secondary{background:#eef2f6;color:var(--navy);width:100%;margin-top:9px}.success{background:#e9f7ef;color:var(--ok);width:100%;margin-top:10px}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:15px}.daydot{aspect-ratio:1;border-radius:9px;background:#e8edf2;color:#667085;font-size:11px}.daydot.done{background:#d8efe2;color:#26734a}.daydot.current{outline:2px solid var(--gold);outline-offset:1px}
+.footer{text-align:center;color:#98a2b3;font-size:11px;margin:20px 0}
+.hidden{display:none}.welcome{text-align:center;padding:25px 5px}.welcome p{line-height:2;color:var(--muted)}
+</style>
+</head>
 <body>
 <div class="app">
-<header><h1>مسیر ۲۸ روزه بازسازی ذهن</h1><p>مسیر اختصاصی شما</p><div id="user" class="user"></div></header>
-<main id="content"></main>
-<nav>
-<button id="n-home" onclick="show('home')">خانه</button>
-<button id="n-task" onclick="show('task')">مأموریت</button>
-<button id="n-progress" onclick="show('progress')">پیشرفت</button>
-<button id="n-contact" onclick="show('contact')">ارتباط</button>
-</nav>
+<header class="header">
+  <div class="brand"><div class="logo">۲۸</div><div><div class="subtitle">مرکز هیپنوتراپی شفا</div><h1>مسیر ۲۸ روزه بازسازی ذهن</h1><div class="subtitle">یک قدم کوچک، هر روز</div></div></div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="stats"><span id="progressText">روز ۰ از ۲۸</span><span id="percent">۰٪</span></div>
+</header>
+
+<section id="home" class="card">
+  <div class="welcome">
+    <span class="badge">نسخه شخصی مسیر</span>
+    <h2>آماده‌ای شروع کنی؟</h2>
+    <p>این برنامه قرار نیست تو را با حجم زیاد اطلاعات خسته کند. هر روز فقط یک قدم کوتاه و مشخص داری.</p>
+    <button class="primary" onclick="start()">شروع مسیر</button>
+  </div>
+</section>
+
+<section id="assessment" class="card hidden">
+  <span class="badge">روز صفر · ارزیابی اولیه</span>
+  <h2>قبل از شروع، نقطه شروع خودت را ثبت کن</h2>
+  <p class="muted">پاسخ درست یا غلط وجود ندارد. صادقانه و کوتاه بنویس.</p>
+  <label>هدف اصلی من</label><textarea id="a1" placeholder="می‌خواهم در این مسیر..."></textarea>
+  <label>چالش اصلی من</label><textarea id="a2" placeholder="در حال حاضر..."></textarea>
+  <label>وضعیت فعلی من</label><textarea id="a3" placeholder="اگر بخواهم وضعیت خودم را در یک جمله بگویم..."></textarea>
+  <label>در پایان ۲۸ روز چه تغییری برایم ارزشمند است؟</label><textarea id="a4" placeholder="برای من موفقیت یعنی..."></textarea>
+  <button class="primary" onclick="saveAssessment()">ثبت و شروع روز ۱</button>
+</section>
+
+<section id="dashboard" class="card hidden">
+  <span class="badge">داشبورد مسیر</span>
+  <h2 id="dashTitle">روز ۱ آماده است</h2>
+  <p class="muted">هر روز را با آرامش انجام بده. اگر یک روز عقب افتادی، مسیرت از بین نمی‌رود.</p>
+  <button class="primary" onclick="openDay(currentDay)">ادامه مسیر من</button>
+  <div class="grid" id="daysGrid"></div>
+</section>
+
+<section id="day" class="card hidden">
+  <span class="badge" id="dayBadge"></span>
+  <h2 id="dayTitle"></h2>
+  <p class="muted" id="dayIntro"></p>
+  <div class="exercise"><b>تمرین امروز</b><br><span id="dayExercise"></span></div>
+  <p class="muted" id="dayClosing"></p>
+  <textarea id="answer" placeholder="پاسخ یا تجربه امروزت را اینجا ثبت کن..."></textarea>
+  <button class="primary" onclick="completeDay()">ثبت تمرین و ادامه</button>
+  <button class="secondary" onclick="showDashboard()">بازگشت به مسیر</button>
+</section>
+
+<section id="final" class="card hidden">
+  <span class="badge">روز ۲۸ · جمع‌بندی</span>
+  <h2>مسیرت را مرور کن</h2>
+  <p class="muted">سه تغییر واقعی، سه آگاهی و سه اقدام بعدی را ثبت کن.</p>
+  <textarea id="f1" placeholder="سه تغییر واقعی..."></textarea>
+  <textarea id="f2" placeholder="سه آگاهی مهم..."></textarea>
+  <textarea id="f3" placeholder="سه اقدام برای ۳۰ روز آینده..."></textarea>
+  <button class="primary" onclick="finish()">ثبت جمع‌بندی</button>
+</section>
+
+<section id="done" class="card hidden">
+  <div class="welcome"><span class="badge">مسیر تکمیل شد</span><h2>تبریک؛ ۲۸ روز را به پایان رساندی.</h2><p>پایان این برنامه، شروع مرحله بعدی انتخاب‌های آگاهانه توست.</p></div>
+</section>
+<div class="footer">مسیر ۲۸ روزه بازسازی ذهن · مرکز هیپنوتراپی شفا</div>
 </div>
+
 <script>
-const tg=window.Telegram?.WebApp;
-if(tg){tg.ready();tg.expand();document.documentElement.style.setProperty('--tg-bg',tg.backgroundColor||'#fff')}
-const key='m28_tg_v1';const S=JSON.parse(localStorage.getItem(key)||'{}');
-function save(){localStorage.setItem(key,JSON.stringify(S))}
-function h(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function show(p){document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));document.getElementById('n-'+p)?.classList.add('active');document.getElementById('content').innerHTML=p==='home'?home():p==='start'?start():p==='task'?task():p==='progress'?progress():contact()}
-function home(){let d=S.day||0;return `<div class="card"><span class="tag">روز ${d} از ۲۸</span><h2>${d?'روز اول — فقط ببین':'روز صفر — شروع مسیر من'}</h2><p class="muted">هر روز حدود ۱۰ تا ۱۵ دقیقه. این نسخه برای آزمایش تجربه کاربری و اتصال به تلگرام آماده شده است.</p><div class="progress"><div class="bar" style="width:${d/28*100}%"></div></div><button class="btn" onclick="show('${d?'task':'start'}')">${d?'شروع مأموریت امروز':'شروع ارزیابی اولیه'}</button></div><div class="card"><h3>وضعیت اتصال</h3><p class="muted">${navigator.onLine?'🟢 آنلاین':'🟠 آفلاین — اطلاعات این دستگاه حفظ می‌شود.'}</p></div>`}
-function start(){return `<div class="card"><h2>روز صفر | ارزیابی اولیه</h2><p class="muted">در نسخه آزمایشی، اطلاعات روی همین دستگاه ذخیره می‌شود. در نسخه نهایی، داده‌ها به سرور امن متصل خواهند شد.</p><h3>اگر این ۲۸ روز مفید باشد، دوست دارم چه تغییری ببینم؟</h3><textarea id="goal">${h(S.goal)}</textarea><h3>شدت مسئله امروز (۰ تا ۱۰)</h3><div class="scale">${Array.from({length:11},(_,i)=>`<button id="s${i}" onclick="pick('s',${i})">${i}</button>`).join('')}</div><h3>تعداد تقریبی دفعات در هفته</h3><input id="freq" value="${h(S.freq)}" placeholder="مثلاً ۳ بار"><h3>اثر مسئله بر زندگی (۰ تا ۱۰)</h3><div class="scale">${Array.from({length:11},(_,i)=>`<button id="t${i}" onclick="pick('t',${i})">${i}</button>`).join('')}</div><button class="btn" onclick="finishStart()">ثبت و ورود به روز اول</button></div>`}
-function pick(prefix,i){S[prefix==='s'?'base':'impact']=i;save();document.querySelectorAll('.scale button').forEach(x=>{if(x.id.startsWith(prefix))x.classList.remove('sel')});document.getElementById(prefix+i).classList.add('sel')}
-function finishStart(){S.goal=document.getElementById('goal').value;S.freq=document.getElementById('freq').value;S.day=1;save();show('home')}
-function task(){return `<div class="card"><span class="tag">روز اول</span><h2>فقط ببین</h2><p class="muted">امروز قرار نیست خودت را تغییر بدهی. فقط یک موقعیت واقعی را مشاهده کن و زنجیره اتفاق، احساس، فکر و واکنش را ثبت کن.</p><div class="notice"><b>زمان:</b> حدود ۱۰ دقیقه<br><b>قانون:</b> قضاوت ممنوع؛ فقط مشاهده و ثبت.</div><h3>چه اتفاقی افتاد؟</h3><textarea id="a1">${h(S.a1)}</textarea><h3>چه احساسی داشتم؟</h3><textarea id="a2">${h(S.a2)}</textarea><h3>شدت احساس (۰ تا ۱۰)</h3><input id="a3" type="number" min="0" max="10" value="${h(S.a3)}"><h3>قبل از واکنش چه فکری از ذهنم گذشت؟</h3><textarea id="a4">${h(S.a4)}</textarea><h3>چه واکنشی نشان دادم؟</h3><textarea id="a5">${h(S.a5)}</textarea><button class="btn" onclick="complete()">ثبت مأموریت</button></div>`}
-function complete(){['a1','a2','a3','a4','a5'].forEach(k=>S[k]=document.getElementById(k).value);S.completed=true;save();show('progress')}
-function progress(){let d=S.completed?1:(S.day||0);return `<div class="card"><h2>پیشرفت من</h2><p><b>${d} از ۲۸ روز</b></p><div class="progress"><div class="bar" style="width:${d/28*100}%"></div></div><h3>خط پایه</h3><span class="tag">شدت: ${S.base??'ثبت نشده'} / ۱۰</span><span class="tag">اثر بر زندگی: ${S.impact??'ثبت نشده'} / ۱۰</span><div class="notice" style="margin-top:14px">این اطلاعات بر اساس ثبت شخصی شماست و به‌تنهایی نشان‌دهنده تشخیص یا درمان پزشکی نیست.</div></div>`}
-function contact(){return `<div class="card"><h2>ارتباط</h2><p class="muted">در نسخه نهایی این بخش به پنل درمانگر و مسیر تلفنی پشتیبان متصل می‌شود.</p><button class="btn" onclick="alert('در نسخه نهایی پیام برای درمانگر ارسال می‌شود.')">ارسال پیام</button><button class="btn alt" onclick="alert('در نسخه نهایی شماره تماس پشتیبان نمایش داده می‌شود.')">تماس تلفنی در زمان قطعی اینترنت</button></div>`}
-let u=tg?.initDataUnsafe?.user;if(u)document.getElementById('user').textContent='سلام '+(u.first_name||'')+' 👋';
-show('home');
-</script></body></html>
+let content=null,currentDay=1;
+const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
+const $=id=>document.getElementById(id);
+function load(){fetch("content.json").then(r=>r.json()).then(x=>{content=x;init()}).catch(()=>{alert("محتوای برنامه بارگذاری نشد.")})}
+function state(){return JSON.parse(localStorage.getItem("maseer28_state")||'{"started":false,"assessment":false,"completed":[],"answers":{}}')}
+function save(s){localStorage.setItem("maseer28_state",JSON.stringify(s))}
+function init(){
+ const s=state(); currentDay=Math.min(28,(s.completed.length||0)+1);
+ if(!s.started){show("home");update();return}
+ if(!s.assessment){show("assessment");update();return}
+ showDashboard();
+}
+function show(id){["home","assessment","dashboard","day","final","done"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
+function start(){let s=state();s.started=true;save(s);show("assessment");update()}
+function saveAssessment(){
+ let s=state();s.assessment=true;s.assessmentData={a1:$("a1").value,a2:$("a2").value,a3:$("a3").value,a4:$("a4").value};save(s);currentDay=1;showDashboard();update()
+}
+function update(){
+ let s=state(),n=s.completed.length; $("bar").style.width=(n/28*100)+"%";$("progressText").textContent=`روز ${fa(n)} از ۲۸`; $("percent").textContent=fa(Math.round(n/28*100))+"٪"
+}
+function showDashboard(){
+ show("dashboard");let s=state();currentDay=Math.min(28,(s.completed.length||0)+1);$("dashTitle").textContent=currentDay<=28?`روز ${fa(currentDay)} آماده است`:"مسیر تکمیل شده";
+ let g=$("daysGrid");g.innerHTML="";for(let i=1;i<=28;i++){let b=document.createElement("button");b.className="daydot "+(s.completed.includes(i)?"done ":"")+(i===currentDay?"current":"");b.textContent=fa(i);b.onclick=()=>openDay(i);g.appendChild(b)}update()
+}
+function openDay(n){
+ let s=state();if(!s.assessment){show("assessment");return}
+ if(n===28 && s.completed.includes(28)){show("final");return}
+ currentDay=n;let d=content.days[n-1];$("dayBadge").textContent=`روز ${fa(n)} از ۲۸`;$("dayTitle").textContent=d.title;$("dayIntro").textContent=d.intro;$("dayExercise").textContent=d.exercise;$("dayClosing").textContent=d.closing;$("answer").value=s.answers[n]||"";show("day")
+}
+function completeDay(){
+ let s=state();s.answers[currentDay]=$("answer").value.trim();if(!s.answers[currentDay]){alert("قبل از ادامه، پاسخ یا تجربه امروزت را ثبت کن.");return}
+ if(!s.completed.includes(currentDay))s.completed.push(currentDay);s.completed.sort((a,b)=>a-b);save(s);update();
+ if(currentDay===28){show("final");return}
+ currentDay=Math.min(28,currentDay+1);showDashboard()
+}
+function finish(){let s=state();s.final={f1:$("f1").value,f2:$("f2").value,f3:$("f3").value};save(s);show("done")}
+load();
+</script>
+</body>
+</html>
