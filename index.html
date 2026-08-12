@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="telegram-web-app-capable" content="yes">
+<title>مسیر ۲۸ روزه</title>
+<script src="https://telegram.org/js/telegram-web-app.js?63"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f4f6;color:#172033;font-family:Tahoma,Arial,sans-serif}
+.app{max-width:520px;margin:auto;min-height:100vh;background:#fff;padding-bottom:70px}
+header{background:#111827;color:#fff;padding:22px 18px;border-radius:0 0 22px 22px}
+header h1{margin:0 0 6px;font-size:21px}header p{margin:0;font-size:12px;opacity:.8}
+main{padding:16px}.card{border:1px solid #e5e7eb;border-radius:18px;padding:17px;margin-bottom:14px}
+h2{font-size:18px;margin:0 0 12px}h3{font-size:14px;margin:17px 0 7px}
+.muted{font-size:13px;line-height:1.9;color:#667085}.btn{width:100%;border:0;border-radius:13px;padding:13px;margin-top:10px;font-size:14px;background:#111827;color:#fff}
+.btn.alt{background:#eef2f7;color:#172033}.progress{height:9px;background:#e5e7eb;border-radius:9px;overflow:hidden}.bar{height:100%;background:#111827}
+textarea,input{width:100%;padding:11px;border:1px solid #d5dae2;border-radius:11px;font:inherit}textarea{min-height:80px}
+nav{position:fixed;bottom:0;left:0;right:0;margin:auto;max-width:520px;background:#fff;border-top:1px solid #e5e7eb;display:flex;padding:7px;z-index:5}
+nav button{flex:1;border:0;background:#fff;padding:8px 2px;font-size:11px;color:#667085}nav button.active{color:#111827;font-weight:bold}
+.scale{display:flex;gap:5px;flex-wrap:wrap}.scale button{background:#fff;border:1px solid #d5dae2;border-radius:8px;padding:7px 9px}.scale button.sel{background:#111827;color:#fff}
+.tag{display:inline-block;padding:5px 9px;border-radius:20px;background:#eef2f7;font-size:11px;margin:2px}
+.notice{background:#f8fafc;padding:11px;border-radius:11px;font-size:12px;line-height:1.8}
+.user{font-size:12px;opacity:.8}
+</style></head>
+<body>
+<div class="app">
+<header><h1>مسیر ۲۸ روزه بازسازی ذهن</h1><p>مسیر اختصاصی شما</p><div id="user" class="user"></div></header>
+<main id="content"></main>
+<nav>
+<button id="n-home" onclick="show('home')">خانه</button>
+<button id="n-task" onclick="show('task')">مأموریت</button>
+<button id="n-progress" onclick="show('progress')">پیشرفت</button>
+<button id="n-contact" onclick="show('contact')">ارتباط</button>
+</nav>
+</div>
+<script>
+const tg=window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand();document.documentElement.style.setProperty('--tg-bg',tg.backgroundColor||'#fff')}
+const key='m28_tg_v1';const S=JSON.parse(localStorage.getItem(key)||'{}');
+function save(){localStorage.setItem(key,JSON.stringify(S))}
+function h(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function show(p){document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));document.getElementById('n-'+p)?.classList.add('active');document.getElementById('content').innerHTML=p==='home'?home():p==='start'?start():p==='task'?task():p==='progress'?progress():contact()}
+function home(){let d=S.day||0;return `<div class="card"><span class="tag">روز ${d} از ۲۸</span><h2>${d?'روز اول — فقط ببین':'روز صفر — شروع مسیر من'}</h2><p class="muted">هر روز حدود ۱۰ تا ۱۵ دقیقه. این نسخه برای آزمایش تجربه کاربری و اتصال به تلگرام آماده شده است.</p><div class="progress"><div class="bar" style="width:${d/28*100}%"></div></div><button class="btn" onclick="show('${d?'task':'start'}')">${d?'شروع مأموریت امروز':'شروع ارزیابی اولیه'}</button></div><div class="card"><h3>وضعیت اتصال</h3><p class="muted">${navigator.onLine?'🟢 آنلاین':'🟠 آفلاین — اطلاعات این دستگاه حفظ می‌شود.'}</p></div>`}
+function start(){return `<div class="card"><h2>روز صفر | ارزیابی اولیه</h2><p class="muted">در نسخه آزمایشی، اطلاعات روی همین دستگاه ذخیره می‌شود. در نسخه نهایی، داده‌ها به سرور امن متصل خواهند شد.</p><h3>اگر این ۲۸ روز مفید باشد، دوست دارم چه تغییری ببینم؟</h3><textarea id="goal">${h(S.goal)}</textarea><h3>شدت مسئله امروز (۰ تا ۱۰)</h3><div class="scale">${Array.from({length:11},(_,i)=>`<button id="s${i}" onclick="pick('s',${i})">${i}</button>`).join('')}</div><h3>تعداد تقریبی دفعات در هفته</h3><input id="freq" value="${h(S.freq)}" placeholder="مثلاً ۳ بار"><h3>اثر مسئله بر زندگی (۰ تا ۱۰)</h3><div class="scale">${Array.from({length:11},(_,i)=>`<button id="t${i}" onclick="pick('t',${i})">${i}</button>`).join('')}</div><button class="btn" onclick="finishStart()">ثبت و ورود به روز اول</button></div>`}
+function pick(prefix,i){S[prefix==='s'?'base':'impact']=i;save();document.querySelectorAll('.scale button').forEach(x=>{if(x.id.startsWith(prefix))x.classList.remove('sel')});document.getElementById(prefix+i).classList.add('sel')}
+function finishStart(){S.goal=document.getElementById('goal').value;S.freq=document.getElementById('freq').value;S.day=1;save();show('home')}
+function task(){return `<div class="card"><span class="tag">روز اول</span><h2>فقط ببین</h2><p class="muted">امروز قرار نیست خودت را تغییر بدهی. فقط یک موقعیت واقعی را مشاهده کن و زنجیره اتفاق، احساس، فکر و واکنش را ثبت کن.</p><div class="notice"><b>زمان:</b> حدود ۱۰ دقیقه<br><b>قانون:</b> قضاوت ممنوع؛ فقط مشاهده و ثبت.</div><h3>چه اتفاقی افتاد؟</h3><textarea id="a1">${h(S.a1)}</textarea><h3>چه احساسی داشتم؟</h3><textarea id="a2">${h(S.a2)}</textarea><h3>شدت احساس (۰ تا ۱۰)</h3><input id="a3" type="number" min="0" max="10" value="${h(S.a3)}"><h3>قبل از واکنش چه فکری از ذهنم گذشت؟</h3><textarea id="a4">${h(S.a4)}</textarea><h3>چه واکنشی نشان دادم؟</h3><textarea id="a5">${h(S.a5)}</textarea><button class="btn" onclick="complete()">ثبت مأموریت</button></div>`}
+function complete(){['a1','a2','a3','a4','a5'].forEach(k=>S[k]=document.getElementById(k).value);S.completed=true;save();show('progress')}
+function progress(){let d=S.completed?1:(S.day||0);return `<div class="card"><h2>پیشرفت من</h2><p><b>${d} از ۲۸ روز</b></p><div class="progress"><div class="bar" style="width:${d/28*100}%"></div></div><h3>خط پایه</h3><span class="tag">شدت: ${S.base??'ثبت نشده'} / ۱۰</span><span class="tag">اثر بر زندگی: ${S.impact??'ثبت نشده'} / ۱۰</span><div class="notice" style="margin-top:14px">این اطلاعات بر اساس ثبت شخصی شماست و به‌تنهایی نشان‌دهنده تشخیص یا درمان پزشکی نیست.</div></div>`}
+function contact(){return `<div class="card"><h2>ارتباط</h2><p class="muted">در نسخه نهایی این بخش به پنل درمانگر و مسیر تلفنی پشتیبان متصل می‌شود.</p><button class="btn" onclick="alert('در نسخه نهایی پیام برای درمانگر ارسال می‌شود.')">ارسال پیام</button><button class="btn alt" onclick="alert('در نسخه نهایی شماره تماس پشتیبان نمایش داده می‌شود.')">تماس تلفنی در زمان قطعی اینترنت</button></div>`}
+let u=tg?.initDataUnsafe?.user;if(u)document.getElementById('user').textContent='سلام '+(u.first_name||'')+' 👋';
+show('home');
+</script></body></html>
