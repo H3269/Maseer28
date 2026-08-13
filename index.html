@@ -46,7 +46,7 @@ button{border:0;border-radius:14px;padding:12px 15px;cursor:pointer;font-weight:
 <section id="profile" class="card hidden"><span class="badge">مرحله اول · تشکیل پرونده</span><h2>اطلاعات اولیه شما</h2><p class="muted">این اطلاعات فقط برای شخصی‌سازی مسیر استفاده می‌شود.</p>
 <label>نام و نام خانوادگی</label><input id="pName" placeholder="نام و نام خانوادگی"><label>سن</label><input id="pAge" type="number" min="12" max="100" placeholder="مثلاً ۳۸"><label>جنسیت</label><select id="pGender"><option value="">انتخاب کنید</option><option>زن</option><option>مرد</option><option>ترجیح می‌دهم نگویم</option></select><label>شماره تماس</label><input id="pPhone" inputmode="tel" placeholder="شماره تماس"><label>مهم‌ترین مسئله یا هدف شما از این مسیر چیست؟</label><textarea id="pProblem" class="small"></textarea><label>مدت زمانی که این مسئله را تجربه می‌کنید</label><input id="pDuration" placeholder="مثلاً ۲ سال"><label>از این مسیر چه نتیجه‌ای برایتان ارزشمند است؟</label><textarea id="pGoal" class="small"></textarea><button class="primary" onclick="saveProfile()">ادامه به ارزیابی اولیه</button></section>
 
-<section id="assessment" class="card hidden"><span class="badge">روز صفر · ارزیابی اولیه</span><h2>نقطه شروع خودت را ثبت کن</h2><label>وضعیت کلی من از ۰ تا ۱۰</label><input id="aScore" type="number" min="0" max="10"><label>هدف اصلی من</label><textarea id="a1" class="small"></textarea><label>چالش اصلی من</label><textarea id="a2" class="small"></textarea><label>وضعیت فعلی من</label><textarea id="a3" class="small"></textarea><label>در پایان ۲۸ روز چه تغییری ارزشمند است؟</label><textarea id="a4" class="small"></textarea><button class="primary" onclick="saveAssessment()">ثبت و شروع روز ۱</button></section>
+<section id="assessment" class="card hidden"><span class="badge">روز صفر · ارزیابی اولیه</span><h2>نقطه شروع خودت را ثبت کن</h2><label>نتیجه ارزیابی من از ۰ تا ۱۰۰</label><input id="aScore" type="number" min="0" max="10"><label>هدف اصلی من</label><textarea id="a1" class="small"></textarea><label>چالش اصلی من</label><textarea id="a2" class="small"></textarea><label>وضعیت فعلی من</label><textarea id="a3" class="small"></textarea><label>در پایان ۲۸ روز چه تغییری ارزشمند است؟</label><textarea id="a4" class="small"></textarea><button class="primary" onclick="saveAssessment()">ثبت و شروع روز ۱</button></section>
 
 <section id="dashboard" class="card hidden"><span class="badge">داشبورد شخصی</span><h2 id="dashTitle">مسیر شما</h2><div id="profileSummary"></div><div class="metric"><div class="metricBox"><strong id="dashProgress">۰٪</strong><span>پیشرفت مسیر</span></div><div class="metricBox"><strong id="dashDays">۰/۲۸</strong><span>روز تکمیل‌شده</span></div></div><div id="finalResult" class="recommendation hidden"></div><button class="primary" onclick="openCurrentDay()">ادامه مسیر</button><button class="secondary" onclick="showSupport()">☎️ پشتیبانی و نوبت‌دهی</button><h3 style="margin-top:20px">روزهای مسیر</h3><div class="grid" id="daysGrid"></div><p class="muted">روزهای قبلی باز هستند. روزهای بعدی تا انجام کامل روز فعلی قفل می‌مانند.</p></section>
 
@@ -57,7 +57,7 @@ button{border:0;border-radius:14px;padding:12px 15px;cursor:pointer;font-weight:
 
 <section id="support" class="card hidden"><span class="badge">پشتیبانی مرکز</span><h2>نیاز به راهنمایی داری؟</h2><p class="muted">برای نوبت‌دهی یا دریافت کتاب با پشتیبانی مرکز ارتباط بگیر.</p><div class="support"><h3>💬 پشتیبانی تلگرام</h3><a class="telegram" href="https://t.me/Hypnotherapy_admin" target="_blank" rel="noopener">ورود به پشتیبانی تلگرام</a><hr><h3>📱 پیامک</h3><p class="muted">شماره مرکز: <b>۰۹۱۹۰۸۸۹۰۶۲</b></p><button type="button" class="sms" onclick="prepareSms()" style="display:block;width:100%;border:0;cursor:pointer;">ارسال پیامک</button></div><button class="secondary" onclick="showDashboard()">بازگشت به داشبورد</button></section>
 
-<section id="final" class="card hidden"><span class="badge">روز ۲۸ · ارزیابی نهایی</span><h2>مسیر را کامل کردی؛ حالا تغییر را اندازه بگیر</h2><label>وضعیت کلی من اکنون از ۰ تا ۱۰</label><input id="fScore" type="number" min="0" max="10"><label>سه تغییر واقعی</label><textarea id="f1" class="small"></textarea><label>سه آگاهی مهم</label><textarea id="f2" class="small"></textarea><label>سه اقدام برای ۳۰ روز آینده</label><textarea id="f3" class="small"></textarea><label>مهم‌ترین چیزی که هنوز نیاز به کار دارد</label><textarea id="f4" class="small"></textarea><button class="primary" onclick="finish()">ثبت ارزیابی نهایی</button></section>
+<section id="final" class="card hidden"><span class="badge">روز ۲۸ · ارزیابی نهایی</span><h2>مسیر را کامل کردی؛ حالا تغییر را اندازه بگیر</h2><label>نتیجه ارزیابی نهایی از ۰ تا ۱۰۰</label><input id="fScore" type="number" min="0" max="10"><label>سه تغییر واقعی</label><textarea id="f1" class="small"></textarea><label>سه آگاهی مهم</label><textarea id="f2" class="small"></textarea><label>سه اقدام برای ۳۰ روز آینده</label><textarea id="f3" class="small"></textarea><label>مهم‌ترین چیزی که هنوز نیاز به کار دارد</label><textarea id="f4" class="small"></textarea><button class="primary" onclick="finish()">ثبت ارزیابی نهایی</button></section>
 
 <section id="done" class="card hidden"><div class="welcome"><span class="badge">مسیر تکمیل شد</span><h2>۲۸ روز را به پایان رساندی.</h2><p class="muted">نتیجه ارزیابی در داشبورد قابل مشاهده است.</p><button class="primary" onclick="showDashboard()">📊 بازگشت به داشبورد</button><button class="gold" onclick="newJourney()">🔄 شروع دوباره مسیر ۲۸ روزه</button><p class="muted">در شروع دوباره، مشخصات قبلی شما حفظ می‌شود و فقط مسیر از روز اول آغاز می‌گردد؛ نیازی به ثبت دوباره مشخصات نیست.</p></div></section>
 
@@ -78,29 +78,47 @@ function saveProfile(){let vals={name:$("pName").value.trim(),age:$("pAge").valu
 function createClientCode(){return"M28-"+String(Date.now()).slice(-6)}
 function saveAssessment(){let score=$("aScore").value.trim(),a1=$("a1").value.trim(),a2=$("a2").value.trim(),a3=$("a3").value.trim(),a4=$("a4").value.trim();if(score===""||!a1||!a2||!a3||!a4){alert("لطفاً ارزیابی اولیه را کامل کنید.");return}let s=state();s.assessment=true;s.assessmentData={score:Number(score),a1,a2,a3,a4};save(s);currentDay=1;showDashboard();update()}
 function showDashboard(){let s=state();currentDay=Math.min(28,(s.completed.length||0)+1);$("dashTitle").textContent=currentDay<=28?`روز ${fa(currentDay)} آماده است`:"مسیر تکمیل شده";let p=s.profileData;if(p)$("profileSummary").innerHTML=`<div class="profile"><div class="profileBox"><span>نام</span><b>${escapeHtml(p.name)}</b></div><div class="profileBox"><span>کد مراجع</span><b>${escapeHtml(p.code)}</b></div><div class="profileBox"><span>هدف اصلی</span><b>${escapeHtml(p.problem)}</b></div><div class="profileBox"><span>سن</span><b>${fa(p.age)}</b></div></div>`;let pct=Math.round(s.completed.length/28*100);$("dashProgress").textContent=fa(pct)+"٪";$("dashDays").textContent=fa(s.completed.length)+"/۲۸";let r=$("finalResult");if(s.final){let d=Number(s.final.score)-Number(s.assessmentData.score);r.classList.remove("hidden");r.innerHTML=`<b>نتیجه ارزیابی ۲۸ روزه</b><br>${resultText(d,s)}</p>`}else r.classList.add("hidden");let g=$("daysGrid");g.innerHTML="";for(let i=1;i<=28;i++){let b=document.createElement("button"),done=s.completed.includes(i),allowed=done||i<=Math.min(28,s.completed.length+1);b.className="daydot "+(done?"done ":"")+(i===currentDay?"current ":"")+(!allowed?"locked":"");b.textContent=fa(i);if(allowed)b.onclick=()=>openDay(i);else b.disabled=true;g.appendChild(b)}update();show("dashboard")}
-function resultText(diff,s){if(diff>=4)return`بر اساس امتیاز خودگزارشی شروع و پایان، تغییر قابل‌توجهی ثبت شده است. در حال حاضر ممکن است نیاز به ادامه خودمراقبتی داشته باشید؛ در صورت باقی‌ماندن مسئله، درباره تعداد جلسات مناسب با مرکز مشورت کنید.`;if(diff>=1)return`بهبود نسبی ثبت شده است. برای تثبیت تغییر، پیشنهاد می‌شود ادامه مسیر و مشاوره تکمیلی را با مرکز بررسی کنید.`;if(diff<=-1)return`امتیاز پایان پایین‌تر از شروع ثبت شده است. بهتر است برای بررسی دقیق‌تر شرایط، با متخصص مرکز مشورت کنید.`;return`امتیاز پایان نسبت به شروع تغییر نکرده است. برای تصمیم‌گیری درباره ادامه مسیر، ارزیابی تخصصی مرکز پیشنهاد می‌شود.`}
+function resultText(diff,s){if(diff>=4)return`بر اساس امتیاز خودگزارشی شروع و پایان، تغییر قابل‌توجهی ثبت شده است. در حال حاضر ممکن است نیاز به ادامه خودمراقبتی داشته باشید؛ در صورت باقی‌ماندن مسئله، درباره تعداد جلسات مناسب با مرکز مشورت کنید.`;if(diff>=1)return`بهبود نسبی ثبت شده است. برای تثبیت تغییر، پیشنهاد می‌شود ادامه مسیر و مشاوره تکمیلی را با مرکز بررسی کنید.`;if(diff<=-1)return`نتیجه پایان پایین‌تر از شروع ثبت شده است. بهتر است برای بررسی دقیق‌تر شرایط، با متخصص مرکز مشورت کنید.`;return`نتیجه پایان نسبت به شروع تغییر نکرده است. برای تصمیم‌گیری درباره ادامه مسیر، ارزیابی تخصصی مرکز پیشنهاد می‌شود.`}
 function openCurrentDay(){let s=state();if(s.completed.length>=28&&s.final){show("done");return}openDay(Math.min(28,s.completed.length+1))}
 function openDay(n){let s=state();if(!s.assessment){show("assessment");return}let allowed=s.completed.includes(n)||n<=Math.min(28,s.completed.length+1);if(!allowed){alert("این روز هنوز فعال نشده است.");return}currentDay=n;let d=content.days[n-1];$("dayBadge").textContent=`روز ${fa(n)} از ۲۸`;$("dayTitle").textContent=d.title;$("dayIntro").textContent=d.intro;$("dayExercise").textContent=d.exercise;$("dayClosing").textContent=d.closing;$("answer").value=s.answers[n]||"";$("dailyFeedback").classList.add("hidden");$("dailyRecommendation").classList.add("hidden");$("medStatus").textContent=s.meditations[n]?"✓ مراقبه این روز ثبت شده است.":"هنوز مراقبه این روز ثبت نشده است.";if(s.feedback[n])renderFeedback(s.feedback[n]);let w=$("nextButtonWrap");w.innerHTML="";if(n<28&&s.completed.includes(n)){let b=document.createElement("button");b.className="primary";b.textContent=`ادامه به روز ${fa(n+1)} →`;b.onclick=()=>openDay(n+1);w.appendChild(b)}show("day")}
 function markMeditation(){let s=state();s.meditations[currentDay]=true;save(s);$("medStatus").textContent="✓ مراقبه این روز ثبت شد. اکنون می‌توانید پاسخ تمرین را ثبت کنید.";if(s.answers[currentDay])completeDay()}
 function completeDay(){let s=state();if(!s.meditations[currentDay]){alert("ابتدا مراقبه قطع لینک همین روز را از لینک مرکز انجام دهید و سپس «مراقبه را انجام دادم» را بزنید.");return}let answer=$("answer").value.trim();if(!answer){alert("قبل از ادامه، پاسخ یا تجربه امروزت را ثبت کن.");return}s.answers[currentDay]=answer;if(!s.completed.includes(currentDay))s.completed.push(currentDay);s.completed.sort((a,b)=>a-b);s.feedback[currentDay]=generateFeedback(answer);save(s);renderFeedback(s.feedback[currentDay]);update();let w=$("nextButtonWrap");w.innerHTML="";let b=document.createElement("button");b.className="primary";if(currentDay===28){b.textContent="ادامه به ارزیابی نهایی →";b.onclick=()=>show("final")}else{b.textContent=`ادامه به روز ${fa(currentDay+1)} →`;b.onclick=()=>openDay(currentDay+1)}w.appendChild(b)}
 function renderFeedback(f){$("dailyFeedback").innerHTML=`<b>بازخورد امروز</b><br>${escapeHtml(f.text)}`;$("dailyRecommendation").innerHTML=`<b>پیشنهاد عملی امروز</b><br>${escapeHtml(f.recommendation)}`;$("dailyFeedback").classList.remove("hidden");$("dailyRecommendation").classList.remove("hidden")}
-function generateFeedback(a){a=a.toLowerCase();if(/استرس|اضطراب|نگرانی|ترس/.test(a))return{text:"در پاسخ امروزت به فشار یا نگرانی اشاره شده است. محرک، فکر و واکنش خودت را از هم جدا کن.",recommendation:"یک موقعیت تنش‌زا را انتخاب کن و بنویس چه اتفاقی افتاد، چه فکری آمد و چگونه واکنش نشان دادی."};if(/خشم|عصبانی|عصبانیت/.test(a))return{text:"هدف سرکوب احساس نیست؛ ایجاد فاصله کوتاه بین محرک و واکنش است.",recommendation:"در موقعیت بعدی سه نفس آرام بکش و نام احساس خود را مشخص کن."};if(/نمی‌توانم|نمیشه|نمی تونم|شکست/.test(a))return{text:"تجربه ناتوانی را به کوچک‌ترین اقدام ممکن تبدیل کن.",recommendation:"یک اقدام پنج تا ده دقیقه‌ای که واقعاً در کنترل توست انجام بده."};return{text:"پاسخ امروزت ثبت شد. مشاهده دقیق تجربه و تبدیل آن به آگاهی قابل استفاده، بخش مهم مسیر است.",recommendation:"امروز فقط یک تغییر کوچک و قابل انجام انتخاب کن و نتیجه آن را مشاهده کن."}}
-function restartPath(){
-  let s=state();
-  s.completed=[];
-  s.answers={};
-  s.feedback={};
-  s.final=null;
-  save(s);
-  currentDay=1;
-  showDashboard();
-  openDay(1);
-  update();
+function generateFeedback(day,answer){
+ const s=state();
+ const challenge=(s.profileData&&s.profileData.problem)||"هدف فعلی";
+ const a=(answer||"").toLowerCase();
+ let text="پاسخ امروز ثبت شد. راهکار امروز بر اساس چالش فعلی شما تنظیم شده است.";
+ let recommendation="امروز یک اقدام کوچک و مشخص در جهت «"+challenge+"» انجام دهید و نتیجه را ثبت کنید.";
+ if(/استرس|اضطراب|نگرانی|ترس/.test(challenge+" "+a)){
+   text="تمرکز امروز بر شناسایی چرخه محرک، فکر و واکنش است.";
+   recommendation="یک موقعیت تنش‌زا را ثبت کنید: محرک چه بود، چه فکری آمد و واکنش شما چه بود؛ سپس یک پاسخ آرام‌تر را جایگزین کنید.";
+ }else if(/اعتماد|اعتمادبه‌نفس|خجالت/.test(challenge+" "+a)){
+   text="تمرکز امروز بر تقویت شواهد واقعی توانمندی و کاهش خودقضاوتی است.";
+   recommendation="یک کار کوچک که معمولاً به تعویق می‌اندازید انجام دهید و دقیقاً بنویسید چه چیزی را بهتر از انتظار انجام دادید.";
+ }else if(/خشم|عصبانیت/.test(challenge+" "+a)){
+   text="تمرکز امروز بر ایجاد فاصله بین محرک و واکنش است.";
+   recommendation="در اولین موقعیت خشم، قبل از پاسخ سه نفس آرام بکشید و احساس اصلی زیر خشم را نام‌گذاری کنید.";
+ }else if(/خواب|بی‌خوابی|خوابیدن/.test(challenge+" "+a)){
+   text="تمرکز امروز بر کاهش محرک‌های مزاحم و ایجاد الگوی ثابت قبل از خواب است.";
+   recommendation="۳۰ دقیقه پیش از خواب صفحه‌نمایش را کنار بگذارید و یک زمان ثابت برای خواب انتخاب کنید.";
+ }else if(/عادت|سیگار|پرخوری|رفتار/.test(challenge+" "+a)){
+   text="تمرکز امروز بر شناخت محرک و جایگزین رفتاری است.";
+   recommendation="محرک اصلی رفتار را شناسایی کنید و یک رفتار جایگزین پنج‌دقیقه‌ای از قبل تعیین کنید.";
+ }
+ return {text,recommendation};
 }
+function restartPath(){let s=state();s.completed=[];s.answers={};s.feedback={};s.final=null;s.assessment=false;s.assessmentData=null;save(s);currentDay=1;show("assessment");update();}
 function previousDay(){if(currentDay>1)openDay(currentDay-1);else showDashboard()}
 function finish(){let score=$("fScore").value.trim(),f1=$("f1").value.trim(),f2=$("f2").value.trim(),f3=$("f3").value.trim(),f4=$("f4").value.trim();if(score===""||!f1||!f2||!f3||!f4){alert("لطفاً ارزیابی نهایی را کامل کنید.");return}let s=state();s.final={score:Number(score),f1,f2,f3,f4};save(s);show("done");}
 function newJourney(){let s=state();s.completed=[];s.meditations={};s.answers={};s.feedback={};s.final=null;s.started=true;s.profile=true;s.assessment=true;save(s);currentDay=1;showDashboard();alert("مسیر جدید از روز اول فعال شد. مشخصات شما حفظ شده و نیازی به ثبت دوباره آن‌ها نیست.")}
 function showSupport(){show("support")}
+function hasSpecialCondition(p){
+ const c=((p&&p.condition)||"").toLowerCase().trim();
+ const m=((p&&p.medication)||"").toLowerCase().trim();
+ if(!c || /ندارم|خیر|خیر ندارم/.test(c)) return false;
+ return true;
+}
 function escapeHtml(v){return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 function restore(){let s=state();if(s.profileData){$("pName").value=s.profileData.name||"";$("pAge").value=s.profileData.age||"";$("pGender").value=s.profileData.gender||"";$("pPhone").value=s.profileData.phone||"";$("pProblem").value=s.profileData.problem||"";$("pDuration").value=s.profileData.duration||"";$("pGoal").value=s.profileData.goal||""}if(s.assessmentData){$("aScore").value=s.assessmentData.score||"";$("a1").value=s.assessmentData.a1||"";$("a2").value=s.assessmentData.a2||"";$("a3").value=s.assessmentData.a3||"";$("a4").value=s.assessmentData.a4||""}}
 function init(){let s=state();restore();if(!s.started)show("home");else if(!s.profile)show("profile");else if(!s.assessment)show("assessment");else if(s.completed.length>=28&&s.final)show("done");else showDashboard();update()}
@@ -123,19 +141,28 @@ function openNativeSms(){
   const t=document.getElementById("smsText").value.trim();
   const body=t ? "?body="+encodeURIComponent(t) : "";
   // Native SMS is opened only after explicit user action.
-  window.location.href="sms:+989190889062"+body;
+  if(navigator.clipboard){
+ navigator.clipboard.writeText("۰۹۱۹۰۸۸۹۰۶۲\n"+(t||"درخواست راهنمایی مسیر ۲۸ روزه")).then(()=>{
+   $("smsCopied").textContent="شماره و متن کپی شد؛ آن‌ها را در پیامک گوشی وارد کنید.";
+ }).catch(()=>{ $("smsCopied").textContent="شماره مرکز: ۰۹۱۹۰۸۸۹۰۶۲"; });
+}else{
+ $("smsCopied").textContent="شماره مرکز: ۰۹۱۹۰۸۸۹۰۶۲";
+}
 }
 </script>
 
 
 <div id="smsModal" class="hidden" style="position:fixed;inset:0;background:#0008;z-index:9999;padding:20px;display:none;align-items:center;justify-content:center;">
-  <div style="background:#fff;border-radius:20px;padding:20px;max-width:420px;width:100%;direction:rtl;">
-    <h3 style="margin-top:0">ارسال پیامک به مرکز</h3>
-    <p class="muted">برای اینکه از ربات خارج نشوی، ابتدا متن پیام را وارد کن. سپس با زدن دکمه زیر برنامه پیامک گوشی باز می‌شود.</p>
-    <input id="smsText" type="text" placeholder="متن پیام شما..." style="width:100%;box-sizing:border-box;margin:8px 0;">
-    <button type="button" class="primary" onclick="openNativeSms()">باز کردن پیامک گوشی</button>
-    <button type="button" class="secondary" onclick="closeSmsModal()">انصراف</button>
-  </div>
-</div>
+<div style="background:#fff;border-radius:20px;padding:20px;max-width:420px;width:100%;direction:rtl;">
+<h3 style="margin-top:0">ارسال پیام به مرکز</h3>
+<p class="muted">برای جلوگیری از خروج ناخواسته از اپ، ابتدا شماره و متن پیام را آماده کن. سپس می‌توانی آن‌ها را کپی کرده و در پیامک گوشی وارد کنی.</p>
+<label>شماره مرکز</label>
+<input id="smsNumber" value="۰۹۱۹۰۸۸۹۰۶۲" readonly>
+<label>متن پیام</label>
+<textarea id="smsText" class="small" placeholder="مثلاً: درخواست راهنمایی برای مسیر ۲۸ روزه"></textarea>
+<button type="button" class="primary" onclick="copySmsInfo()">📋 کپی شماره و متن پیام</button>
+<button type="button" class="secondary" onclick="closeSmsModal()">بستن</button>
+<p id="smsCopied" class="muted" style="text-align:center;margin-bottom:0"></p>
+</div></div>
 </body>
 </html>
