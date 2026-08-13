@@ -85,6 +85,18 @@ function markMeditation(){let s=state();s.meditations[currentDay]=true;save(s);$
 function completeDay(){let s=state();if(!s.meditations[currentDay]){alert("ابتدا مراقبه قطع لینک همین روز را از لینک مرکز انجام دهید و سپس «مراقبه را انجام دادم» را بزنید.");return}let answer=$("answer").value.trim();if(!answer){alert("قبل از ادامه، پاسخ یا تجربه امروزت را ثبت کن.");return}s.answers[currentDay]=answer;if(!s.completed.includes(currentDay))s.completed.push(currentDay);s.completed.sort((a,b)=>a-b);s.feedback[currentDay]=generateFeedback(answer);save(s);renderFeedback(s.feedback[currentDay]);update();let w=$("nextButtonWrap");w.innerHTML="";let b=document.createElement("button");b.className="primary";if(currentDay===28){b.textContent="ادامه به ارزیابی نهایی →";b.onclick=()=>show("final")}else{b.textContent=`ادامه به روز ${fa(currentDay+1)} →`;b.onclick=()=>openDay(currentDay+1)}w.appendChild(b)}
 function renderFeedback(f){$("dailyFeedback").innerHTML=`<b>بازخورد امروز</b><br>${escapeHtml(f.text)}`;$("dailyRecommendation").innerHTML=`<b>پیشنهاد عملی امروز</b><br>${escapeHtml(f.recommendation)}`;$("dailyFeedback").classList.remove("hidden");$("dailyRecommendation").classList.remove("hidden")}
 function generateFeedback(a){a=a.toLowerCase();if(/استرس|اضطراب|نگرانی|ترس/.test(a))return{text:"در پاسخ امروزت به فشار یا نگرانی اشاره شده است. محرک، فکر و واکنش خودت را از هم جدا کن.",recommendation:"یک موقعیت تنش‌زا را انتخاب کن و بنویس چه اتفاقی افتاد، چه فکری آمد و چگونه واکنش نشان دادی."};if(/خشم|عصبانی|عصبانیت/.test(a))return{text:"هدف سرکوب احساس نیست؛ ایجاد فاصله کوتاه بین محرک و واکنش است.",recommendation:"در موقعیت بعدی سه نفس آرام بکش و نام احساس خود را مشخص کن."};if(/نمی‌توانم|نمیشه|نمی تونم|شکست/.test(a))return{text:"تجربه ناتوانی را به کوچک‌ترین اقدام ممکن تبدیل کن.",recommendation:"یک اقدام پنج تا ده دقیقه‌ای که واقعاً در کنترل توست انجام بده."};return{text:"پاسخ امروزت ثبت شد. مشاهده دقیق تجربه و تبدیل آن به آگاهی قابل استفاده، بخش مهم مسیر است.",recommendation:"امروز فقط یک تغییر کوچک و قابل انجام انتخاب کن و نتیجه آن را مشاهده کن."}}
+function restartPath(){
+  let s=state();
+  s.completed=[];
+  s.answers={};
+  s.feedback={};
+  s.final=null;
+  save(s);
+  currentDay=1;
+  showDashboard();
+  openDay(1);
+  update();
+}
 function previousDay(){if(currentDay>1)openDay(currentDay-1);else showDashboard()}
 function finish(){let score=$("fScore").value.trim(),f1=$("f1").value.trim(),f2=$("f2").value.trim(),f3=$("f3").value.trim(),f4=$("f4").value.trim();if(score===""||!f1||!f2||!f3||!f4){alert("لطفاً ارزیابی نهایی را کامل کنید.");return}let s=state();s.final={score:Number(score),f1,f2,f3,f4};save(s);show("done");}
 function newJourney(){let s=state();s.completed=[];s.meditations={};s.answers={};s.feedback={};s.final=null;s.started=true;s.profile=true;s.assessment=true;save(s);currentDay=1;showDashboard();alert("مسیر جدید از روز اول فعال شد. مشخصات شما حفظ شده و نیازی به ثبت دوباره آن‌ها نیست.")}
