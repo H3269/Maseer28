@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>مسیر ۲۸ روزه بازسازی ذهن | مرکز هیپنوتراپی شفا — نسخه 2026.08.13.3</title>
+<title>مسیر ۲۸ روزه بازسازی ذهن | مرکز هیپنوتراپی شفا — نسخه 2026.08.13.4</title>
 <style>
 :root{--navy:#102a43;--navy2:#173f5f;--gold:#c9a45c;--gold2:#ead7a5;--bg:#f4f7fa;--card:#fff;--text:#17202a;--muted:#667085;--line:#e4e7ec;--ok:#287a50;--okbg:#eaf7ef;--warn:#a15c00;--warnbg:#fff5e6;--danger:#b42318}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif}
@@ -32,7 +32,7 @@ button{border:0;border-radius:14px;padding:12px 15px;cursor:pointer;font-weight:
 .meditation{background:#eef8f2;border:1px solid #cfe8d8;border-radius:16px;padding:15px;margin-top:14px}
 .meditation a{display:block;text-align:center;text-decoration:none;background:#238b57;color:#fff;padding:12px;border-radius:12px;font-weight:800;margin-top:10px}
 .support{background:#f8fafc;border:1px solid var(--line);border-radius:16px;padding:15px;margin-top:14px}.support a{display:block;text-decoration:none;text-align:center;border-radius:12px;padding:11px;margin-top:8px;font-weight:800}
-.sms{background:#eaf7ef;color:#21633f}.telegram{background:#e9f3fb;color:#17608b}.profile{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.telegram{background:#e9f3fb;color:#17608b}.profile{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
 .profileBox{background:#f8fafc;border:1px solid var(--line);border-radius:13px;padding:11px}.profileBox span{display:block;font-size:11px;color:var(--muted)}.profileBox b{display:block;margin-top:4px;font-size:13px}
 .metric{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.metricBox{background:#f8fafc;border:1px solid var(--line);border-radius:15px;padding:14px;text-align:center}.metricBox strong{display:block;font-size:24px;color:var(--navy)}.metricBox span{color:var(--muted);font-size:11px}
 .answerItem{border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:9px}.answerItem b{color:var(--navy)}.answerItem p{margin:7px 0 0;color:var(--muted);line-height:1.9;white-space:pre-wrap;font-size:13px}
@@ -214,11 +214,6 @@ function hasSpecialCondition(p){
  if(!c || /ندارم|خیر|خیر ندارم/.test(c)) return false;
  return true;
 }
-function openSmsComposer(){
-  const number="09190889062";
-  const uri="sms:"+number;
-  window.location.href=uri;
-}
 function escapeHtml(v){return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 function restore(){
  let s=state();
@@ -264,7 +259,6 @@ window.markMeditation=markMeditation;
 window.completeDay=completeDay;
 window.previousDay=previousDay;
 window.showDashboard=showDashboard;
-window.openSmsComposer=openSmsComposer;
 window.finish=finish;
 window.showFinalReport=showFinalReport;
 window.newJourney=newJourney;
