@@ -55,7 +55,7 @@ button{border:0;border-radius:14px;padding:12px 15px;cursor:pointer;font-weight:
 <label>پاسخ یا تجربه امروزت</label><textarea id="answer" placeholder="اینجا بنویس..."></textarea><button class="primary" onclick="completeDay()">ثبت پاسخ و دریافت بازخورد</button><div id="dailyFeedback" class="feedback hidden"></div><div id="dailyRecommendation" class="recommendation hidden"></div>
 <div class="navrow"><button class="secondary" onclick="previousDay()">← روز قبل</button><button class="secondary" onclick="showDashboard()">داشبورد</button></div><div id="nextButtonWrap"></div></section>
 
-<section id="support" class="card hidden"><span class="badge">پشتیبانی مرکز</span><h2>نیاز به راهنمایی داری؟</h2><p class="muted">برای نوبت‌دهی یا دریافت کتاب با پشتیبانی مرکز ارتباط بگیر.</p><div class="support"><h3>💬 پشتیبانی تلگرام</h3><a class="telegram" href="https://t.me/Hypnotherapy_admin" target="_blank" rel="noopener">ورود به پشتیبانی تلگرام</a><hr><h3>📱 پیامک</h3><p class="muted">شماره مرکز: <b>۰۹۱۹۰۸۸۹۰۶۲</b></p><a class="sms" href="sms:+989190889062">ارسال پیامک</a></div><button class="secondary" onclick="showDashboard()">بازگشت به داشبورد</button></section>
+<section id="support" class="card hidden"><span class="badge">پشتیبانی مرکز</span><h2>نیاز به راهنمایی داری؟</h2><p class="muted">برای نوبت‌دهی یا دریافت کتاب با پشتیبانی مرکز ارتباط بگیر.</p><div class="support"><h3>💬 پشتیبانی تلگرام</h3><a class="telegram" href="https://t.me/Hypnotherapy_admin" target="_blank" rel="noopener">ورود به پشتیبانی تلگرام</a><hr><h3>📱 پیامک</h3><p class="muted">شماره مرکز: <b>۰۹۱۹۰۸۸۹۰۶۲</b></p><button type="button" class="sms" onclick="prepareSms()" style="display:block;width:100%;border:0;cursor:pointer;">ارسال پیامک</button></div><button class="secondary" onclick="showDashboard()">بازگشت به داشبورد</button></section>
 
 <section id="final" class="card hidden"><span class="badge">روز ۲۸ · ارزیابی نهایی</span><h2>مسیر را کامل کردی؛ حالا تغییر را اندازه بگیر</h2><label>وضعیت کلی من اکنون از ۰ تا ۱۰</label><input id="fScore" type="number" min="0" max="10"><label>سه تغییر واقعی</label><textarea id="f1" class="small"></textarea><label>سه آگاهی مهم</label><textarea id="f2" class="small"></textarea><label>سه اقدام برای ۳۰ روز آینده</label><textarea id="f3" class="small"></textarea><label>مهم‌ترین چیزی که هنوز نیاز به کار دارد</label><textarea id="f4" class="small"></textarea><button class="primary" onclick="finish()">ثبت ارزیابی نهایی</button></section>
 
@@ -106,6 +106,36 @@ function restore(){let s=state();if(s.profileData){$("pName").value=s.profileDat
 function init(){let s=state();restore();if(!s.started)show("home");else if(!s.profile)show("profile");else if(!s.assessment)show("assessment");else if(s.completed.length>=28&&s.final)show("done");else showDashboard();update()}
 function load(){fetch("content.json").then(r=>{if(!r.ok)throw Error();return r.json()}).then(x=>{content=x;init()}).catch(()=>alert("محتوای برنامه بارگذاری نشد. content.json باید کنار index.html باشد."))}
 load();
+
+
+function prepareSms(){
+  const m=document.getElementById("smsModal");
+  const t=document.getElementById("smsText");
+  if(!m) return;
+  t.value="";
+  m.style.display="flex";
+}
+function closeSmsModal(){
+  const m=document.getElementById("smsModal");
+  if(m) m.style.display="none";
+}
+function openNativeSms(){
+  const t=document.getElementById("smsText").value.trim();
+  const body=t ? "?body="+encodeURIComponent(t) : "";
+  // Native SMS is opened only after explicit user action.
+  window.location.href="sms:+989190889062"+body;
+}
 </script>
+
+
+<div id="smsModal" class="hidden" style="position:fixed;inset:0;background:#0008;z-index:9999;padding:20px;display:none;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:20px;padding:20px;max-width:420px;width:100%;direction:rtl;">
+    <h3 style="margin-top:0">ارسال پیامک به مرکز</h3>
+    <p class="muted">برای اینکه از ربات خارج نشوی، ابتدا متن پیام را وارد کن. سپس با زدن دکمه زیر برنامه پیامک گوشی باز می‌شود.</p>
+    <input id="smsText" type="text" placeholder="متن پیام شما..." style="width:100%;box-sizing:border-box;margin:8px 0;">
+    <button type="button" class="primary" onclick="openNativeSms()">باز کردن پیامک گوشی</button>
+    <button type="button" class="secondary" onclick="closeSmsModal()">انصراف</button>
+  </div>
+</div>
 </body>
 </html>
