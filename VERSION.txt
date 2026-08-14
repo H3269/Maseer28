@@ -1,2 +1,3 @@
-Maseer28 Shafa FINAL V8 | 2026-08-14
-Final result -> Start new course -> Register new problem/goal -> New assessment -> Day 1.
+Maseer28 Shafa FINAL V9 | 2026-08-14
+Final-result restart button directly opens the new-problem screen.
+Assessment is opened only by saveNewProblem() after the new problem/goal is submitted.
