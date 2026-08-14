@@ -1,4 +1,3 @@
-Maseer28 Shafa FINAL V15
-Built from the current GitHub code structure.
-Restart flow: final result -> Personal Information (previous values preserved/editable) -> new problem/goal -> new assessment -> day 1.
-Unlimited restarts; no IP/device counter.
+Maseer28 Shafa FINAL V18
+Built from V16 with requested professional input validation, problem selection, start gate, and adaptive day-to-day planning.
+Restart flow preserved; no IP/device counter.
