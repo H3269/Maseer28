@@ -1,3 +1,4 @@
-Maseer28 Shafa FINAL V11
-Exact final flow:
-Telegram Bot -> Maseer 28 -> Personal Info -> Problem + Goal -> Specific Assessment -> Day 1 -> Daily Exercise + Practical Action + Supplementary Suggestion + Feedback + Cut-Link Meditation -> Day 2 ... Day 28 -> Final Assessment -> Score /100 -> Recommendation -> Restart -> Personal Info -> Problem + Goal -> Specific Assessment -> New 28-Day Journey.
+Maseer28 Shafa FINAL V12
+Exact requested restart flow:
+Final 28-day result -> Restart 28-day course -> Personal Information -> Problem + Goal -> Specific Assessment -> Day 1 -> ... -> Day 28.
+The restart button is directly bound to restartCourseFromBeginning().
