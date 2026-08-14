@@ -1,4 +1,3 @@
-Maseer28 Shafa FINAL V12
-Exact requested restart flow:
-Final 28-day result -> Restart 28-day course -> Personal Information -> Problem + Goal -> Specific Assessment -> Day 1 -> ... -> Day 28.
-The restart button is directly bound to restartCourseFromBeginning().
+Maseer28 Shafa FINAL V13
+Choice B restart flow:
+Final result -> Restart 28-day course -> Personal Information with previous values preserved/editable -> Problem + Goal can be changed -> Specific Assessment -> Day 1 -> New 28-day journey.

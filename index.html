@@ -264,24 +264,50 @@ function finish(){
  s.final={answers:a,score,f1,f2,f3,f4};save(s);show("done")
 }
 function restartCourseFromBeginning(){
-  // Complete reset of the active 28-day journey.
-  // The user must start again from Personal Information.
+  // New 28-day journey, but keep the user's existing personal information
+  // visible/editable in the profile form (choice B).
+  const old=state();
+  const previousProfile=old && old.profileData ? {...old.profileData} : null;
+
   const fresh=freshState();
   fresh.started=true;
+  fresh.profileData=previousProfile;
+  fresh.profile=false;
+  fresh.assessment=false;
+  fresh.assessmentData=null;
+  fresh.category=null;
+  fresh.completed=[];
+  fresh.meditations={};
+  fresh.answers={};
+  fresh.feedback={};
+  fresh.dailyScores={};
+  fresh.final=null;
   save(fresh);
+
   currentDay=1;
 
-  // Clear all personal-information inputs, including problem + goal.
-  ["pName","pAge","pPhone","pProblem","pDuration","pGoal","pConditionDetail","pMedication"].forEach(id=>{
-    const el=$(id);
-    if(el) el.value="";
-  });
-  ["pGender","pCondition","pCommunication"].forEach(id=>{
-    const el=$(id);
-    if(el) el.selectedIndex=0;
-  });
+  // Re-populate the personal-information form from the previous profile.
+  if(previousProfile){
+    const map={
+      pName:previousProfile.name,
+      pAge:previousProfile.age,
+      pPhone:previousProfile.phone,
+      pGender:previousProfile.gender,
+      pProblem:previousProfile.problem,
+      pDuration:previousProfile.duration,
+      pGoal:previousProfile.goal,
+      pCondition:previousProfile.condition,
+      pConditionDetail:previousProfile.conditionDetail,
+      pMedication:previousProfile.medication,
+      pCommunication:previousProfile.communication
+    };
+    Object.keys(map).forEach(id=>{
+      const el=$(id);
+      if(el && map[id]!==undefined && map[id]!==null) el.value=map[id];
+    });
+  }
 
-  // IMPORTANT: the first visible screen after restart is always Personal Information.
+  // Exact requested first screen after restart: editable Personal Information.
   show("profile");
   update();
 }
