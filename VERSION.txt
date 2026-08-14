@@ -1,8 +1,4 @@
-Maseer28 Shafa FINAL V14
-Restart policy:
-- Unlimited client-side restarts; no IP/device limit is enforced.
-- Restart opens Personal Information first.
-- Previous personal information is preserved and editable.
-- Problem/goal can be replaced for the new journey.
-- Previous assessment/progress is reset for the new journey.
-- A visible "شروع مسیر جدید با مشکل جدید" button is available on the dashboard.
+Maseer28 Shafa FINAL V15
+Built from the current GitHub code structure.
+Restart flow: final result -> Personal Information (previous values preserved/editable) -> new problem/goal -> new assessment -> day 1.
+Unlimited restarts; no IP/device counter.
