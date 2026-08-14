@@ -1,3 +1,2 @@
-Maseer28 Shafa FINAL V9 | 2026-08-14
-Final-result restart button directly opens the new-problem screen.
-Assessment is opened only by saveNewProblem() after the new problem/goal is submitted.
+Maseer28 Shafa FINAL V10
+Final flow: final result -> restart -> new problem + goal -> new assessment -> new 28-day journey.
