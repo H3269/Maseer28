@@ -45,6 +45,7 @@
 <section id="assessment" class="card hidden"><span class="badge">مرحله دوم · ارزیابی اختصاصی</span><h2 id="assessmentTitle">ارزیابی بر اساس مشکل شما</h2><p class="muted" id="assessmentIntro"></p><div id="questions"></div><label>در پایان ۲۸ روز دوست دارم چه تغییری را ببینم؟</label><textarea id="goalText" class="small"></textarea><button class="primary" data-action="saveAssessment">ثبت ارزیابی و شروع روز ۱</button></section>
 
 <section id="dashboard" class="card hidden"><span class="badge">داشبورد شخصی</span><h2 id="dashTitle">مسیر شما</h2><div id="profileSummary"></div><div class="metric"><div class="metricBox"><strong id="dashProgress">۰٪</strong><span>پیشرفت مسیر</span></div><div class="metricBox"><strong id="dashDays">۰/۲۸</strong><span>روز تکمیل‌شده</span></div></div><div id="finalResult" class="result hidden"></div>
+<button id="restartJourneyDashboard" class="gold hidden" data-action="newJourney">🔄 شروع مجدد ارزیابی و مسیر ۲۸ روزه</button>
 <button class="primary" data-action="openCurrentDay">ادامه مسیر</button><button class="gold" data-action="showBooks">📚 کتاب‌های «از حقیقت تا واقعیت»</button><a class="telegram" href="https://t.me/Healing_Hypnotherapy_Center" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;border-radius:12px;padding:11px;margin-top:9px;font-weight:800">📢 ورود به کانال مرکز هیپنوتراپی شفا</a><button class="secondary" data-action="showSupport">☎️ پشتیبانی و نوبت‌دهی</button>
 <h3 style="margin-top:20px">روزهای مسیر</h3><div class="grid" id="daysGrid"></div><p class="muted">روزهای قبلی باز هستند؛ روزهای آینده تا تکمیل روز فعلی قفل می‌مانند.</p></section>
 
@@ -157,7 +158,9 @@ function showDashboard(){
  let s=state();currentDay=Math.min(28,s.completed.length+1);$("dashTitle").textContent=currentDay<=28?`روز ${fa(currentDay)} آماده است`:"مسیر تکمیل شده";
  const p=s.profileData;if(p)$("profileSummary").innerHTML=`<div class="profile"><div class="profileBox"><span>نام</span><b>${esc(p.name)}</b></div><div class="profileBox"><span>کد مراجع</span><b>${esc(p.code)}</b></div><div class="profileBox"><span>مشکل</span><b>${esc(p.problem)}</b></div><div class="profileBox"><span>سن</span><b>${fa(p.age)}</b></div></div>`;
  $("dashProgress").textContent=fa(Math.round(s.completed.length/28*100))+"%";$("dashDays").textContent=fa(s.completed.length)+"/۲۸";
- const r=$("finalResult");if(s.final){r.classList.remove("hidden");r.innerHTML=buildRecommendation(s)}else r.classList.add("hidden");
+ const r=$("finalResult"),restartBtn=$("restartJourneyDashboard");
+if(s.final){r.classList.remove("hidden");r.innerHTML=buildRecommendation(s);restartBtn.classList.remove("hidden")}
+else{r.classList.add("hidden");restartBtn.classList.add("hidden")}
  const g=$("daysGrid");g.innerHTML="";
  for(let i=1;i<=28;i++){let b=document.createElement("button"),done=s.completed.includes(i),allowed=done||i<=Math.min(28,s.completed.length+1);b.className="daydot "+(done?"done ":"")+(i===currentDay?"current ":"")+(!allowed?"locked":"");b.textContent=fa(i);if(allowed)b.onclick=()=>openDay(i);else b.disabled=true;g.appendChild(b)}
  update();show("dashboard")
@@ -171,7 +174,7 @@ function buildRecommendation(s){
  else if(score>50&&score<=70){out+=`پیشنهاد برنامه: <b>۲ جلسه مشاوره آنلاین</b>.`}
  else if(score>70&&score<100){out+=`پیشنهاد برنامه: <b>۱ جلسه مشاوره آنلاین</b>.`}
  else out+=`در این بازه، پیشنهاد تعداد جلسه مشخصی از این برنامه صادر نمی‌شود و در صورت نیاز بهتر است با مرکز مشورت شود.`;
- out+=`<br><span class='muted'>این نتیجه یک شاخص خودگزارشی برنامه است و به‌تنهایی تشخیص پزشکی یا روان‌پزشکی نیست.</span><br><button class='gold' data-action='newJourney' style='margin-top:14px;width:100%'>🔄 شروع مجدد ارزیابی و مسیر ۲۸ روزه</button>`;
+ out+=`<br><span class='muted'>این نتیجه یک شاخص خودگزارشی برنامه است و به‌تنهایی تشخیص پزشکی یا روان‌پزشکی نیست.</span>`;
  return out
 }
 function openCurrentDay(){let s=state();if(s.completed.length>=28&&s.final){showDashboard();return}openDay(Math.min(28,s.completed.length+1))}

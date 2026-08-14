@@ -1,3 +1,2 @@
-Maseer28 Shafa - Final V3
-Version: 2026.08.14-final-v3
-Changes: dashboard channel button + visible restart button after final evaluation; all prior features preserved.
+Maseer28 Shafa FINAL V4 | 2026-08-14
+Dedicated restart button added directly below the final 28-day evaluation result in the dashboard.
