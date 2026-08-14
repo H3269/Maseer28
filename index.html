@@ -62,8 +62,8 @@
 <section id="assessment" class="card hidden"><span class="badge">مرحله دوم · ارزیابی اختصاصی</span><h2 id="assessmentTitle">ارزیابی بر اساس مشکل شما</h2><p class="muted" id="assessmentIntro"></p><div id="questions"></div><label>در پایان ۲۸ روز دوست دارم چه تغییری را ببینم؟</label><textarea id="goalText" class="small"></textarea><button class="primary" data-action="saveAssessment">ثبت ارزیابی و شروع روز ۱</button></section>
 
 <section id="dashboard" class="card hidden"><span class="badge">داشبورد شخصی</span><h2 id="dashTitle">مسیر شما</h2><div id="profileSummary"></div><div class="metric"><div class="metricBox"><strong id="dashProgress">۰٪</strong><span>پیشرفت مسیر</span></div><div class="metricBox"><strong id="dashDays">۰/۲۸</strong><span>روز تکمیل‌شده</span></div></div><div id="finalResult" class="result hidden"></div>
-<button id="journeyActionButton" class="primary" type="button" onclick="openCurrentDay()">ادامه مسیر</button><button class="gold" data-action="showBooks">📚 کتاب‌های «از حقیقت تا واقعیت»</button><a class="telegram" href="https://t.me/Healing_Hypnotherapy_Center" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;border-radius:12px;padding:11px;margin-top:9px;font-weight:800">📢 ورود به کانال مرکز هیپنوتراپی شفا</a><button class="secondary" data-action="showSupport">☎️ پشتیبانی و نوبت‌دهی</button>
-<h3 style="margin-top:20px">روزهای مسیر</h3><div class="grid" id="daysGrid"></div><p class="muted">روزهای قبلی باز هستند؛ روزهای آینده تا تکمیل روز فعلی قفل می‌مانند.</p></section>
+<button id="journeyActionButton" class="primary" type="button" onclick="openCurrentDay()">ادامه مسیر</button><button class="gold" data-action="showBooks">📚 کتاب‌های «از حقیقت تا واقعیت»</button><a class="telegram" href="https://t.me/Healing_Hypnotherapy_Center" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;border-radius:12px;padding:11px;margin-top:9px;font-weight:800">📢 ورود به کانال مرکز هیپنوتراپی شفا</a><button class="secondary" data-action="showSupport">☎️ پشتیبانی و نوبت‌دهی</button><button class="gold" data-action="restartCourseFromBeginning">🔄 شروع مسیر جدید با مشکل جدید</button>
+<h3 style="margin-top:20px">روزهای مسیر</h3><div class="grid" id="daysGrid"></div><p class="muted">روزهای قبلی باز هستند؛ روزهای آینده تا تکمیل روز فعلی قفل می‌مانند.</p><br>هر کاربر می‌تواند پس از پایان مسیر، بدون محدودیت مسیر جدیدی را با اطلاعات قبلیِ قابل ویرایش و مشکل جدید آغاز کند.</p></section>
 
 <section id="day" class="card hidden"><span class="badge" id="dayBadge"></span><h2 id="dayTitle"></h2><p class="muted" id="dayIntro"></p>
 <div class="exercise"><b>تمرین امروز</b><br><span id="dayExercise"></span></div>
@@ -264,54 +264,56 @@ function finish(){
  s.final={answers:a,score,f1,f2,f3,f4};save(s);show("done")
 }
 function restartCourseFromBeginning(){
-  // New 28-day journey, but keep the user's existing personal information
-  // visible/editable in the profile form (choice B).
-  const old=state();
-  const previousProfile=old && old.profileData ? {...old.profileData} : null;
+  // Unlimited local restart: no IP/device counter is used or enforced.
+  // Choice B: keep previous personal information visible and editable.
+  const old=state()||fresh();
+  const previousProfile=old.profileData ? JSON.parse(JSON.stringify(old.profileData)) : null;
 
-  const fresh=freshState();
-  fresh.started=true;
-  fresh.profileData=previousProfile;
-  fresh.profile=false;
-  fresh.assessment=false;
-  fresh.assessmentData=null;
-  fresh.category=null;
-  fresh.completed=[];
-  fresh.meditations={};
-  fresh.answers={};
-  fresh.feedback={};
-  fresh.dailyScores={};
-  fresh.final=null;
-  save(fresh);
+  const freshJourney=fresh();
+  freshJourney.started=true;
+  freshJourney.profile=false;
+  freshJourney.assessment=false;
+  freshJourney.category="عمومی";
+  freshJourney.completed=[];
+  freshJourney.meditations={};
+  freshJourney.answers={};
+  freshJourney.feedback={};
+  freshJourney.dailyScores={};
+  freshJourney.final=null;
+  freshJourney.assessmentData=null;
+  freshJourney.profileData=previousProfile;
+  save(freshJourney);
 
   currentDay=1;
 
-  // Re-populate the personal-information form from the previous profile.
+  // Explicitly populate the FIRST screen of the new journey.
   if(previousProfile){
-    const map={
-      pName:previousProfile.name,
-      pAge:previousProfile.age,
-      pPhone:previousProfile.phone,
-      pGender:previousProfile.gender,
-      pProblem:previousProfile.problem,
-      pDuration:previousProfile.duration,
-      pGoal:previousProfile.goal,
-      pCondition:previousProfile.condition,
-      pConditionDetail:previousProfile.conditionDetail,
-      pMedication:previousProfile.medication,
-      pCommunication:previousProfile.communication
+    const fields={
+      pName:previousProfile.name||"",
+      pAge:previousProfile.age||"",
+      pGender:previousProfile.gender||"",
+      pPhone:previousProfile.phone||"",
+      pProblem:previousProfile.problem||"",
+      pDuration:previousProfile.duration||"",
+      pGoal:previousProfile.goal||"",
+      pCondition:previousProfile.condition||"",
+      pConditionDetail:previousProfile.conditionDetail||"",
+      pMedication:previousProfile.medication||"",
+      pCommunication:previousProfile.communication||""
     };
-    Object.keys(map).forEach(id=>{
+    Object.entries(fields).forEach(([id,value])=>{
       const el=$(id);
-      if(el && map[id]!==undefined && map[id]!==null) el.value=map[id];
+      if(el) el.value=value;
     });
   }
 
-  // Exact requested first screen after restart: editable Personal Information.
   show("profile");
   update();
+  window.scrollTo(0,0);
 }
 function newJourney(){
+  restartCourseFromBeginning();
+}{
   restartCourseFromBeginning();
 }
 function saveNewProblem(){

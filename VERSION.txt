@@ -1,3 +1,8 @@
-Maseer28 Shafa FINAL V13
-Choice B restart flow:
-Final result -> Restart 28-day course -> Personal Information with previous values preserved/editable -> Problem + Goal can be changed -> Specific Assessment -> Day 1 -> New 28-day journey.
+Maseer28 Shafa FINAL V14
+Restart policy:
+- Unlimited client-side restarts; no IP/device limit is enforced.
+- Restart opens Personal Information first.
+- Previous personal information is preserved and editable.
+- Problem/goal can be replaced for the new journey.
+- Previous assessment/progress is reset for the new journey.
+- A visible "شروع مسیر جدید با مشکل جدید" button is available on the dashboard.
