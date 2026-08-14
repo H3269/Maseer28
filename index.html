@@ -42,6 +42,17 @@
 <label>آیا مشکل کلامی یا شنیداری دارید؟</label><select id="pCommunication"><option value="">انتخاب کنید</option><option value="خیر">خیر</option><option value="کلامی">مشکل کلامی</option><option value="شنیداری">مشکل شنیداری</option><option value="هر دو">هر دو</option></select>
 <button class="primary" data-action="saveProfile">ادامه به ارزیابی اختصاصی</button></section>
 
+<section id="newProblem" class="card hidden">
+<span class="badge">شروع مسیر جدید</span><h2>مشکل یا هدف جدیدت را ثبت کن</h2>
+<p class="muted">اطلاعات هویتی قبلی حفظ شده است؛ فقط موضوع جدیدی را که می‌خواهی روی آن کار کنی ثبت کن.</p>
+<label>مهم‌ترین مسئله یا هدف جدید شما چیست؟</label>
+<textarea id="newProblemText" class="small" placeholder="مثلاً خشم، اضطراب، ترس، اعتمادبه‌نفس، وابستگی عاطفی و..."></textarea>
+<label>مدت زمانی که این مسئله را تجربه می‌کنید</label><input id="newDuration" placeholder="مثلاً ۲ سال">
+<label>از این مسیر جدید به چه نتیجه‌ای می‌خواهید برسید؟</label>
+<textarea id="newGoal" class="small" placeholder="تغییر مطلوب خود را دقیق بنویسید"></textarea>
+<button class="primary" data-action="saveNewProblem">ثبت مشکل جدید و ورود به ارزیابی</button>
+</section>
+
 <section id="assessment" class="card hidden"><span class="badge">مرحله دوم · ارزیابی اختصاصی</span><h2 id="assessmentTitle">ارزیابی بر اساس مشکل شما</h2><p class="muted" id="assessmentIntro"></p><div id="questions"></div><label>در پایان ۲۸ روز دوست دارم چه تغییری را ببینم؟</label><textarea id="goalText" class="small"></textarea><button class="primary" data-action="saveAssessment">ثبت ارزیابی و شروع روز ۱</button></section>
 
 <section id="dashboard" class="card hidden"><span class="badge">داشبورد شخصی</span><h2 id="dashTitle">مسیر شما</h2><div id="profileSummary"></div><div class="metric"><div class="metricBox"><strong id="dashProgress">۰٪</strong><span>پیشرفت مسیر</span></div><div class="metricBox"><strong id="dashDays">۰/۲۸</strong><span>روز تکمیل‌شده</span></div></div><div id="finalResult" class="result hidden"></div>
@@ -111,13 +122,22 @@ function fresh(){return{started:false,profile:false,assessment:false,category:"�
 function state(){try{let s=JSON.parse(localStorage.getItem(KEY)||"null");if(!s)s=fresh();s.completed=s.completed||[];s.meditations=s.meditations||{};s.answers=s.answers||{};s.feedback=s.feedback||{};s.dailyScores=s.dailyScores||{};return s}catch(e){return fresh()}}
 function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
 function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
-function show(id){["home","profile","assessment","dashboard","day","books","support","final","done"].forEach(x=>$(x).classList.toggle("hidden",x!==id));window.scrollTo({top:0,behavior:"smooth"})}
+function show(id){["home","profile","newProblem","assessment","dashboard","day","books","support","final","done"].forEach(x=>$(x).classList.toggle("hidden",x!==id));window.scrollTo({top:0,behavior:"smooth"})}
 function update(){let s=state(),n=s.completed.length,p=Math.round(n/28*100);$("bar").style.width=p+"%";$("progressText").textContent=`روز ${fa(n)} از ۲۸`;$("percent").textContent=fa(p)+"٪"}
 function start(){let s=state();s.started=true;save(s);if(!s.profile)show("profile");else if(!s.assessment)prepareAssessment();else showDashboard();update()}
 function saveProfile(){
  let p={name:$("pName").value.trim(),age:Number($("pAge").value),gender:$("pGender").value,phone:$("pPhone").value.trim(),problem:$("pProblem").value.trim(),duration:$("pDuration").value.trim(),goal:$("pGoal").value.trim(),condition:$("pCondition").value,conditionDetail:$("pConditionDetail").value.trim(),medication:$("pMedication").value.trim(),communication:$("pCommunication").value};
  if(!p.name||!p.age||!p.problem||!p.goal||!p.condition||!p.communication){alert("لطفاً نام، سن، مسئله، هدف، وضعیت بیماری و وضعیت کلامی/شنیداری را کامل کنید.");return}
  let s=state();p.code=s.profileData?.code||("M28-"+String(Date.now()).slice(-6));s.profileData=p;s.profile=true;s.started=true;s.assessment=false;s.assessmentData=null;save(s);prepareAssessment()
+}
+function saveNewProblem(){
+ let problem=$("newProblemText").value.trim(),duration=$("newDuration").value.trim(),goal=$("newGoal").value.trim();
+ if(!problem||!goal){alert("لطفاً مشکل جدید و نتیجه‌ای که می‌خواهی به آن برسی را کامل وارد کن.");return}
+ let s=state(),p=s.profileData||{};
+ p.problem=problem;p.duration=duration;p.goal=goal;
+ s.profileData=p;s.profile=true;s.assessment=false;s.assessmentData=null;
+ s.completed=[];s.meditations={};s.answers={};s.feedback={};s.dailyScores={};s.final=null;s.started=true;
+ save(s);currentDay=1;prepareAssessment()
 }
 function detectCategory(problem){
  let t=(problem||"").toLowerCase();
@@ -247,14 +267,18 @@ function finish(){
  s.final={answers:a,score,f1,f2,f3,f4};save(s);show("done")
 }
 function newJourney(){
- let s=state();s.completed=[];s.meditations={};s.answers={};s.feedback={};s.dailyScores={};s.final=null;s.assessment=false;s.assessmentData=null;s.started=true;s.profile=true;save(s);currentDay=1;prepareAssessment();update()
+ let s=state();
+ s.completed=[];s.meditations={};s.answers={};s.feedback={};s.dailyScores={};s.final=null;
+ s.assessment=false;s.assessmentData=null;s.started=true;s.profile=true;
+ save(s);currentDay=1;
+ $("newProblemText").value="";$("newDuration").value="";$("newGoal").value="";
+ show("newProblem");update()
 }
-function showBooks(){show("books")}function showSupport(){show("support")}
 function init(){
  let s=state();if(!s.started)show("home");else if(!s.profile)show("profile");else if(!s.assessment)prepareAssessment();else if(s.completed.length>=28&&s.final)showDashboard();else showDashboard();update()
 }
 document.addEventListener("click",e=>{const el=e.target.closest("[data-action]");if(!el)return;const a=el.dataset.action;try{if(typeof window[a]==="function")window[a]()}catch(err){console.error(err);alert("این بخش با خطا روبه‌رو شد. لطفاً دوباره تلاش کن.")}});
-window.start=start;window.saveProfile=saveProfile;window.saveAssessment=saveAssessment;window.openCurrentDay=openCurrentDay;window.showBooks=showBooks;window.showSupport=showSupport;window.markMeditation=markMeditation;window.completeDay=completeDay;window.previousDay=previousDay;window.showDashboard=showDashboard;window.finish=finish;window.newJourney=newJourney;
+window.start=start;window.saveProfile=saveProfile;window.saveAssessment=saveAssessment;window.openCurrentDay=openCurrentDay;window.showBooks=showBooks;window.showSupport=showSupport;window.markMeditation=markMeditation;window.completeDay=completeDay;window.previousDay=previousDay;window.showDashboard=showDashboard;window.finish=finish;window.newJourney=newJourney;window.saveNewProblem=saveNewProblem;
 init();
 </script>
 </body>

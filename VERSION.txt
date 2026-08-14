@@ -1,2 +1,2 @@
-Maseer28 Shafa FINAL V5 | 2026-08-14
-After the final 28-day evaluation, the exact dashboard button in place of «ادامه مسیر» becomes «شروع مجدد دوره» and launches a new assessment while retaining identity/profile data.
+Maseer28 Shafa FINAL V6 | 2026-08-14
+Restart now opens a dedicated new-problem registration screen while preserving identity data.
