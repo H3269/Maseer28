@@ -1,2 +1,3 @@
-Maseer28 Shafa FINAL V10
-Final flow: final result -> restart -> new problem + goal -> new assessment -> new 28-day journey.
+Maseer28 Shafa FINAL V11
+Exact final flow:
+Telegram Bot -> Maseer 28 -> Personal Info -> Problem + Goal -> Specific Assessment -> Day 1 -> Daily Exercise + Practical Action + Supplementary Suggestion + Feedback + Cut-Link Meditation -> Day 2 ... Day 28 -> Final Assessment -> Score /100 -> Recommendation -> Restart -> Personal Info -> Problem + Goal -> Specific Assessment -> New 28-Day Journey.

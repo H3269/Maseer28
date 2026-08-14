@@ -263,12 +263,23 @@ function finish(){
  s.final={answers:a,score,f1,f2,f3,f4};save(s);show("done")
 }
 function newJourney(){
-  const s=state();
-  if(!s.profileData){show("profile");return}
-  $("npProblem").value="";
-  $("npDuration").value="";
-  $("npGoal").value="";
-  show("newProblem");
+  // Start a completely new 28-day journey from the beginning.
+  // The personal-information form is intentionally shown first.
+  let fresh={
+    started:true, profile:false, profileData:null,
+    assessment:false, assessmentData:null, category:null,
+    completed:[], meditations:{}, answers:{}, feedback:{}, dailyScores:{}, final:null
+  };
+  save(fresh);
+  currentDay=1;
+  // Clear any previous values so the new journey really starts from scratch.
+  ["pName","pAge","pPhone","pProblem","pDuration","pGoal","pConditionDetail","pMedication"].forEach(id=>{
+    const el=$(id); if(el) el.value="";
+  });
+  ["pGender","pCondition","pCommunication"].forEach(id=>{
+    const el=$(id); if(el) el.selectedIndex=0;
+  });
+  show("profile");
   update();
 }
 function saveNewProblem(){
