@@ -121,7 +121,7 @@
 
 <section id="done" class="card hidden"><div class="welcome"><span class="badge">مسیر تکمیل شد</span><h2>۲۸ روز را به پایان رساندی.</h2><p class="muted">نتیجه ارزیابی نهایی در داشبورد ثبت شده است.</p><button class="primary" data-action="showDashboard">📊 مشاهده نتیجه در داشبورد</button><button class="gold" data-action="newJourney">🔄 شروع دوباره مسیر ۲۸ روزه</button><p class="muted">در شروع دوباره، مشخصات هویتی قبلی حفظ می‌شود؛ فقط ارزیابی مشکل جدید دوباره فعال می‌شود و مسیر تازه‌ای ساخته خواهد شد.</p></div></section>
 
-<div class="footer">نسخه ۱۸ · مسیر ۲۸ روزه بازسازی ذهن · مرکز هیپنوتراپی شفا<br>برنامه آموزشی و خودمشاهده‌ای؛ جایگزین تشخیص یا درمان تخصصی نیست.</div>
+<div class="footer">نسخه ۱۹ · مسیر ۲۸ روزه بازسازی ذهن · مرکز هیپنوتراپی شفا<br>برنامه آموزشی و خودمشاهده‌ای؛ جایگزین تشخیص یا درمان تخصصی نیست.</div>
 </div>
 
 <script>
@@ -167,7 +167,9 @@ function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
 function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 function show(id){["home","profile","newProblem","assessment","dashboard","day","books","support","final","done"].forEach(x=>$(x).classList.toggle("hidden",x!==id));window.scrollTo({top:0,behavior:"smooth"})}
 function update(){let s=state(),n=s.completed.length,p=Math.round(n/28*100);$("bar").style.width=p+"%";$("progressText").textContent=`روز ${fa(n)} از ۲۸`;$("percent").textContent=fa(p)+"٪"}
-function start(){let s=state();s.started=true;save(s);if(!s.profile)show("profile");else if(!s.assessment)prepareAssessment();else showDashboard();update()}
+const APP_UI_VERSION="19";
+function start(){let s=state();s.uiVersionSeen=APP_UI_VERSION;s.started=true;save(s);prefillProfile(s);show("profile");update()}
+function prefillProfile(s){const p=s.profileData||{};if($("pName"))$("pName").value=p.name||"";if($("pAge"))$("pAge").value=p.age==null?"":String(p.age);if($("pGender"))$("pGender").value=p.gender||"";if($("pPhone"))$("pPhone").value=p.phone||"";if($("pProblem"))$("pProblem").value=p.problem||"";if($("pDuration"))$("pDuration").value=p.duration||"";if($("pGoal"))$("pGoal").value=p.goal||"";if($("pCondition"))$("pCondition").value=p.condition||"";if($("pConditionDetail"))$("pConditionDetail").value=p.conditionDetail||"";if($("pMedication"))$("pMedication").value=p.medication||"";if($("pCommunication"))$("pCommunication").value=p.communication||""}
 
 function normalizeDigits(value){
  return String(value??"").replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d));
@@ -494,7 +496,12 @@ function saveNewProblem(){
 function showBooks(){show("books")}function showSupport(){show("support")}
 function init(){
  setupInputRules();
- let s=state();if(!s.started)show("home");else if(!s.profile)show("profile");else if(!s.assessment)prepareAssessment();else if(s.completed.length>=28&&s.final)showDashboard();else showDashboard();update()
+ let s=state();
+ if(!s.started || s.uiVersionSeen!==APP_UI_VERSION){show("home");}
+ else if(!s.profile)show("profile");
+ else if(!s.assessment)prepareAssessment();
+ else showDashboard();
+ update()
 }
 document.addEventListener("click",e=>{const el=e.target.closest("[data-action]");if(!el)return;const a=el.dataset.action;try{if(typeof window[a]==="function")window[a]()}catch(err){console.error(err);alert("این بخش با خطا روبه‌رو شد. لطفاً دوباره تلاش کن.")}});
 window.start=start;window.saveProfile=saveProfile;window.saveAssessment=saveAssessment;window.openCurrentDay=openCurrentDay;window.showBooks=showBooks;window.showSupport=showSupport;window.markMeditation=markMeditation;window.completeDay=completeDay;window.previousDay=previousDay;window.showDashboard=showDashboard;window.finish=finish;window.newJourney=newJourney;window.restartCourseFromBeginning=restartCourseFromBeginning;window.saveNewProblem=saveNewProblem;
