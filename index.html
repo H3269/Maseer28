@@ -43,14 +43,19 @@
 <button class="primary" data-action="saveProfile">ادامه به ارزیابی اختصاصی</button></section>
 
 <section id="newProblem" class="card hidden">
-<span class="badge">شروع مسیر جدید</span><h2>مشکل یا هدف جدیدت را ثبت کن</h2>
-<p class="muted">اطلاعات هویتی قبلی حفظ شده است؛ فقط موضوع جدیدی را که می‌خواهی روی آن کار کنی ثبت کن.</p>
-<label>مهم‌ترین مسئله یا هدف جدید شما چیست؟</label>
-<textarea id="newProblemText" class="small" placeholder="مثلاً خشم، اضطراب، ترس، اعتمادبه‌نفس، وابستگی عاطفی و..."></textarea>
-<label>مدت زمانی که این مسئله را تجربه می‌کنید</label><input id="newDuration" placeholder="مثلاً ۲ سال">
-<label>از این مسیر جدید به چه نتیجه‌ای می‌خواهید برسید؟</label>
-<textarea id="newGoal" class="small" placeholder="تغییر مطلوب خود را دقیق بنویسید"></textarea>
-<button class="primary" data-action="saveNewProblem">ثبت مشکل جدید و ورود به ارزیابی</button>
+  <div class="welcome">
+    <span class="badge">مسیر جدید</span>
+    <h2>مشکل جدیدت را ثبت کن</h2>
+    <p class="muted">مشخصات قبلی تو حفظ شده است. فقط مشکل و هدف جدیدت را ثبت کن تا ارزیابی و مسیر ۲۸ روزه متناسب با آن ساخته شود.</p>
+  </div>
+  <label>مهم‌ترین مشکل یا چالش جدیدت چیست؟</label>
+  <textarea id="npProblem" class="small" placeholder="مثلاً خشم، اضطراب، ترس، وابستگی عاطفی، اعتمادبه‌نفس، اهمال‌کاری و..."></textarea>
+  <label>این مشکل از چه زمانی وجود دارد؟</label>
+  <input id="npDuration" placeholder="مثلاً ۲ سال، ۶ ماه، از کودکی...">
+  <label>می‌خواهی در پایان این مسیر به چه تغییری برسی؟</label>
+  <textarea id="npGoal" class="small" placeholder="هدف خودت را واضح و کوتاه بنویس..."></textarea>
+  <button class="primary" data-action="saveNewProblem">ثبت مشکل جدید و شروع ارزیابی</button>
+  <button class="secondary" data-action="showDashboard">بازگشت به نتیجه قبلی</button>
 </section>
 
 <section id="assessment" class="card hidden"><span class="badge">مرحله دوم · ارزیابی اختصاصی</span><h2 id="assessmentTitle">ارزیابی بر اساس مشکل شما</h2><p class="muted" id="assessmentIntro"></p><div id="questions"></div><label>در پایان ۲۸ روز دوست دارم چه تغییری را ببینم؟</label><textarea id="goalText" class="small"></textarea><button class="primary" data-action="saveAssessment">ثبت ارزیابی و شروع روز ۱</button></section>
@@ -129,15 +134,6 @@ function saveProfile(){
  let p={name:$("pName").value.trim(),age:Number($("pAge").value),gender:$("pGender").value,phone:$("pPhone").value.trim(),problem:$("pProblem").value.trim(),duration:$("pDuration").value.trim(),goal:$("pGoal").value.trim(),condition:$("pCondition").value,conditionDetail:$("pConditionDetail").value.trim(),medication:$("pMedication").value.trim(),communication:$("pCommunication").value};
  if(!p.name||!p.age||!p.problem||!p.goal||!p.condition||!p.communication){alert("لطفاً نام، سن، مسئله، هدف، وضعیت بیماری و وضعیت کلامی/شنیداری را کامل کنید.");return}
  let s=state();p.code=s.profileData?.code||("M28-"+String(Date.now()).slice(-6));s.profileData=p;s.profile=true;s.started=true;s.assessment=false;s.assessmentData=null;save(s);prepareAssessment()
-}
-function saveNewProblem(){
- let problem=$("newProblemText").value.trim(),duration=$("newDuration").value.trim(),goal=$("newGoal").value.trim();
- if(!problem||!goal){alert("لطفاً مشکل جدید و نتیجه‌ای که می‌خواهی به آن برسی را کامل وارد کن.");return}
- let s=state(),p=s.profileData||{};
- p.problem=problem;p.duration=duration;p.goal=goal;
- s.profileData=p;s.profile=true;s.assessment=false;s.assessmentData=null;
- s.completed=[];s.meditations={};s.answers={};s.feedback={};s.dailyScores={};s.final=null;s.started=true;
- save(s);currentDay=1;prepareAssessment()
 }
 function detectCategory(problem){
  let t=(problem||"").toLowerCase();
@@ -267,13 +263,25 @@ function finish(){
  s.final={answers:a,score,f1,f2,f3,f4};save(s);show("done")
 }
 function newJourney(){
- let s=state();
- s.completed=[];s.meditations={};s.answers={};s.feedback={};s.dailyScores={};s.final=null;
- s.assessment=false;s.assessmentData=null;s.started=true;s.profile=true;
- save(s);currentDay=1;
- $("newProblemText").value="";$("newDuration").value="";$("newGoal").value="";
- show("newProblem");update()
+  let s=state();
+  if(!s.profileData){show("profile");return}
+  $("npProblem").value="";
+  $("npDuration").value="";
+  $("npGoal").value="";
+  show("newProblem");
 }
+function saveNewProblem(){
+  const problem=$("npProblem").value.trim();
+  const duration=$("npDuration").value.trim();
+  const goal=$("npGoal").value.trim();
+  if(!problem||!goal){alert("لطفاً مشکل جدید و هدف جدیدت را کامل وارد کن.");return}
+  let s=state();
+  s.profileData={...s.profileData,problem,duration,goal};
+  s.completed=[];s.meditations={};s.answers={};s.feedback={};s.dailyScores={};
+  s.final=null;s.assessment=false;s.assessmentData=null;s.started=true;s.profile=true;
+  save(s);currentDay=1;prepareAssessment();update()
+}
+function showBooks(){show("books")}function showSupport(){show("support")}
 function init(){
  let s=state();if(!s.started)show("home");else if(!s.profile)show("profile");else if(!s.assessment)prepareAssessment();else if(s.completed.length>=28&&s.final)showDashboard();else showDashboard();update()
 }

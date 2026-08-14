@@ -1,2 +1,2 @@
-Maseer28 Shafa FINAL V6 | 2026-08-14
-Restart now opens a dedicated new-problem registration screen while preserving identity data.
+Maseer28 Shafa FINAL V7 | 2026-08-14
+Restart now opens a dedicated new-problem form before the new assessment.
