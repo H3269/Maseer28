@@ -1,3 +1,2 @@
-Maseer28 Shafa FINAL V18
-Built from V16 with requested professional input validation, problem selection, start gate, and adaptive day-to-day planning.
-Restart flow preserved; no IP/device counter.
+V18
+2026-08-15
