@@ -46,7 +46,7 @@
   <div class="welcome">
     <span class="badge">مسیر جدید</span>
     <h2>مشکل جدیدت را ثبت کن</h2>
-    <p class="muted">مشخصات قبلی تو حفظ شده است. فقط مشکل و هدف جدیدت را ثبت کن تا ارزیابی و مسیر ۲۸ روزه متناسب با آن ساخته شود.</p>
+    <p class="muted">مشخصات قبلی تو حفظ شده است. ابتدا <b>مشکل و هدف جدیدت</b> را ثبت کن؛ بعد از ثبت این مرحله، ارزیابی اختصاصی مشکل جدید باز می‌شود.</p>
   </div>
   <label>مهم‌ترین مشکل یا چالش جدیدت چیست؟</label>
   <textarea id="npProblem" class="small" placeholder="مثلاً خشم، اضطراب، ترس، وابستگی عاطفی، اعتمادبه‌نفس، اهمال‌کاری و..."></textarea>
@@ -61,7 +61,7 @@
 <section id="assessment" class="card hidden"><span class="badge">مرحله دوم · ارزیابی اختصاصی</span><h2 id="assessmentTitle">ارزیابی بر اساس مشکل شما</h2><p class="muted" id="assessmentIntro"></p><div id="questions"></div><label>در پایان ۲۸ روز دوست دارم چه تغییری را ببینم؟</label><textarea id="goalText" class="small"></textarea><button class="primary" data-action="saveAssessment">ثبت ارزیابی و شروع روز ۱</button></section>
 
 <section id="dashboard" class="card hidden"><span class="badge">داشبورد شخصی</span><h2 id="dashTitle">مسیر شما</h2><div id="profileSummary"></div><div class="metric"><div class="metricBox"><strong id="dashProgress">۰٪</strong><span>پیشرفت مسیر</span></div><div class="metricBox"><strong id="dashDays">۰/۲۸</strong><span>روز تکمیل‌شده</span></div></div><div id="finalResult" class="result hidden"></div>
-<button id="journeyActionButton" class="primary" data-action="openCurrentDay">ادامه مسیر</button><button class="gold" data-action="showBooks">📚 کتاب‌های «از حقیقت تا واقعیت»</button><a class="telegram" href="https://t.me/Healing_Hypnotherapy_Center" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;border-radius:12px;padding:11px;margin-top:9px;font-weight:800">📢 ورود به کانال مرکز هیپنوتراپی شفا</a><button class="secondary" data-action="showSupport">☎️ پشتیبانی و نوبت‌دهی</button>
+<button id="journeyActionButton" class="primary" type="button" onclick="handleJourneyButton()">ادامه مسیر</button><button class="gold" data-action="showBooks">📚 کتاب‌های «از حقیقت تا واقعیت»</button><a class="telegram" href="https://t.me/Healing_Hypnotherapy_Center" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;border-radius:12px;padding:11px;margin-top:9px;font-weight:800">📢 ورود به کانال مرکز هیپنوتراپی شفا</a><button class="secondary" data-action="showSupport">☎️ پشتیبانی و نوبت‌دهی</button>
 <h3 style="margin-top:20px">روزهای مسیر</h3><div class="grid" id="daysGrid"></div><p class="muted">روزهای قبلی باز هستند؛ روزهای آینده تا تکمیل روز فعلی قفل می‌مانند.</p></section>
 
 <section id="day" class="card hidden"><span class="badge" id="dayBadge"></span><h2 id="dayTitle"></h2><p class="muted" id="dayIntro"></p>
@@ -178,12 +178,12 @@ if(s.final){
   r.classList.remove("hidden");
   r.innerHTML=buildRecommendation(s);
   journeyBtn.textContent="🔄 شروع مجدد دوره";
-  journeyBtn.dataset.action="newJourney";
+  journeyBtn.setAttribute("onclick","handleJourneyButton()");
   journeyBtn.className="gold";
 }else{
   r.classList.add("hidden");
   journeyBtn.textContent="ادامه مسیر";
-  journeyBtn.dataset.action="openCurrentDay";
+  journeyBtn.setAttribute("onclick","handleJourneyButton()");
   journeyBtn.className="primary";
 }
  const g=$("daysGrid");g.innerHTML="";
@@ -262,13 +262,18 @@ function finish(){
  let f1=$("f1").value.trim(),f2=$("f2").value.trim(),f3=$("f3").value.trim(),f4=$("f4").value.trim();if(!f1||!f2||!f3||!f4){alert("لطفاً چهار بخش جمع‌بندی را کامل کن.");return}
  s.final={answers:a,score,f1,f2,f3,f4};save(s);show("done")
 }
+function handleJourneyButton(){
+  const s=state();
+  if(s.final){newJourney();}else{openCurrentDay();}
+}
 function newJourney(){
-  let s=state();
+  const s=state();
   if(!s.profileData){show("profile");return}
   $("npProblem").value="";
   $("npDuration").value="";
   $("npGoal").value="";
   show("newProblem");
+  update();
 }
 function saveNewProblem(){
   const problem=$("npProblem").value.trim();

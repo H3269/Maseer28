@@ -1,2 +1,2 @@
-Maseer28 Shafa FINAL V7 | 2026-08-14
-Restart now opens a dedicated new-problem form before the new assessment.
+Maseer28 Shafa FINAL V8 | 2026-08-14
+Final result -> Start new course -> Register new problem/goal -> New assessment -> Day 1.
