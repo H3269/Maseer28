@@ -1,2 +1,2 @@
-Maseer28 Shafa FINAL V4 | 2026-08-14
-Dedicated restart button added directly below the final 28-day evaluation result in the dashboard.
+Maseer28 Shafa FINAL V5 | 2026-08-14
+After the final 28-day evaluation, the exact dashboard button in place of «ادامه مسیر» becomes «شروع مجدد دوره» and launches a new assessment while retaining identity/profile data.
