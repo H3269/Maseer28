@@ -1,5 +1,6 @@
-Maseer28 Shafa — V24
-Clean exercise/action separation
-Internal protocol text removed from client-facing cards
-Goal + initial assessment + daily feedback retained in adaptive selection
+Maseer28 Shafa — V26
+Professional welcome screen with Shafa branding
+Fixed welcome START and HOW IT WORKS button click handlers
+First-entry UI version gate updated to V26
+Adaptive daily exercise/action logic retained
 34 problem categories × 28 days
