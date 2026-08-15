@@ -252,23 +252,19 @@ function saveProfile(){
 
 function detectCategory(problem){
  const t=String(problem||"").trim();
- const map={
-  "خشم":"خشم","اضطراب":"اضطراب","ترس":"ترس","نفرت":"خشم","حسادت":"حسادت","غم و سوگ":"غم",
-  "احساس گناه":"گناه","وابستگی عاطفی":"وابستگی","اهمال‌کاری":"اهمالکاری",
-  "بی‌خوابی و مشکلات خواب":"خواب","عادت‌های تکراری":"عادت","مرزبندی و نه گفتن":"مرزبندی",
-  "تنهایی":"تنهایی","کمبود انگیزه":"انگیزه","اعتمادبه‌نفس پایین":"اعتمادبه‌نفس",
-  "افکار منفی و نشخوار فکری":"افکارمنفی","مشکلات رابطه":"رابطه","نفرت از خود":"افکارمنفی",
-  "خودسرزنشی":"گناه","کمال‌گرایی":"اعتمادبه‌نفس","اجتناب":"اضطراب","استرس":"اضطراب","رنجش و کینه":"خشم","شرم":"گناه","ترس از قضاوت":"ترس","ترس از شکست":"ترس","ترس از طرد شدن":"وابستگی","شک و تردید":"افکارمنفی","کنترل‌گری":"خشم","بی‌انگیزگی":"انگیزه","خودانتقادی":"افکارمنفی",
-  "احساس بی‌ارزشی":"اعتمادبه‌نفس","مشکل در کنترل هیجان":"خشم","مشکل دیگر":"عمومی"
- };
- if(map[t])return map[t];
- let best="عمومی",score=0;
- for(const [k,c] of Object.entries(CONTENT.categories)){if(k==="عمومی")continue;let n=0;for(const kw of c.keywords||[])if(t.includes(kw))n++;if(n>score){score=n;best=k}}
+ if(CONTENT.categories[t]) return t;
+ let best="مشکل دیگر",score=0;
+ for(const [k,c] of Object.entries(CONTENT.categories)){
+   if(k==="مشکل دیگر") continue;
+   let n=0;
+   for(const kw of c.keywords||[]) if(t.includes(kw)) n++;
+   if(n>score){score=n;best=k}
+ }
  return best;
 }
 function prepareAssessment(){
  let s=state(),cat=detectCategory(s.profileData.problem);s.category=cat;save(s);
- const c=CONTENT.categories[cat]||CONTENT.categories["عمومی"];
+ const c=CONTENT.categories[cat]||CONTENT.categories["مشکل دیگر"];
  $("assessmentTitle").textContent="ارزیابی اختصاصی · "+c.name;
  $("assessmentIntro").textContent="بر اساس مسئله‌ای که ثبت کردی، این ارزیابی روی «"+s.profileData.problem+"» و هدف «"+s.profileData.goal+"» متمرکز است.";
  renderQuestions("questions",s.assessmentData?.answers||[]);
@@ -331,10 +327,12 @@ function openCurrentDay(){let s=state();if(s.completed.length>=28&&s.final){show
 function openDay(n){
  let s=state();if(!s.assessment){prepareAssessment();return}
  let allowed=s.completed.includes(n)||n<=Math.min(28,s.completed.length+1);if(!allowed){alert("این روز هنوز فعال نشده است.");return}
- currentDay=n;let c=CONTENT.categories[s.category]||CONTENT.categories["عمومی"];let action=c.actions[n-1]||c.actions[0];if(n>1&&s.answers[n-1]&&s.dailyScores[n-1]!=null)action=personalizedNext(s,n-1).text;
+ currentDay=n;let c=CONTENT.categories[s.category]||CONTENT.categories["مشکل دیگر"];let action=c.tips[n-1]||c.tips[0];if(n>1&&s.answers[n-1]&&s.dailyScores[n-1]!=null)action=personalizedNext(s,n-1).text;
  $("dayBadge").textContent=`روز ${fa(n)} از ۲۸ · ${c.name}`;$("dayTitle").textContent=`${phaseTitle(n)} · ${c.name}`;$("dayIntro").textContent=`هدف امروز: ${c.goal}`;
- const exercise=(n>1&&s.answers[n-1]&&s.dailyScores[n-1]!=null)?personalizedExercise(s,n-1):(CONTENT.exerciseTemplates[n-1]||CONTENT.exerciseTemplates[0]);
- $("dayExercise").textContent=`${exercise} موضوع «${s.profileData.problem}» را در این تمرین در نظر بگیر.`;
+ const exercise=(n>1&&s.answers[n-1]&&s.dailyScores[n-1]!=null)
+  ? personalizedExercise(s,n-1)
+  : (c.actions[n-1]||c.actions[0]);
+ $("dayExercise").textContent=exercise;
  $("dayAction").textContent=action;
  $("answer").value=s.answers[n]||"";
  $("dailyScore").value=s.dailyScores[n]??"";
@@ -367,43 +365,49 @@ function completeDay(){
  w.appendChild(b)
 }
 function personalizedExercise(s,day){
- const c=CONTENT.categories[s.category]||CONTENT.categories["عمومی"];
- const answer=s.answers[day]||"";
+ const c=CONTENT.categories[s.category]||CONTENT.categories["مشکل دیگر"];
+ const answer=String(s.answers[day]||"").trim();
  const score=Number(s.dailyScores[day]);
  const prev=day>1?Number(s.dailyScores[day-1]):null;
  const delta=prev==null?null:score-prev;
+ const base=c.actions[day]||c.actions[0];
  if(score>=8 || (delta!==null&&delta>=2)){
-   return `بر اساس ثبت روز ${fa(day)}، امروز یک موقعیت کم‌خطر را انتخاب کن، محرک اصلی را نام‌گذاری کن، یک مکث کوتاه ایجاد کن و فقط یک پاسخ جایگزین کوچک را اجرا کن.`;
+   return `تنظیم شدت: ${base} در سطحی کم‌خطر اجرا شود؛ اگر شدت بالا رفت، مکث و تنظیم را در اولویت قرار بده.`;
  }
  if(score<=3 && (delta===null||delta<=-1)){
-   return `بر اساس کاهش شدت ثبت‌شده، امروز همان رفتار مؤثر را در یک موقعیت واقعی تکرار کن و دقیق بنویس چه چیزی باعث شد شدت مشکل پایین‌تر بماند.`;
+   return `تثبیت پیشرفت: ${base} را در یک موقعیت واقعی اما قابل‌کنترل اجرا کن و عامل مؤثر بر کاهش شدت را ثبت کن.`;
+ }
+ if(answer.length<15){
+   return `گام کوچک‌تر: ${base} را با یک موقعیت ساده انجام بده و پاسخ کوتاه اما مشخص ثبت کن.`;
  }
  if(delta===0){
-   return `بر اساس ثابت ماندن شدت، امروز یک موقعیت مشابه روز قبل را با الگوی «محرک، فکر، احساس، رفتار» بررسی کن و یک تفاوت کوچک در پاسخ خود ایجاد کن.`;
+   return `بررسی الگو: ${base} را با تمرکز بر همان نقطه‌ای انجام بده که در گزارش روز قبل تغییر نکرده است.`;
  }
- return `بر اساس پاسخ روز قبلت، امروز تمرین اصلی روز را یک مرحله عمیق‌تر انجام بده و نتیجه را کوتاه و روشن ثبت کن.`;
+ return `پیشروی مرحله‌ای: ${base} را یک بار در موقعیت واقعی اجرا کن و نتیجه را با وضعیت روز قبل مقایسه کن.`;
 }
 function personalizedNext(s,day){
- const c=CONTENT.categories[s.category]||CONTENT.categories["عمومی"];
- const answer=s.answers[day]||"";
+ const c=CONTENT.categories[s.category]||CONTENT.categories["مشکل دیگر"];
+ const answer=String(s.answers[day]||"").trim();
  const score=Number(s.dailyScores[day]);
  const prev=day>1?Number(s.dailyScores[day-1]):null;
  const delta=prev==null?null:score-prev;
+ const base=c.tips[day]||c.tips[0];
  let mode="پیشروی";
  if(score>=8 || (delta!==null&&delta>=2)) mode="تنظیم";
  else if(score<=3 && (delta===null||delta<=-1)) mode="تثبیت";
+ else if(answer.length<15) mode="گام کوچک";
  else if(delta===0) mode="بررسی";
- const base=c.actions[day]||c.actions[0];
- const safe={
-  "تنظیم":`امروز ابتدا محرک اصلی پاسخ دیروزت را پیدا کن و قبل از هر واکنش، یک مکث کوتاه ایجاد کن؛ سپس فقط یک اقدام کوچک و قابل کنترل از تمرین «${base}» انجام بده.`,
-  "تثبیت":`پیشرفت امروزت را تثبیت کن: تمرین «${base}» را در یک موقعیت واقعی با شدت پایین اجرا کن و نتیجه را ثبت کن.`,
-  "بررسی":`امروز روی همان نقطه‌ای که تغییر نکرد تمرکز کن؛ تمرین «${base}» را با توجه ویژه به محرک، فکر و واکنش خودت انجام بده.`,
-  "پیشروی":`تمرین امروز «${base}» را یک مرحله عمیق‌تر اجرا کن و نتیجه را در پاسخ روزانه ثبت کن.`
- };
- return {mode,text:safe[mode],answer,score,delta}
+ const prefix={
+  "تنظیم":"برای روز بعد، شدت کار را پایین و قابل‌کنترل نگه دار: ",
+  "تثبیت":"برای روز بعد، مهارت مؤثر را در یک موقعیت ساده تثبیت کن: ",
+  "گام کوچک":"برای روز بعد، مداخله را به کوچک‌ترین اقدام قابل‌اجرا تبدیل کن: ",
+  "بررسی":"برای روز بعد، همان نقطه ثابت‌مانده را دقیق‌تر بررسی کن: ",
+  "پیشروی":"برای روز بعد، یک گام رفتاری قابل‌اندازه‌گیری اضافه کن: "
+ }[mode];
+ return {mode,text:prefix+base,answer,score,delta};
 }
 function makeFeedback(s,day,a,score){
- const c=CONTENT.categories[s.category]||CONTENT.categories["عمومی"];
+ const c=CONTENT.categories[s.category]||CONTENT.categories["مشکل دیگر"];
  const prev=day>1?s.dailyScores[day-1]:null;
  let progress="";
  if(prev!=null){
