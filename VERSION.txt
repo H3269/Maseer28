@@ -1,6 +1,4 @@
-Maseer28 Shafa — V26
-Professional welcome screen with Shafa branding
-Fixed welcome START and HOW IT WORKS button click handlers
-First-entry UI version gate updated to V26
-Adaptive daily exercise/action logic retained
-34 problem categories × 28 days
+Maseer28 Shafa FINAL V15
+Built from the current GitHub code structure.
+Restart flow: final result -> Personal Information (previous values preserved/editable) -> new problem/goal -> new assessment -> day 1.
+Unlimited restarts; no IP/device counter.
