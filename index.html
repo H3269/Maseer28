@@ -14,48 +14,8 @@
 @media(max-width:430px){.profile{grid-template-columns:1fr}.primary{min-height:52px;padding:13px 15px;font-size:15px;white-space:normal;overflow:visible}}
 </style>
 <meta name="maseer28-build" content="V21">
-
-<style id="v25-welcome-style">
-.welcome-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box}
-.welcome-card{width:min(680px,100%);padding:30px 24px;border-radius:26px;text-align:center;box-sizing:border-box}
-.welcome-kicker{font-size:15px;font-weight:700;margin-bottom:8px}
-.welcome-card h1{margin:0 0 10px;font-size:34px;line-height:1.2}
-.welcome-lead{font-size:19px;font-weight:700;margin:0 0 22px}
-.welcome-card p{font-size:16px;line-height:2;margin:12px 0}
-.welcome-note{font-weight:700;margin-top:20px!important}
-.welcome-start{width:100%;border:0;border-radius:16px;padding:17px 16px;font-size:18px;font-weight:800;cursor:pointer;margin-top:14px}
-.welcome-more{border:0;background:transparent;text-decoration:underline;padding:14px;font-size:14px;cursor:pointer}
-@media(max-width:480px){.welcome-card{padding:24px 18px}.welcome-card h1{font-size:29px}.welcome-card p{font-size:15px;line-height:1.9}.welcome-lead{font-size:17px}}
-</style>
-
 </head>
 <body>
-
-<section id="welcomeScreen" class="welcome-screen" aria-label="شروع مسیر ۲۸ روزه">
-  <div class="welcome-card">
-    <div class="welcome-kicker">🌱 مسیر ۲۸ روزه</div>
-    <h1>بازسازی ذهن</h1>
-    <p class="welcome-lead">هر روز فقط یک قدم؛ اما ۲۸ قدم پشت سر هم.</p>
-    <p>
-      این مسیر برای کمک به تو طراحی شده تا در ۲۸ روز، با تمرین‌های ساده و کاربردی،
-      روی مسئله‌ای که انتخاب می‌کنی کار کنی.
-    </p>
-    <p>
-      در شروع مسیر چند سؤال کوتاه از تو می‌پرسیم تا بهتر بدانیم از کجا شروع می‌کنی
-      و دوست داری به کجا برسی. بعد از آن، هر روز فقط <strong>تمرین همان روز</strong>
-      و <strong>یک راهکار عملی</strong> را می‌بینی.
-    </p>
-    <p>
-      تجربه‌ای که هر روز ثبت می‌کنی به برنامه کمک می‌کند ادامه مسیر را بهتر با شرایط
-      خودت هماهنگ کند. لازم نیست چیزی بلد باشی؛ فقط کافی است هر روز چند دقیقه برای خودت وقت بگذاری.
-    </p>
-    <p class="welcome-note">قرار نیست در ۲۸ روز همه‌چیز یک‌باره تغییر کند؛ قرار است هر روز یک قدم برداری.</p>
-    <button id="start28Btn" class="welcome-start" type="button">شروع مسیر ۲۸ روزه بازسازی ذهن</button>
-    <button id="howWorksBtn" class="welcome-more" type="button">مسیر ۲۸ روزه چگونه کار می‌کند؟</button>
-  </div>
-</section>
-
-
 <div class="app">
 <header class="header">
 <div class="brand"><div class="logo"><img src="logo.png" alt="لوگوی مرکز هیپنوتراپی شفا"></div><div><div class="subtitle">مرکز هیپنوتراپی شفا</div><h1>مسیر ۲۸ روزه بازسازی ذهن</h1><div class="subtitle">یک قدم کوچک، هر روز</div></div></div>
@@ -207,7 +167,7 @@ function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
 function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 function show(id){["home","profile","newProblem","assessment","dashboard","day","books","support","final","done"].forEach(x=>$(x).classList.toggle("hidden",x!==id));window.scrollTo({top:0,behavior:"smooth"})}
 function update(){let s=state(),n=s.completed.length,p=Math.round(n/28*100);$("bar").style.width=p+"%";$("progressText").textContent=`روز ${fa(n)} از ۲۸`;$("percent").textContent=fa(p)+"٪"}
-const APP_UI_VERSION="25";
+const APP_UI_VERSION="24";
 function start(){let s=state();s.uiVersionSeen=APP_UI_VERSION;s.started=true;save(s);prefillProfile(s);show("profile");update()}
 function prefillProfile(s){const p=s.profileData||{};if($("pName"))$("pName").value=p.name||"";if($("pAge"))$("pAge").value=p.age==null?"":String(p.age);if($("pGender"))$("pGender").value=p.gender||"";if($("pPhone"))$("pPhone").value=p.phone||"";if($("pProblem"))$("pProblem").value=p.problem||"";if($("pDuration"))$("pDuration").value=p.duration||"";if($("pGoal"))$("pGoal").value=p.goal||"";if($("pCondition"))$("pCondition").value=p.condition||"";if($("pConditionDetail"))$("pConditionDetail").value=p.conditionDetail||"";if($("pMedication"))$("pMedication").value=p.medication||"";if($("pCommunication"))$("pCommunication").value=p.communication||""}
 
@@ -699,30 +659,5 @@ document.addEventListener("click",e=>{const el=e.target.closest("[data-action]")
 window.start=start;window.saveProfile=saveProfile;window.saveAssessment=saveAssessment;window.openCurrentDay=openCurrentDay;window.showBooks=showBooks;window.showSupport=showSupport;window.markMeditation=markMeditation;window.completeDay=completeDay;window.previousDay=previousDay;window.showDashboard=showDashboard;window.finish=finish;window.newJourney=newJourney;window.restartCourseFromBeginning=restartCourseFromBeginning;window.saveNewProblem=saveNewProblem;
 init();
 </script>
-
-// V25: clean first-entry experience. The welcome screen is presentation-only;
-// it never changes the user's saved day/state.
-(function(){
-  const ws=document.getElementById("welcomeScreen");
-  const start=document.getElementById("start28Btn");
-  const more=document.getElementById("howWorksBtn");
-  if(!ws) return;
-
-  const explanation =
-    "این مسیر ۲۸ روزه هر روز فقط یک تمرین و یک راهکار عملی به تو می‌دهد. " +
-    "مشکل انتخابی، هدف شخصی، ارزیابی اولیه و بازخورد روزهای قبل در ادامه مسیر " +
-    "برای انتخاب محتوای مناسب‌تر استفاده می‌شوند.";
-
-  more?.addEventListener("click",()=>alert(explanation));
-
-  start?.addEventListener("click",()=>{
-    ws.style.display="none";
-    if(typeof showScreen==="function") showScreen("profile");
-    else if(typeof showPage==="function") showPage("profile");
-  });
-
-  // Do not force a reset here. Existing state is handled by the app.
-})();
-
 </body>
 </html>
