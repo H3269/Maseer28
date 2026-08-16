@@ -52,7 +52,7 @@ label{display:block;font-weight:800;font-size:13px;margin:15px 0 7px}input,texta
  <div class="hint">می‌توانی فقط ماه، فقط سال، یا هر دو را انتخاب کنی؛ مثلاً ۳ ماه، ۵ سال یا ۳ سال و ۷ ماه.</div>
 
  <label>آیا بیماری یا شرایط پزشکی خاصی داری؟</label>
- <select id="medicalCondition"><option value="ندارم">خیر، ندارم</option><option value="دارم">بله، دارم</option></select>
+ <select id="medicalCondition"><option value="ندارم">خیر، ندارم</option><option value="دارم">بله، دارم</option><option value="شنیداری کلامی">شنیداری کلامی</option></select>
  <div id="medicalList" class="medical-list hidden">
    <label class="checkrow"><input type="checkbox" name="medical" value="صرع"> صرع</label>
    <label class="checkrow"><input type="checkbox" name="medical" value="تشنج"> تشنج</label>
@@ -157,7 +157,12 @@ function load(){try{return JSON.parse(localStorage.getItem(KEY))||fresh()}catch(
 function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
 function show(id){["home","profile","assessment","dashboard","day","books","support","final","done"].forEach(x=>$(x).classList.toggle("hidden",x!==id));window.scrollTo({top:0,behavior:"smooth"});update()}
 function update(){const s=load(),n=s.completed.length,p=Math.round(n/28*100);$("bar").style.width=p+"%";$("percent").textContent=fa(p)+"٪";$("progressText").textContent=`روز ${fa(n)} از ۲۸`}
-function isPersianOnly(v){const t=String(v||"").trim();return !!t && t.length<=1000 && /^[اآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهیئء‌\\s]+$/.test(t) && /[اآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهیئء]/.test(t)}
+function isPersianOnly(v){
+ const t=String(v||"").trim();
+ if(!t || t.length>1000) return false;
+ return /^[\u0600-\u06FF\u200C\u200D\s،؛؟٫٬«»:!٪ـ\-]+$/.test(t)
+   && /[\u0600-\u06FF]/.test(t);
+}
 function isName(v){const t=String(v||"").trim();return (t.length>=3&&t.length<=50)&&(/^[اآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهیئء‌ ]+$/.test(t)||/^[A-Za-z]+(?:[ -][A-Za-z]+)+$/.test(t))}
 function parseDigits(v,max,min=0){const t=String(v||"").trim();if(!/^(?:[0-9]+|[۰-۹]+)$/.test(t))return null;if(/[0-9]/.test(t)&&/[۰-۹]/.test(t))return null;const x=t.replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d));const n=Number(x);return Number.isInteger(n)&&n>=min&&n<=max?n:null}
 function persianField(id,label){const v=$(id).value.trim();if(!v||!isPersianOnly(v)){alert(`در «${label}» فقط کلمات فارسی و حداکثر ۱۰۰۰ نویسه مجاز است.`);$(id).classList.add("invalid");return false}$(id).classList.remove("invalid");return true}
@@ -191,11 +196,19 @@ function saveProfile(){const name=$("name").value.trim(),age=parseDigits($("age"
  if(medical.length===0&&$("medicalCondition").value==="دارم"){alert("اگر بیماری یا شرایط خاصی داری، حداقل یک مورد را انتخاب کن.");return}
  if(medication==="بله"&&!medicationName){alert("اگر داروی خاصی مصرف می‌کنی، نام دارو را بنویس.");return}
  if(medicationName&&!isPersianOnly(medicationName)){alert("نام دارو را فقط با کلمات فارسی و حداکثر ۱۰۰۰ نویسه بنویس.");return}
- if(!persianField("goal","هدف مسیر"))return;
+ if(!isPersianOnly($("goal").value.trim())){
+ alert("کادر «می‌خواهی در این مسیر چه پیشرفتی حاصل شود؟» باید فقط با متن فارسی و حداکثر ۱۰۰۰ نویسه پر شود.");
+ $("goal").classList.add("invalid"); return;
+}
+$("goal").classList.remove("invalid");
  if($("condition").value.trim()&&!isPersianOnly($("condition").value)){alert("کادر نکته مهم فقط کلمات فارسی را می‌پذیرد.");return}
  let s=load();s.profile={name,age,phone,problem,duration,durationYears:years?Number(years):0,durationMonths:months?Number(months):0,goal:$("goal").value.trim(),condition:$("condition").value.trim(),medicalCondition:$("medicalCondition").value,medical,medication,medicationName};s.assessment=null;s.completed=[];s.answers={};s.scores={};s.shown={};s.final=null;save(s);
  $("assessmentIntro").textContent=`برای «${problem}» چند سؤال کوتاه می‌پرسیم. هدف تو «${s.profile.goal}» است و این اطلاعات در انتخاب تمرین‌های مسیر استفاده می‌شود.`;renderQs("assessmentQs",[]);$("assessmentGoal").value=s.profile.goal;show("assessment")}
-function saveAssessment(){const a=collectQs("assessmentQs");if(a.some(v=>v===null)){alert("به همه سؤال‌ها پاسخ بده.");return}if(!persianField("assessmentGoal","هدف ارزیابی"))return;let s=load();s.assessment={answers:a,avg:a.reduce((x,y)=>x+y,0)/a.length,goal:$("assessmentGoal").value.trim()};save(s);showDashboard()}
+function saveAssessment(){const a=collectQs("assessmentQs");if(a.some(v=>v===null)){alert("به همه سؤال‌ها پاسخ بده.");return}if(!isPersianOnly($("assessmentGoal").value.trim())){
+ alert("کادر هدف ارزیابی باید فقط متن فارسی و حداکثر ۱۰۰۰ نویسه داشته باشد.");
+ $("assessmentGoal").classList.add("invalid"); return;
+}
+$("assessmentGoal").classList.remove("invalid");let s=load();s.assessment={answers:a,avg:a.reduce((x,y)=>x+y,0)/a.length,goal:$("assessmentGoal").value.trim()};save(s);showDashboard()}
 function feedbackMode(s,day){if(day<=1)return"شروع";const score=Number(s.scores[day]),prev=Number(s.scores[day-1]),txt=(s.answers[day]||"")+" "+(s.answers[day-1]||"");const no=/کمک نکرد|فایده نداشت|اثر نکرد|بهتر نشد|تغییری نکرد|جواب نداد|بی‌اثر|بدتر شد/.test(txt);const same=score===prev; if(no||(same&&day>=3))return"تغییر راهبرد";if(score>=8)return"کاهش فشار";if(score<=3)return"تثبیت";if(score<prev)return"پیشروی";return"ادامه"}
 function goalTone(s){const g=s.profile.goal||"";if(/آرام|استرس|اضطراب|ترس/.test(g))return"آرام و مرحله‌ای";if(/اعتماد|قاطع|مرز/.test(g))return"قاطع و عملی";if(/رابطه|ارتباط/.test(g))return"ارتباطی و روشن";return"ساده و قابل‌انجام"}
 function chooseStage(s,day){const mode=feedbackMode(s,day-1);let base=day-1;if(mode==="تغییر راهبرد")base=(base+7)%28;else if(mode==="کاهش فشار")base=(base+3)%28;else if(mode==="تثبیت")base=(base+11)%28;else if(mode==="پیشروی")base=(base+5)%28;else if(mode==="ادامه")base=(base+1)%28;
