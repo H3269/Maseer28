@@ -281,7 +281,17 @@ const KEY="maseer28_state_v32";
 const $=id=>document.getElementById(id);
 const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 const fresh=()=>({started:false,profile:null,assessment:null,assessmentDraft:null,completed:[],feedbacks:{},scores:{},shown:{},final:null});
-function load(){try{return JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){return fresh()}}
+function load(){
+ try{
+  const raw=JSON.parse(localStorage.getItem(KEY));
+  if(!raw)return fresh();
+  raw.completed=Array.from(new Set((Array.isArray(raw.completed)?raw.completed:[]).map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=28))).sort((a,b)=>a-b);
+  raw.feedbacks=raw.feedbacks&&typeof raw.feedbacks==="object"?raw.feedbacks:{};
+  raw.scores=raw.scores&&typeof raw.scores==="object"?raw.scores:{};
+  raw.shown=raw.shown&&typeof raw.shown==="object"?raw.shown:{};
+  return raw;
+ }catch(e){return fresh()}
+}
 function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
 let currentScreen=null;
 const screenHistory=[];
@@ -358,8 +368,8 @@ function feedbackMode(s,day){
  return"ادامه";
 }
 function goalTone(s){const g=s.profile.goal||"";if(/آرام|استرس|اضطراب|ترس/.test(g))return"آرام و مرحله‌ای";if(/اعتماد|قاطع|مرز/.test(g))return"قاطع و عملی";if(/رابطه|ارتباط/.test(g))return"ارتباطی و روشن";return"ساده و قابل‌انجام"}
-function chooseStage(s,day){const mode=feedbackMode(s,day-1);let base=day-1;if(mode==="تغییر راهبرد")base=(base+7)%28;else if(mode==="فشار بالا")base=(base+3)%28;else if(mode==="تثبیت")base=(base+11)%28;else if(mode==="پیشروی")base=(base+5)%28;else if(mode==="ادامه")base=(base+1)%28;
- const used=new Set(Object.values(s.shown||{}).map(x=>x.stage));for(let k=0;k<28;k++){const idx=(base+k)%28;if(!used.has(idx))return idx}return base}
+function chooseStage(s,day){const mode=feedbackMode(s,day-1);const count=STAGES.length;let base=(day-1)%count;if(mode==="تغییر راهبرد")base=(base+7)%count;else if(mode==="فشار بالا")base=(base+3)%count;else if(mode==="تثبیت")base=(base+11)%count;else if(mode==="پیشروی")base=(base+5)%count;else if(mode==="ادامه")base=(base+1)%count;
+ const used=new Set(Object.values(s.shown||{}).filter(x=>x&&Number.isInteger(x.stage)).map(x=>x.stage));for(let k=0;k<count;k++){const idx=(base+k)%count;if(!used.has(idx))return idx}return base}
 function buildDay(s,day){const c=CONTENT.categories[s.profile.problem],idx=chooseStage(s,day),st=STAGES[idx],goal=s.profile.goal,avg=s.assessment?.avg??5,mode=feedbackMode(s,day-1);
  let ex=st[1].replaceAll("{p}",s.profile.problem),ac=st[2].replaceAll("{p}",s.profile.problem);
  if(mode==="تغییر راهبرد"){ac="این بار روش قبلی را تکرار نکن. "+ac}
@@ -445,29 +455,34 @@ function encouragementForFeedback(score,fb){
    return "این نشانه خوبی است؛ شدت مشکل پایین آمده. فردا یک قدم دیگر جلو می‌رویم تا این تغییر را محکم‌تر کنیم.";
  return "امروز یک قدم دیگر برداشتی. بازخوردت ثبت شد و تمرین و راهکار فردا بر اساس همین تجربه تنظیم می‌شود؛ یک قدم دیگر تا روز بعد مانده.";
 }
+let completingDay=false;
 function completeDay(){
+ if(completingDay)return;
+ completingDay=true;
+ try {
  let s=load();
+ const dayBeingCompleted=currentDay;
  if(dailySelected===null){alert("شدت مشکل امروز را از ۰ تا ۱۰ انتخاب کن.");return}
  const fb=getFeedback();
  if(!fb.length){alert("حداقل یک بازخورد برای امروز انتخاب کن.");return}
  s.feedbacks=s.feedbacks||{};s.scores=s.scores||{};s.shown=s.shown||{};
- s.feedbacks[currentDay]=fb;
- s.scores[currentDay]=dailySelected;
- if(!s.completed.includes(currentDay))s.completed.push(currentDay);
+ s.feedbacks[dayBeingCompleted]=fb;
+ s.scores[dayBeingCompleted]=dailySelected;
+ if(!s.completed.includes(dayBeingCompleted))s.completed.push(dayBeingCompleted);
  s.completed=[...new Set(s.completed)].filter(n=>n>=1&&n<=28).sort((a,b)=>a-b);
- const fbText=fb.join("، ");
  const encouragement=encouragementForFeedback(dailySelected,fb);
  save(s);
- if(currentDay<28){
-   const next=nextUnlockedDay(s);
-   if(next<=28){
-     if(!s.shown[next]){s.shown[next]=buildDay(s,next);save(s)}
-     openDay(next);
-   }
+ if(dayBeingCompleted<28){
+   const next=dayBeingCompleted+1;
+   if(!s.shown[next]){s.shown[next]=buildDay(s,next);save(s)}
+   openDay(next);
    return;
  }
  $("journeyCompleteText").innerHTML=`<p>${encouragement}</p><p>۲۸ روز را قدم‌به‌قدم پشت سر گذاشتی. حالا وقت آن است که ببینی این مسیر چه تغییری در تو ایجاد کرده است.</p><p><b>این پایان مسیر نیست؛ پایان یک مرحله و شروع آگاهانه مرحله بعد است.</b></p>`;
  show("journeyComplete");
+ } finally {
+  completingDay=false;
+ }
 }
 function showDashboard(){const s=load();$("dashTitle").textContent=s.final?"مسیر کامل شده":"مسیر شخصی تو";$("summary").innerHTML=`<div class="pill">مشکل: ${s.profile?.problem||""}</div><div class="pill">هدف: ${s.profile?.goal||""}</div><p>تمرین‌های تو بر اساس مشکل، هدف و ارزیابی اولیه ساخته می‌شوند و بازخورد روزانه هم روز بعد را تغییر می‌دهد.</p>`;$("dashPercent").textContent=fa(Math.round(s.completed.length/28*100))+"٪";$("dashDays").textContent=fa(s.completed.length)+"/۲۸";$("continueBtn").textContent=s.final?"مسیر جدید":"ادامه مسیر →";$("days").innerHTML="";const next=nextUnlockedDay(s);for(let i=1;i<=28;i++){const b=document.createElement("button");b.className="day "+(s.completed.includes(i)?"done ":"")+(i===Math.min(28,next)?"current":"");b.textContent=fa(i);b.disabled=i>next;if(!b.disabled)b.onclick=()=>openDay(i);$("days").appendChild(b)}if(s.final){$("summary").innerHTML+=`<div class="resource"><b>نتیجه نهایی:</b> ${fa(s.final.score)} از ۱۰۰</div>`;$("continueBtn").textContent="شروع مسیر تازه"}show("dashboard")}
 function showFinal(){renderQs("finalQs",[] ,true);show("final")}
@@ -887,7 +902,7 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
   on("continueBtn",()=>{const s=load();if(s.final){newJourney();return}if(!s.profile){show("profile");return}if(!s.assessment){show(s.assessmentDraft?"assessment":"assessmentForm");return}openDay(Math.min(28,nextUnlockedDay(s)));});
   on("booksBtn",()=>show("books"));
   on("supportBtn",()=>show("support"));
-  on("booksBack",showDashboard);on("supportBack",showDashboard);on("completeDay",completeDay);
+  on("booksBack",showDashboard);on("supportBack",showDashboard);
   on("prevDay",()=>openDay(Math.max(1,currentDay-1)));on("dayBack",()=>show("profile"));on("dayDash",showDashboard);on("finish",finish);on("doneDash",showDashboard);on("journeyCompleteBack",()=>openDay(28));on("goFinal",showFinal);
 })();
 </script>
