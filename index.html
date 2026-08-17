@@ -58,6 +58,32 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
 .book-grid{display:grid;grid-template-columns:1fr;gap:14px;margin:16px 0}.book-card{display:flex;gap:14px;align-items:stretch;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:12px;overflow:hidden}.book-cover{width:92px;min-width:92px;min-height:132px;border-radius:12px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:8px;box-sizing:border-box;box-shadow:0 8px 20px rgba(0,0,0,.18)}.cover-one{background:linear-gradient(145deg,#173b4d,#7b5d27);color:#fff}.cover-two{background:linear-gradient(145deg,#2c1c43,#8b5e34);color:#fff}.book-cover span{font-weight:800;font-size:14px;line-height:1.5}.book-cover small{margin-top:8px;font-size:10px;opacity:.9}.book-info{flex:1;display:flex;flex-direction:column;align-items:flex-start}.book-info h3{margin:5px 0 4px}.book-info p{margin:0 0 12px;font-size:13px;line-height:1.7;color:var(--muted,#aaa)}.book-tag{font-size:11px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.08)}.book-reader{margin:14px 0;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:#111}.book-reader .reader-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px;background:rgba(255,255,255,.06)}.reader-note{font-size:11px;padding:8px 12px;color:#bbb;background:#171717}.book-reader iframe{display:block;width:100%;height:68vh;min-height:480px;border:0;background:#fff}.book-reader.hidden{display:none!important}
 @media (min-width:700px){.book-grid{grid-template-columns:1fr 1fr}}
 </style>
+
+<style>
+/* V37 · Professional book reader */
+.book-reader{margin:14px 0;border-radius:20px;overflow:hidden;border:1px solid #dfe9e5;background:#fbfdfc;color:#17333b;box-shadow:0 12px 34px rgba(18,61,70,.08)}
+.reader-head-pro{background:linear-gradient(135deg,#155b60,#246f70);color:#fff!important;padding:13px!important;position:sticky;top:0;z-index:5}
+.reader-head-pro strong{font-size:13px;line-height:1.6}
+.reader-toolbar{display:flex;gap:7px;flex-wrap:wrap;padding:10px;background:#f1f6f4;border-bottom:1px solid #e2ebe8}
+.reader-tool{border:1px solid #d7e3df;background:#fff;border-radius:12px;padding:8px 10px;font:inherit;font-size:11px;color:#27545b;cursor:pointer}
+.reader-tool:active{transform:translateY(1px)}
+.reader-search{display:flex;gap:8px;padding:10px;background:#f8fbfa;border-bottom:1px solid #e4ece9}
+.reader-search input{flex:1;min-width:0;border:1px solid #d5e1de;border-radius:12px;padding:10px 12px;font:inherit;direction:rtl;background:#fff}
+.reader-toc{max-height:42vh;overflow:auto;background:#fff;border-bottom:1px solid #e3ebe8;padding:8px}
+.reader-toc-title,.reader-search-title{font-weight:800;font-size:13px;padding:7px 8px 10px;color:#1c5960}
+.toc-item{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:right;border:0;border-bottom:1px solid #edf2f0;background:#fff;padding:10px 8px;font:inherit;color:#254a50;cursor:pointer}
+.toc-item small{white-space:nowrap;color:#8a9996;font-size:9px}
+.reader-progress{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;color:#73817f;font-size:10px;background:#f7faf9;border-bottom:1px solid #e5ecea}
+.reader-page{--reader-font:18px;direction:rtl;text-align:right;padding:22px 19px 26px;min-height:48vh;background:#fff;font-family:Tahoma,"Noto Sans Arabic",Arial,sans-serif;line-height:2.15}
+.reader-page p{margin:0 0 17px;font-size:var(--reader-font);color:#243b40;line-height:2.15;white-space:normal}
+.reader-page .reader-section-title{margin:0 0 17px;padding:10px 12px;border-right:4px solid #2d7776;border-radius:10px;background:#f1f7f5;color:#174e55;font-size:calc(var(--reader-font) + 2px);line-height:1.8}
+.reader-loading,.reader-empty{padding:40px 18px;text-align:center;color:#7b8b88;font-size:13px;line-height:2}
+.reader-nav{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:10px;background:#f1f6f4;border-top:1px solid #e0e9e6}
+.reader-search-results{max-height:38vh;overflow:auto;background:#fff;border-top:1px solid #e3ebe8;padding:8px}
+.search-hit{display:block;width:100%;text-align:right;border:0;border-bottom:1px solid #edf2f0;background:#fff;padding:10px 8px;font:inherit;cursor:pointer;color:#29494e}
+.search-hit b{display:block;color:#1c696b;font-size:10px;margin-bottom:5px}.search-hit span{display:block;font-size:11px;line-height:1.9;color:#657774}
+@media(max-width:430px){.reader-page{padding:19px 15px 23px;--reader-font:17px}.reader-page p{line-height:2.05}.reader-head-pro{padding:11px!important}.reader-tool{font-size:10px;padding:7px 9px}.reader-nav .btn{font-size:11px}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -175,10 +201,25 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
  <span class="badge">📚 کتابخانه اختصاصی</span><h2>از حقیقت تا واقعیت</h2>
  <p class="muted books-intro">کتاب‌های این مجموعه را در محیط اختصاصی مطالعه کن. هر کتاب فقط هنگام انتخاب تو بارگذاری می‌شود تا مسیر ۲۸ روزه سریع و سبک باقی بماند.</p>
  <div class="book-grid">
-  <article class="book-card professional-book"><div class="book-cover-image"><img src="book1.png" alt="جلد اول کتاب از حقیقت تا واقعیت" loading="lazy"></div><div class="book-info"><span class="book-tag">جلد اول</span><h3>از حقیقت تا واقعیت</h3><p>نسخه الکترونیکی کتاب در محیط مطالعه اختصاصی.</p><div class="book-meta"><span>📖 مطالعه دیجیتال</span><span>🔒 دسترسی پس از خرید</span></div><button class="btn primary" data-book="1">📖 مشاهده کتاب</button></div></article>
-  <article class="book-card professional-book"><div class="book-cover-image"><img src="book2.png" alt="جلد دوم کتاب از حقیقت تا واقعیت؛ دگردیسی" loading="lazy"></div><div class="book-info"><span class="book-tag">جلد دوم · دگردیسی</span><h3>از حقیقت تا واقعیت</h3><p>جلد دوم مجموعه با عنوان «دگردیسی».</p><div class="book-meta"><span>📖 مطالعه دیجیتال</span><span>🔒 دسترسی پس از خرید</span></div><button class="btn primary" data-book="2">📖 مشاهده کتاب</button></div></article>
+  <article class="book-card professional-book"><div class="book-cover-image"><img src="book1.png" alt="جلد اول کتاب از حقیقت تا واقعیت" loading="lazy"></div><div class="book-info"><span class="book-tag">جلد اول</span><h3>از حقیقت تا واقعیت</h3><p>نسخه الکترونیکی کتاب در محیط مطالعه اختصاصی.</p><div class="book-meta"><span>📖 مطالعه دیجیتال</span><span>🧪 نسخه آزمایشی مطالعه</span></div><button class="btn primary" data-book="1">📖 مشاهده کتاب</button></div></article>
+  <article class="book-card professional-book"><div class="book-cover-image"><img src="book2.png" alt="جلد دوم کتاب از حقیقت تا واقعیت؛ دگردیسی" loading="lazy"></div><div class="book-info"><span class="book-tag">جلد دوم · دگردیسی</span><h3>از حقیقت تا واقعیت</h3><p>جلد دوم مجموعه با عنوان «دگردیسی».</p><div class="book-meta"><span>📖 مطالعه دیجیتال</span><span>🧪 نسخه آزمایشی مطالعه</span></div><button class="btn primary" data-book="2">📖 مشاهده کتاب</button></div></article>
  </div>
- <div id="bookReader" class="book-reader hidden" aria-live="polite"><div class="reader-head"><button id="closeReader" class="btn secondary">← بازگشت به کتابخانه</button><strong id="readerTitle">مطالعه کتاب</strong></div><div class="reader-note">کتاب فقط پس از انتخاب شما بارگذاری می‌شود.</div><iframe id="bookFrame" title="کتاب دیجیتال" loading="lazy"></iframe></div>
+ <div id="bookReader" class="book-reader hidden" aria-live="polite">
+  <div class="reader-head reader-head-pro"><button id="closeReader" class="btn secondary" type="button">← بازگشت به کتابخانه</button><strong id="readerTitle">مطالعه کتاب</strong></div>
+  <div class="reader-toolbar">
+    <button id="readerTocBtn" class="reader-tool" type="button">☰ فهرست</button>
+    <button id="readerSearchBtn" class="reader-tool" type="button">⌕ جستجو</button>
+    <button id="readerPdfBtn" class="reader-tool" type="button">PDF</button>
+    <button id="readerFontDown" class="reader-tool" type="button">A−</button>
+    <button id="readerFontUp" class="reader-tool" type="button">A+</button>
+  </div>
+  <div id="readerSearchBox" class="reader-search hidden"><input id="readerSearchInput" type="search" placeholder="در متن کتاب جستجو کن…"/><button id="readerSearchGo" class="btn primary" type="button">جستجو</button></div>
+  <div id="readerToc" class="reader-toc hidden"></div>
+  <div class="reader-progress"><span id="readerPageLabel">صفحه ۱</span><span id="readerPercent">۰٪</span></div>
+  <article id="readerPage" class="reader-page"><div class="reader-loading">در حال آماده‌سازی متن کتاب…</div></article>
+  <div class="reader-nav"><button id="readerPrev" class="btn secondary" type="button">→ صفحه قبل</button><button id="readerNext" class="btn primary" type="button">صفحه بعد ←</button></div>
+  <div id="readerSearchResults" class="reader-search-results hidden"></div>
+</div>
  <a class="btn telegram" href="https://t.me/Healing_Hypnotherapy_Center" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">📢 ورود به کانال مرکز</a><button class="btn secondary" id="booksBack">بازگشت به داشبورد</button>
 </section>
 
@@ -289,7 +330,7 @@ function saveProfile(){const name=$("name").value.trim(),age=parseDigits($("age"
 $("goal").classList.remove("invalid");
  if($("condition").value.trim()&&!isPersianOnly($("condition").value)){alert("کادر نکته مهم فقط کلمات فارسی را می‌پذیرد.");return}
  let s=load();s.profile={name,age,phone,problem,duration,durationYears:years?Number(years):0,durationMonths:months?Number(months):0,goal:$("goal").value.trim(),condition:$("condition").value.trim(),medicalCondition:$("medicalCondition").value,medical,medication,medicationName};s.assessment=null;s.completed=[];s.feedbacks={};s.scores={};s.shown={};s.final=null;save(s);
- $("assessmentIntro").textContent=`برای «${problem}» چند سؤال کوتاه می‌پرسیم. هدف تو «${s.profile.goal}» است و این اطلاعات در انتخاب تمرین‌های مسیر استفاده می‌شود.`;renderQs("assessmentQs",[]);$("assessmentGoal").value=s.profile.goal;show("assessment")}
+ $("assessmentFormIntro").textContent=`برای «${problem}» چند سؤال کوتاه می‌پرسیم. هدف تو «${s.profile.goal}» است و این اطلاعات در انتخاب تمرین‌های مسیر استفاده می‌شود.`;renderQs("assessmentQs",[]);show("assessmentForm")}
 function saveAssessment(){const s=load(),draft=s.assessmentDraft;if(!draft){show("assessmentForm");return}if(!isPersianOnly($("assessmentGoal").value.trim())){alert("کادر هدف ارزیابی باید فقط متن فارسی و حداکثر ۱۰۰۰ نویسه داشته باشد.");$("assessmentGoal").classList.add("invalid");return}$("assessmentGoal").classList.remove("invalid");s.assessment={answers:draft.answers,avg:draft.avg,goal:$("assessmentGoal").value.trim()};s.assessmentDraft=null;save(s);showDashboard()}
 function feedbackMode(s,day){
  if(day<=1)return"شروع";
@@ -391,27 +432,6 @@ function encouragementForFeedback(score,fb){
    return "این نشانه خوبی است؛ شدت مشکل پایین آمده. فردا یک قدم دیگر جلو می‌رویم تا این تغییر را محکم‌تر کنیم.";
  return "امروز یک قدم دیگر برداشتی. بازخوردت ثبت شد و تمرین و راهکار فردا بر اساس همین تجربه تنظیم می‌شود؛ یک قدم دیگر تا روز بعد مانده.";
 }
-function completeDay(){
- let s=load();
- if(dailySelected===null){alert("شدت مشکل امروز را از ۰ تا ۱۰ انتخاب کن.");return}
- const fb=getFeedback();
- if(!fb.length){alert("حداقل یک بازخورد برای امروز انتخاب کن.");return}
- s.feedbacks=s.feedbacks||{};s.feedbacks[currentDay]=fb;s.scores[currentDay]=dailySelected;
- if(!s.completed.includes(currentDay))s.completed.push(currentDay);
- s.completed.sort((a,b)=>a-b);
- if(currentDay<28)s.shown[currentDay+1]=buildDay(s,currentDay+1);
- save(s);
- const fbText=fb.join("، ");
- const encouragement=encouragementForFeedback(dailySelected,fb);
- $("feedback").innerHTML=currentDay<28
- ?`<div class="result-card"><b>بازخورد امروز ثبت شد</b><br><span>نمره شدت مشکل: ${fa(dailySelected)} از ۱۰</span><br><span>بازخورد: ${fbText}</span><p>${encouragement}</p><button type="button" id="nextDayBtn" class="primary-btn">ادامه به روز ${fa(currentDay+1)} ←</button></div>`
- :`<div class="result-card"><b>۲۸ روز کامل شد</b><p>${encouragement}</p><button type="button" id="finalBtn" class="primary-btn">رفتن به ارزیابی نهایی ←</button></div>`;
- $("feedback").classList.remove("hidden");
- setTimeout(()=>{
- if(currentDay<28)$("nextDayBtn")?.addEventListener("click",()=>openDay(currentDay+1));
- else $("finalBtn")?.addEventListener("click",()=>showFinal());
-},0);
-}
 function showDashboard(){const s=load();$("dashTitle").textContent=s.final?"مسیر کامل شده":"مسیر شخصی تو";$("summary").innerHTML=`<div class="pill">مشکل: ${s.profile?.problem||""}</div><div class="pill">هدف: ${s.profile?.goal||""}</div><p>تمرین‌های تو بر اساس مشکل، هدف و ارزیابی اولیه ساخته می‌شوند و بازخورد روزانه هم روز بعد را تغییر می‌دهد.</p>`;$("dashPercent").textContent=fa(Math.round(s.completed.length/28*100))+"٪";$("dashDays").textContent=fa(s.completed.length)+"/۲۸";$("continueBtn").textContent=s.final?"مسیر جدید":"ادامه مسیر →";$("days").innerHTML="";for(let i=1;i<=28;i++){const b=document.createElement("button");b.className="day "+(s.completed.includes(i)?"done ":"")+(i===Math.min(28,(s.completed.length?Math.max(...s.completed):0)+1)?"current":"");b.textContent=fa(i);b.disabled=i>((s.completed.length?Math.max(...s.completed):0)+1);if(!b.disabled)b.onclick=()=>openDay(i);$("days").appendChild(b)}if(s.final){$("summary").innerHTML+=`<div class="resource"><b>نتیجه نهایی:</b> ${fa(s.final.score)} از ۱۰۰</div>`;$("continueBtn").textContent="شروع مسیر تازه"}show("dashboard")}
 function showFinal(){renderQs("finalQs",[] ,true);show("final")}
 function finish(){let s=load(),a=collectQs("finalQs");if(a.some(v=>v===null)){alert("به همه سؤال‌های ارزیابی نهایی پاسخ بده.");return}for(const id of ["f1","f2","f3","f4"])if(!persianField(id,"این کادر"))return;s.final={answers:a,score:Math.round(a.reduce((x,y)=>x+y,0)/(a.length*10)*100)};save(s);$("finalResult").innerHTML=`نتیجه خودارزیابی تو ${fa(s.final.score)} از ۱۰۰ است. این عدد فقط برای مقایسه وضعیت شروع و پایان مسیر استفاده می‌شود.`;show("done")}
@@ -425,7 +445,7 @@ function boot(c){
   update();
 }
 function init(){if(location.protocol==="file:"){boot(EMBEDDED_CONTENT);return}fetch("content.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("content");return r.json()}).then(boot).catch(()=>boot(EMBEDDED_CONTENT))}
-$("startBtn").onclick=start;$("howBtn").onclick=()=>$("modal").classList.remove("hidden");$("closeModal").onclick=()=>$("modal").classList.add("hidden");$("profileNext").onclick=saveProfile;$("assessmentFormNext").onclick=saveAssessmentForm;$("assessmentNext").onclick=saveAssessment;$("continueBtn").onclick=()=>{const s=load();if(s.final){newJourney();return}if(!s.profile){show("profile");return}if(!s.assessment){show(s.assessmentDraft?"assessment":"assessmentForm");return}openDay(Math.min(28,(s.completed.length||0)+1));};$("booksBtn").onclick=()=>show("books");$("supportBtn").onclick=()=>show("support");$("booksBack").onclick=showDashboard;$("supportBack").onclick=showDashboard;$("completeDay").onclick=completeDay;$("prevDay").onclick=()=>openDay(Math.max(1,currentDay-1));$("dayBack").onclick=goBack;$("dayDash").onclick=showDashboard;$("finish").onclick=finish;$("doneDash").onclick=showDashboard;
+
 document.addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(b){b.parentElement.querySelectorAll("button").forEach(x=>x.classList.remove("selected"));b.classList.add("selected")}});
 ["name","goal","condition","medicationName","assessmentGoal","f1","f2","f3","f4"].forEach(id=>$(id).addEventListener("input",()=>{if($(id).value.length>1000)$(id).value=$(id).value.slice(0,1000)}));
 $("age").addEventListener("input",()=>{$("age").value=$("age").value.replace(/[^0-9۰-۹]/g,"").slice(0,3)});
@@ -829,7 +849,8 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
     if(inPerson) cards.push(`<div class="service-card"><span class="service-icon">🧠</span><div><strong>۱ جلسه هیپنوتراپی حضوری</strong><small>برای ادامه فرایند تخصصی بر اساس نتیجه مسیر</small></div></div>`);
     if(!cards.length) cards.push(`<div class="service-card"><span class="service-icon">💬</span><div><strong>ادامه مسیر از طریق پشتیبانی مرکز</strong><small>برای انتخاب مناسب‌ترین گام بعدی با توجه به شرایط ثبت‌شده</small></div></div>`);
     const problem=s.profile?.problem||"موضوع ثبت‌شده";
-    return `<div class="recommendation-box"><div class="recommendation-head"><span class="badge">پیشنهاد ادامه مسیر</span><h3>بر اساس اطلاعات ثبت‌شده در ابتدای مسیر و نتیجه ارزیابی نهایی</h3><p>موضوع «${problem}» در پیشنهاد ادامه مسیر در نظر گرفته شده است.</p></div>${cards.join("")}</div>`;
+    const goal=s.profile?.goal||"هدف ثبت‌شده در پرونده";
+    return `<div class="recommendation-box"><div class="recommendation-head"><span class="badge">پیشنهاد ادامه مسیر</span><h3>پیشنهاد شخصی‌سازی‌شده برای ادامه مسیر</h3><p>این پیشنهاد با توجه به موضوع «${problem}»، هدف ثبت‌شده «${goal}» و نتیجه ارزیابی نهایی تنظیم شده است.</p></div>${cards.join("")}</div>`;
   }
 
   finish=function(){
@@ -843,6 +864,19 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
 
   $("profileNext").onclick=saveProfile;$("assessmentFormNext").onclick=saveAssessmentForm;$("assessmentNext").onclick=saveAssessment;$("completeDay").onclick=completeDay;$("finish").onclick=finish;
   $("profileBack")?.addEventListener("click",goBack);$("assessmentFormBack")?.addEventListener("click",goBack);$("assessmentBack")?.addEventListener("click",goBack);
+})();
+
+// Final event wiring: all enhanced functions are defined before any button is connected.
+(function bindFinalControls(){
+  const on=(id,fn)=>{const el=$(id);if(el)el.onclick=fn};
+  on("startBtn",start);
+  on("howBtn",()=>$("modal")?.classList.remove("hidden"));
+  on("closeModal",()=>$("modal")?.classList.add("hidden"));
+  on("continueBtn",()=>{const s=load();if(s.final){newJourney();return}if(!s.profile){show("profile");return}if(!s.assessment){show(s.assessmentDraft?"assessment":"assessmentForm");return}openDay(Math.min(28,(s.completed.length?Math.max(...s.completed):0)+1));});
+  on("booksBtn",()=>show("books"));
+  on("supportBtn",()=>show("support"));
+  on("booksBack",goBack);on("supportBack",goBack);on("completeDay",completeDay);
+  on("prevDay",()=>openDay(Math.max(1,currentDay-1)));on("dayBack",goBack);on("dayDash",showDashboard);on("finish",finish);on("doneDash",showDashboard);
 })();
 </script>
 
@@ -988,28 +1022,69 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
 </style>
 
 <script>
-// Book library test layer: lazy-loads only the selected PDF and leaves the 28-day engine untouched.
+// Professional text reader. Book text is loaded only after the user opens a book.
 (function(){
-  const frame=document.getElementById('bookFrame');
-  const reader=document.getElementById('bookReader');
-  const title=document.getElementById('readerTitle');
-  const booksSection=document.getElementById('books');
+  const frameBookFiles={1:'book1.pdf',2:'book2.pdf'};
+  const dataFiles={1:'book1_text.json',2:'book2_text.json'};
   const titles={1:'از حقیقت تا واقعیت — جلد اول',2:'از حقیقت تا واقعیت — دگردیسی (جلد دوم)'};
-  const files={1:'book1.pdf',2:'book2.pdf'};
-  document.querySelectorAll('[data-book]').forEach(btn=>btn.addEventListener('click',()=>{
-    const id=btn.dataset.book;
-    title.textContent=titles[id];
-    frame.src=files[id];
-    reader.classList.remove('hidden');
-    booksSection.querySelectorAll('.book-grid,.books-intro').forEach(el=>el.style.display='none');
-    reader.scrollIntoView({behavior:'smooth',block:'start'});
-  }));
-  document.getElementById('closeReader')?.addEventListener('click',()=>{
-    frame.src='about:blank';
-    reader.classList.add('hidden');
-    booksSection.querySelector('.book-grid').style.display='grid';
-    window.scrollTo({top:0,behavior:'smooth'});
-  });
+  const stateKey='maseer28_book_reader_v1';
+  const $r=id=>document.getElementById(id);
+  let activeId=null,data=null,pageIndex=0,fontSize=18;
+  try{fontSize=Number(localStorage.getItem(stateKey+'_font')||18)}catch(e){}
+  const faR=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+  const normalizeText=t=>String(t||'').replace(/\u200e|\u200f|\u202a|\u202b|\u202c|\u202d|\u202e|\ufeff/g,'').replace(/ي/g,'ی').replace(/ك/g,'ک');
+  function getSaved(){try{return JSON.parse(localStorage.getItem(stateKey)||'{}')}catch(e){return {}}}
+  function saveSaved(obj){try{localStorage.setItem(stateKey,JSON.stringify(obj))}catch(e){}}
+  function setFont(){const el=$r('readerPage');if(el)el.style.setProperty('--reader-font',fontSize+'px');try{localStorage.setItem(stateKey+'_font',String(fontSize))}catch(e){}}
+  function pct(){return data?Math.round(((pageIndex+1)/data.pages.length)*100):0}
+  function renderPage(){
+    if(!data)return;
+    const p=data.pages[pageIndex];
+    const page=$r('readerPage');
+    const parts=normalizeText(p.text).split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean);
+    page.innerHTML=parts.length?parts.map((x,i)=>{
+      const isHead=/^(فصل|بخش|مقدمه|پیشگفتار|تقدیم|تمرین|جمع بندی|قانون|نتیجه گیری|سخن پایانی)/.test(x);
+      return isHead?`<h3 class="reader-section-title">${escapeHtml(x)}</h3>`:`<p>${escapeHtml(x)}</p>`;
+    }).join(''):`<p class="reader-empty">متن این صفحه در نسخه استخراج‌شده موجود نیست.</p>`;
+    $r('readerPageLabel').textContent=`صفحه ${faR(p.page)} از ${faR(data.pages.length)}`;
+    $r('readerPercent').textContent=faR(pct())+'٪';
+    $r('readerPrev').disabled=pageIndex===0;$r('readerNext').disabled=pageIndex===data.pages.length-1;
+    const saved=getSaved();saved[activeId]=pageIndex;saveSaved(saved);setFont();window.scrollTo({top:$r('readerPage').offsetTop-12,behavior:'smooth'});
+  }
+  function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+  function renderToc(){
+    const box=$r('readerToc');
+    const chapters=(data?.chapters||[]).filter((c,i,a)=>i===a.findIndex(x=>x.page===c.page));
+    box.innerHTML=chapters.length?`<div class="reader-toc-title">فهرست فصل‌ها</div>`+chapters.map(c=>`<button type="button" class="toc-item" data-page="${Math.max(1,c.page)-1}"><span>${escapeHtml(c.title)}</span><small>صفحه ${faR(c.page)}</small></button>`).join(''):`<div class="reader-empty">فهرست فصل‌ها در دسترس نیست.</div>`;
+    box.querySelectorAll('.toc-item').forEach(b=>b.addEventListener('click',()=>{pageIndex=Number(b.dataset.page);box.classList.add('hidden');renderPage()}));
+  }
+  async function openBook(id){
+    activeId=String(id);$r('readerTitle').textContent=titles[id]||'مطالعه کتاب';$r('bookReader').classList.remove('hidden');
+    document.querySelectorAll('#books .book-grid,.books-intro').forEach(el=>el.style.display='none');
+    $r('readerPage').innerHTML='<div class="reader-loading">در حال بارگذاری متن کتاب…</div>';
+    $r('readerToc').classList.add('hidden');$r('readerSearchBox').classList.add('hidden');$r('readerSearchResults').classList.add('hidden');
+    try{
+      const res=await fetch(dataFiles[id],{cache:'force-cache'});if(!res.ok)throw new Error('book data');data=await res.json();
+      const saved=getSaved();pageIndex=Number(saved[activeId]||0);if(pageIndex<0||pageIndex>=data.pages.length)pageIndex=0;renderToc();renderPage();
+    }catch(e){$r('readerPage').innerHTML='<div class="reader-empty">متن کتاب بارگذاری نشد. می‌توانی نسخه PDF را باز کنی.</div>';}
+  }
+  function search(){
+    if(!data)return;const q=normalizeText($r('readerSearchInput').value).trim().toLowerCase();const box=$r('readerSearchResults');
+    if(q.length<2){box.classList.add('hidden');return}
+    const hits=[];for(let i=0;i<data.pages.length&&hits.length<30;i++){const t=normalizeText(data.pages[i].text).toLowerCase();const pos=t.indexOf(q);if(pos>=0){const raw=data.pages[i].text.replace(/\s+/g,' ');hits.push({i,p:data.pages[i].page,snip:raw.slice(Math.max(0,pos-70),Math.min(raw.length,pos+150))})}}
+    box.innerHTML=hits.length?`<div class="reader-search-title">نتایج جستجو: ${faR(hits.length)}</div>`+hits.map(h=>`<button type="button" class="search-hit" data-page="${h.i}"><b>صفحه ${faR(h.p)}</b><span>${escapeHtml(h.snip)}</span></button>`).join(''):'<div class="reader-empty">نتیجه‌ای پیدا نشد.</div>';
+    box.classList.remove('hidden');box.querySelectorAll('.search-hit').forEach(b=>b.addEventListener('click',()=>{pageIndex=Number(b.dataset.page);box.classList.add('hidden');$r('readerSearchBox').classList.add('hidden');renderPage()}));
+  }
+  document.querySelectorAll('[data-book]').forEach(btn=>btn.addEventListener('click',()=>openBook(Number(btn.dataset.book))));
+  $r('closeReader')?.addEventListener('click',()=>{$r('bookReader').classList.add('hidden');data=null;document.querySelectorAll('#books .book-grid,.books-intro').forEach(el=>el.style.display='');window.scrollTo({top:0,behavior:'smooth'})});
+  $r('readerPrev')?.addEventListener('click',()=>{if(pageIndex>0){pageIndex--;renderPage()}});
+  $r('readerNext')?.addEventListener('click',()=>{if(data&&pageIndex<data.pages.length-1){pageIndex++;renderPage()}});
+  $r('readerTocBtn')?.addEventListener('click',()=>{const x=$r('readerToc');x.classList.toggle('hidden');if(!x.classList.contains('hidden'))$r('readerSearchBox').classList.add('hidden')});
+  $r('readerSearchBtn')?.addEventListener('click',()=>{$r('readerSearchBox').classList.toggle('hidden');$r('readerToc').classList.add('hidden');$r('readerSearchInput')?.focus()});
+  $r('readerSearchGo')?.addEventListener('click',search);$r('readerSearchInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')search()});
+  $r('readerFontDown')?.addEventListener('click',()=>{fontSize=Math.max(15,fontSize-1);setFont()});
+  $r('readerFontUp')?.addEventListener('click',()=>{fontSize=Math.min(24,fontSize+1);setFont()});
+  $r('readerPdfBtn')?.addEventListener('click',()=>{if(activeId)window.open(frameBookFiles[activeId],'_blank','noopener')});
 })();
 </script>
 </body></html>
