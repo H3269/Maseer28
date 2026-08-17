@@ -790,8 +790,13 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
     if(errors.length){showValidationErrors(errors,"برای ثبت امروز، این موارد را کامل کن");return}
     let s=load();s.feedbacks=s.feedbacks||{};s.feedbacks[currentDay]=fb;s.scores[currentDay]=dailySelected;if(!s.completed.includes(currentDay))s.completed.push(currentDay);s.completed.sort((a,b)=>a-b);if(currentDay<28)s.shown[currentDay+1]=buildDay(s,currentDay+1);save(s);
     const fbText=fb.join("، "),encouragement=encouragementForFeedback(dailySelected,fb);
-    $("feedback").innerHTML=currentDay<28?`<div class="result-card"><b>بازخورد امروز ثبت شد</b><br><span>نمره شدت مشکل: ${fa(dailySelected)} از ۱۰</span><br><span>بازخورد: ${fbText}</span><p>${encouragement}</p><button type="button" id="nextDayBtn" class="primary-btn">ادامه به روز ${fa(currentDay+1)} ←</button></div>`:`<div class="result-card"><b>۲۸ روز کامل شد</b><p>${encouragement}</p><button type="button" id="finalBtn" class="primary-btn">رفتن به ارزیابی نهایی ←</button></div>`;
-    $("feedback").classList.remove("hidden");setTimeout(()=>{if(currentDay<28)$("nextDayBtn")?.addEventListener("click",()=>openDay(currentDay+1));else $("finalBtn")?.addEventListener("click",()=>showFinal())},0)
+    $("feedback").innerHTML=currentDay<28?`<div class="result-card"><b>بازخورد امروز ثبت شد</b><br><span>نمره شدت مشکل: ${fa(dailySelected)} از ۱۰</span><br><span>بازخورد: ${fbText}</span><p>${encouragement}</p></div>`:`<div class="result-card"><b>۲۸ روز کامل شد</b><p>${encouragement}</p><button type="button" id="finalBtn" class="primary-btn">رفتن به ارزیابی نهایی ←</button></div>`;
+    if(currentDay<28){
+      openDay(currentDay+1);
+    }else{
+      $("feedback").classList.remove("hidden");
+      setTimeout(()=>$("finalBtn")?.addEventListener("click",()=>showFinal()),0);
+    }
   };
 
   finish=function(){
