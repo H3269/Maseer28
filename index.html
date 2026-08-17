@@ -46,6 +46,12 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
 .app-modal-card{max-width:540px;padding:0;overflow:hidden;box-shadow:var(--shadow-lg);border:1px solid rgba(255,255,255,.65);animation:modalPop .2s ease}.app-modal-head{padding:22px 22px 10px;display:flex;align-items:flex-start;gap:13px}.app-modal-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;flex:none;font-size:22px;background:#eef5f3;color:var(--navy)}.app-modal-card.error .app-modal-icon{background:var(--danger-soft);color:var(--danger)}.app-modal-card.success .app-modal-icon{background:var(--success-soft);color:var(--success)}.app-modal-title{margin:1px 0 4px;font-size:19px;color:var(--navy)}.app-modal-message{margin:0;color:var(--muted);font-size:13px;line-height:1.9}.app-modal-body{padding:4px 22px 8px}.app-modal-list{display:grid;gap:8px}.app-modal-item{width:100%;border:1px solid #e3e9e8;background:#fbfcfc;border-radius:13px;padding:10px 12px;text-align:right;display:flex;gap:9px;align-items:flex-start;color:var(--text);cursor:pointer}.app-modal-item:hover{border-color:#cfdad8;background:#f6faf9}.app-modal-item-index{width:23px;height:23px;border-radius:8px;background:var(--danger-soft);color:var(--danger);display:grid;place-items:center;flex:none;font-size:11px;font-weight:900}.app-modal-item strong{display:block;font-size:12px}.app-modal-item small{display:block;color:var(--muted);font-size:11px;line-height:1.7;margin-top:2px}.app-modal-actions{display:flex;gap:9px;padding:13px 22px 20px}.app-modal-actions .btn{margin:0}.app-modal-actions .primary{flex:1}.app-modal-actions .secondary{width:auto;min-width:92px}@keyframes modalPop{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}
 @media(max-width:520px){.form-actions{grid-template-columns:1fr}.form-actions .back-btn{order:2}.app-modal-head{padding:18px 17px 8px}.app-modal-body{padding:4px 17px 7px}.app-modal-actions{padding:12px 17px 17px}.smart-select-list{max-height:220px}}
 
+.professional-book{background:#fff;border:1px solid #e5ebe8;box-shadow:0 10px 28px rgba(20,60,68,.07)}
+.book-cover-image{width:104px;min-width:104px;height:148px;border-radius:13px;overflow:hidden;background:#eef2f0;box-shadow:0 8px 18px rgba(20,50,60,.12)}
+.book-cover-image img{width:100%;height:100%;object-fit:cover;display:block}.book-meta{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px;color:#6f7f7c;font-size:10px}.book-meta span{background:#f4f7f6;border-radius:999px;padding:4px 7px}
+.final-score-card{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:18px;border-radius:18px;background:#f4f8f6;border:1px solid #dfe9e5;margin-bottom:14px;text-align:center}.final-score-card span{font-size:12px;color:#657673;width:100%}.final-score-card strong{font-size:38px;color:#245a60;line-height:1}.final-score-card small{font-size:11px;color:#71807e}
+.recommendation-box{border:1px solid #dfe8e5;border-radius:20px;padding:16px;background:#fff;margin-top:12px}.recommendation-head h3{margin:10px 0 5px;font-size:16px}.recommendation-head p{margin:0 0 12px;color:#687774;font-size:12px;line-height:1.9}.service-card{display:flex;align-items:center;gap:12px;padding:12px;border-radius:15px;background:#f7faf9;border:1px solid #e5ece9;margin-top:9px}.service-icon{font-size:22px}.service-card strong{display:block;color:#234b53;font-size:13px}.service-card small{display:block;color:#75827f;font-size:10.5px;line-height:1.7;margin-top:2px}
+@media(max-width:430px){.book-cover-image{width:88px;min-width:88px;height:128px}.professional-book{gap:11px;padding:10px}}
 </style>
 <style>
 /* Book library test layer — does not alter the 28-day logic */
@@ -156,30 +162,18 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
 </details>
 <button id="completeDay" class="btn primary">ثبت امروز و رفتن به روز بعد</button>
  <div id="feedback" class="feedback hidden"></div>
- <div class="metric"><button id="prevDay" class="btn secondary">← روز قبل</button><button id="nextDayNav" class="btn secondary">روز بعد →</button><button id="dayDash" class="btn secondary">داشبورد</button></div>
+ <div class="metric"><button id="prevDay" class="btn secondary">← روز قبل</button><button id="dayDash" class="btn secondary">داشبورد</button></div>
 </section>
 
 <section id="books" class="card hidden">
- <span class="badge">📚 کتابخانه آموزشی</span>
- <h2>کتاب‌های «از حقیقت تا واقعیت»</h2>
- <p class="muted">این بخش در این نسخه برای تست تجربه مطالعه ساخته شده است. پرداخت و فعال‌سازی خودکار در مرحله بعد اضافه می‌شود.</p>
+ <span class="badge">📚 کتابخانه اختصاصی</span><h2>از حقیقت تا واقعیت</h2>
+ <p class="muted books-intro">کتاب‌های این مجموعه را در محیط اختصاصی مطالعه کن. هر کتاب فقط هنگام انتخاب تو بارگذاری می‌شود تا مسیر ۲۸ روزه سریع و سبک باقی بماند.</p>
  <div class="book-grid">
-  <article class="book-card">
-   <div class="book-cover cover-one"><span>از حقیقت<br>تا واقعیت</span><small>جلد اول</small></div>
-   <div class="book-info"><span class="book-tag">جلد اول</span><h3>از حقیقت تا واقعیت</h3><p>نسخه آزمایشی کتاب‌خوان موبایلی.</p><button class="btn primary" data-book="1">📖 مطالعه آزمایشی</button></div>
-  </article>
-  <article class="book-card">
-   <div class="book-cover cover-two"><span>از حقیقت<br>تا واقعیت</span><small>دگردیسی · جلد دوم</small></div>
-   <div class="book-info"><span class="book-tag">جلد دوم</span><h3>دگردیسی</h3><p>نسخه آزمایشی کتاب‌خوان موبایلی.</p><button class="btn primary" data-book="2">📖 مطالعه آزمایشی</button></div>
-  </article>
+  <article class="book-card professional-book"><div class="book-cover-image"><img src="book1.png" alt="جلد اول کتاب از حقیقت تا واقعیت" loading="lazy"></div><div class="book-info"><span class="book-tag">جلد اول</span><h3>از حقیقت تا واقعیت</h3><p>نسخه الکترونیکی کتاب در محیط مطالعه اختصاصی.</p><div class="book-meta"><span>📖 مطالعه دیجیتال</span><span>🔒 دسترسی پس از خرید</span></div><button class="btn primary" data-book="1">📖 مشاهده کتاب</button></div></article>
+  <article class="book-card professional-book"><div class="book-cover-image"><img src="book2.png" alt="جلد دوم کتاب از حقیقت تا واقعیت؛ دگردیسی" loading="lazy"></div><div class="book-info"><span class="book-tag">جلد دوم · دگردیسی</span><h3>از حقیقت تا واقعیت</h3><p>جلد دوم مجموعه با عنوان «دگردیسی».</p><div class="book-meta"><span>📖 مطالعه دیجیتال</span><span>🔒 دسترسی پس از خرید</span></div><button class="btn primary" data-book="2">📖 مشاهده کتاب</button></div></article>
  </div>
- <div id="bookReader" class="book-reader hidden" aria-live="polite">
-   <div class="reader-head"><button id="closeReader" class="btn secondary">← بازگشت به کتابخانه</button><strong id="readerTitle">مطالعه کتاب</strong></div>
-   <div class="reader-note">نسخه آزمایشی · در این مرحله پرداخت فعال نیست.</div>
-   <iframe id="bookFrame" title="کتاب دیجیتال" loading="lazy"></iframe>
- </div>
- <a class="btn telegram" href="https://t.me/Healing_Hypnotherapy_Center" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">📢 ورود به کانال مرکز</a>
- <button class="btn secondary" id="booksBack">بازگشت به داشبورد</button>
+ <div id="bookReader" class="book-reader hidden" aria-live="polite"><div class="reader-head"><button id="closeReader" class="btn secondary">← بازگشت به کتابخانه</button><strong id="readerTitle">مطالعه کتاب</strong></div><div class="reader-note">کتاب فقط پس از انتخاب شما بارگذاری می‌شود.</div><iframe id="bookFrame" title="کتاب دیجیتال" loading="lazy"></iframe></div>
+ <a class="btn telegram" href="https://t.me/Healing_Hypnotherapy_Center" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">📢 ورود به کانال مرکز</a><button class="btn secondary" id="booksBack">بازگشت به داشبورد</button>
 </section>
 
 <section id="support" class="card hidden">
@@ -242,7 +236,14 @@ function isPersianOnly(v){
 function isName(v){const t=String(v||"").trim();return (t.length>=3&&t.length<=50)&&(/^[اآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهیئء‌ ]+$/.test(t)||/^[A-Za-z]+(?:[ -][A-Za-z]+)+$/.test(t))}
 function parseDigits(v,max,min=0){const t=String(v||"").trim();if(!/^(?:[0-9]+|[۰-۹]+)$/.test(t))return null;if(/[0-9]/.test(t)&&/[۰-۹]/.test(t))return null;const x=t.replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d));const n=Number(x);return Number.isInteger(n)&&n>=min&&n<=max?n:null}
 function persianField(id,label){const v=$(id).value.trim();if(!v||!isPersianOnly(v)){alert(`در «${label}» فقط کلمات فارسی و حداکثر ۱۰۰۰ نویسه مجاز است.`);$(id).classList.add("invalid");return false}$(id).classList.remove("invalid");return true}
-function start(){let s=load();s.started=true;save(s);show("profile")}
+function start(){
+  let s=load();
+  if(!s.started){s.started=true;save(s);show("profile");return}
+  if(!s.profile){show("profile");return}
+  if(!s.assessment){show("assessment");return}
+  if(s.final){show("done");return}
+  showDashboard();
+}
 function renderProblems(){const sel=$("problem");Object.keys(CONTENT.categories).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=k;sel.appendChild(o)})}
 function renderQs(container,vals,final=false){const box=$(container);box.innerHTML="";const qs=final?[
 "در پایان مسیر، شدت این مشکل را نسبت به شروع چقدر کمتر یا بیشتر می‌بینی؟",
@@ -300,7 +301,7 @@ function feedbackMode(s,day){
 }
 function goalTone(s){const g=s.profile.goal||"";if(/آرام|استرس|اضطراب|ترس/.test(g))return"آرام و مرحله‌ای";if(/اعتماد|قاطع|مرز/.test(g))return"قاطع و عملی";if(/رابطه|ارتباط/.test(g))return"ارتباطی و روشن";return"ساده و قابل‌انجام"}
 function chooseStage(s,day){const mode=feedbackMode(s,day-1);let base=day-1;if(mode==="تغییر راهبرد")base=(base+7)%28;else if(mode==="کاهش فشار")base=(base+3)%28;else if(mode==="تثبیت")base=(base+11)%28;else if(mode==="پیشروی")base=(base+5)%28;else if(mode==="ادامه")base=(base+1)%28;
- const used=new Set(Object.values(s.shown||{}).filter(x=>x&&Number.isFinite(Number(x.stage))).map(x=>Number(x.stage)));for(let k=0;k<28;k++){const idx=(base+k)%28;if(!used.has(idx))return idx}return base}
+ const used=new Set(Object.values(s.shown||{}).map(x=>x.stage));for(let k=0;k<28;k++){const idx=(base+k)%28;if(!used.has(idx))return idx}return base}
 function buildDay(s,day){const c=CONTENT.categories[s.profile.problem],idx=chooseStage(s,day),st=STAGES[idx],goal=s.profile.goal,avg=s.assessment?.avg??5,mode=feedbackMode(s,day-1);
  let ex=st[1].replaceAll("{p}",s.profile.problem),ac=st[2].replaceAll("{p}",s.profile.problem);
  if(mode==="تغییر راهبرد"){ac="این بار روش قبلی را تکرار نکن. "+ac}
@@ -308,7 +309,7 @@ function buildDay(s,day){const c=CONTENT.categories[s.profile.problem],idx=choos
  if(avg<=3)ex+=" لازم نیست فشار زیادی به خودت وارد کنی؛ فقط بخش ساده و قابل‌تحملش را انجام بده.";
  const intro=`تمرکز امروز: ${c.goal.replace(/^مسیر خودیاری ۲۸ روزه برای /,"").replace(/\.$/,"")}. هدف شخصی تو «${goal}» است. لحن امروز ${goalTone(s)} تنظیم شده است.`;
  return {stage:idx,title:st[0],exercise:ex,action:ac,intro,mode,method:c.method}}
-function openDay(n){let s=load();if(!s.profile||!s.assessment){show(!s.profile?"profile":"assessment");return}const max=s.completed.length+1;if(n>max){alert("این روز هنوز فعال نشده است.");return}currentDay=n;let pair=s.shown[n];if(!pair){pair=buildDay(s,n);s.shown[n]=pair;save(s)}$("dayBadge").textContent=`روز ${fa(n)} از ۲۸ · ${s.profile.problem}`;$("dayTitle").textContent=`${pair.title}`;$("dayIntro").textContent=pair.intro;$("exercise").textContent=pair.exercise;$("action").textContent=pair.action;renderDailyScore(s.scores[n]);renderFeedbackOptions((s.feedbacks&&s.feedbacks[n])||[]);$("feedback").classList.add("hidden");const nextBtn=$("nextDayNav");if(nextBtn){const max=s.completed.length+1;nextBtn.disabled=n>=max;}show("day")}
+function openDay(n){let s=load();if(!s.profile||!s.assessment){show(!s.profile?"profile":"assessment");return}const max=(s.completed.length?Math.max(...s.completed):0)+1;if(n>max){alert("این روز هنوز فعال نشده است.");return}currentDay=n;let pair=s.shown[n];if(!pair){pair=buildDay(s,n);s.shown[n]=pair;save(s)}$("dayBadge").textContent=`روز ${fa(n)} از ۲۸ · ${s.profile.problem}`;$("dayTitle").textContent=`${pair.title}`;$("dayIntro").textContent=pair.intro;$("exercise").textContent=pair.exercise;$("action").textContent=pair.action;renderDailyScore(s.scores[n]);renderFeedbackOptions((s.feedbacks&&s.feedbacks[n])||[]);$("feedback").classList.add("hidden");show("day")}
 const FEEDBACK_OPTIONS=["حالم بهتر شد","کمی بهتر شدم","تغییری احساس نکردم","حالم بدتر شد","تمرین برایم تکراری بود","انجام تمرین برایم سخت بود","فرصت کافی برای انجامش نداشتم","تمرین برایم قابل‌فهم بود","متوجه نشدم دقیقاً چه کاری باید انجام بدهم","احساس کردم تمرین به مشکل اصلی من مربوط بود","احساس نکردم تمرین به مشکل من کمک کند","دوست دارم تمرین روز بعد متفاوت باشد"];
 const FEEDBACK_GROUPS=[
  {title:"حال امروز",items:FEEDBACK_OPTIONS.slice(0,4)},
@@ -406,13 +407,20 @@ function completeDay(){
  else $("finalBtn")?.addEventListener("click",()=>showFinal());
 },0);
 }
-function showDashboard(){const s=load();$("dashTitle").textContent=s.final?"مسیر کامل شده":"مسیر شخصی تو";$("summary").innerHTML=`<div class="pill">مشکل: ${s.profile?.problem||""}</div><div class="pill">هدف: ${s.profile?.goal||""}</div><p>تمرین‌های تو بر اساس مشکل، هدف و ارزیابی اولیه ساخته می‌شوند و بازخورد روزانه هم روز بعد را تغییر می‌دهد.</p>`;$("dashPercent").textContent=fa(Math.round(s.completed.length/28*100))+"٪";$("dashDays").textContent=fa(s.completed.length)+"/۲۸";$("continueBtn").textContent=s.final?"مسیر جدید":"ادامه مسیر →";$("days").innerHTML="";for(let i=1;i<=28;i++){const b=document.createElement("button");b.className="day "+(s.completed.includes(i)?"done ":"")+(i===Math.min(28,s.completed.length+1)?"current":"");b.textContent=fa(i);b.disabled=i>s.completed.length+1;if(!b.disabled)b.onclick=()=>openDay(i);$("days").appendChild(b)}if(s.final){$("summary").innerHTML+=`<div class="resource"><b>نتیجه نهایی:</b> ${fa(s.final.score)} از ۱۰۰</div>`;$("continueBtn").textContent="شروع مسیر تازه"}show("dashboard")}
+function showDashboard(){const s=load();$("dashTitle").textContent=s.final?"مسیر کامل شده":"مسیر شخصی تو";$("summary").innerHTML=`<div class="pill">مشکل: ${s.profile?.problem||""}</div><div class="pill">هدف: ${s.profile?.goal||""}</div><p>تمرین‌های تو بر اساس مشکل، هدف و ارزیابی اولیه ساخته می‌شوند و بازخورد روزانه هم روز بعد را تغییر می‌دهد.</p>`;$("dashPercent").textContent=fa(Math.round(s.completed.length/28*100))+"٪";$("dashDays").textContent=fa(s.completed.length)+"/۲۸";$("continueBtn").textContent=s.final?"مسیر جدید":"ادامه مسیر →";$("days").innerHTML="";for(let i=1;i<=28;i++){const b=document.createElement("button");b.className="day "+(s.completed.includes(i)?"done ":"")+(i===Math.min(28,(s.completed.length?Math.max(...s.completed):0)+1)?"current":"");b.textContent=fa(i);b.disabled=i>((s.completed.length?Math.max(...s.completed):0)+1);if(!b.disabled)b.onclick=()=>openDay(i);$("days").appendChild(b)}if(s.final){$("summary").innerHTML+=`<div class="resource"><b>نتیجه نهایی:</b> ${fa(s.final.score)} از ۱۰۰</div>`;$("continueBtn").textContent="شروع مسیر تازه"}show("dashboard")}
 function showFinal(){renderQs("finalQs",[] ,true);show("final")}
 function finish(){let s=load(),a=collectQs("finalQs");if(a.some(v=>v===null)){alert("به همه سؤال‌های ارزیابی نهایی پاسخ بده.");return}for(const id of ["f1","f2","f3","f4"])if(!persianField(id,"این کادر"))return;s.final={answers:a,score:Math.round(a.reduce((x,y)=>x+y,0)/(a.length*10)*100)};save(s);$("finalResult").innerHTML=`نتیجه خودارزیابی تو ${fa(s.final.score)} از ۱۰۰ است. این عدد فقط برای مقایسه وضعیت شروع و پایان مسیر استفاده می‌شود.`;show("done")}
 function newJourney(){const s=load();s.assessment=null;s.completed=[];s.feedbacks={};s.scores={};s.shown={};s.final=null;save(s);show("assessment")}
-function boot(c){CONTENT=c;renderProblems();const s=load();if(!s.started)show("home");else if(!s.profile)show("profile");else if(!s.assessment)show("assessment");else showDashboard();update()}
+function boot(c){
+  CONTENT=c;renderProblems();
+  const s=load();
+  const startBtn=$("startBtn");
+  if(startBtn) startBtn.textContent=s.started?(s.final?"📊 مشاهده نتیجه مسیر":"🚀 ادامه مسیر ۲۸ روزه"):"🚀 شروع مسیر ۲۸ روزه بازسازی ذهن";
+  show("home");
+  update();
+}
 function init(){if(location.protocol==="file:"){boot(EMBEDDED_CONTENT);return}fetch("content.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("content");return r.json()}).then(boot).catch(()=>boot(EMBEDDED_CONTENT))}
-$("startBtn").onclick=start;$("howBtn").onclick=()=>$("modal").classList.remove("hidden");$("closeModal").onclick=()=>$("modal").classList.add("hidden");$("profileNext").onclick=saveProfile;$("assessmentNext").onclick=saveAssessment;$("continueBtn").onclick=()=>{const s=load();if(s.final){newJourney();return}if(!s.profile){show("profile");return}if(!s.assessment){show("assessment");return}openDay(Math.min(28,(s.completed.length||0)+1));};$("booksBtn").onclick=()=>show("books");$("supportBtn").onclick=()=>show("support");$("booksBack").onclick=showDashboard;$("supportBack").onclick=showDashboard;$("completeDay").onclick=completeDay;$("prevDay").onclick=()=>openDay(Math.max(1,currentDay-1));$("nextDayNav").onclick=()=>{const s=load();const max=s.completed.length+1;if(currentDay<max)openDay(currentDay+1);};$("dayDash").onclick=showDashboard;$("finish").onclick=finish;$("doneDash").onclick=showDashboard;
+$("startBtn").onclick=start;$("howBtn").onclick=()=>$("modal").classList.remove("hidden");$("closeModal").onclick=()=>$("modal").classList.add("hidden");$("profileNext").onclick=saveProfile;$("assessmentNext").onclick=saveAssessment;$("continueBtn").onclick=()=>{const s=load();if(s.final){newJourney();return}if(!s.profile){show("profile");return}if(!s.assessment){show("assessment");return}openDay(Math.min(28,(s.completed.length||0)+1));};$("booksBtn").onclick=()=>show("books");$("supportBtn").onclick=()=>show("support");$("booksBack").onclick=showDashboard;$("supportBack").onclick=showDashboard;$("completeDay").onclick=completeDay;$("prevDay").onclick=()=>openDay(Math.max(1,currentDay-1));$("dayDash").onclick=showDashboard;$("finish").onclick=finish;$("doneDash").onclick=showDashboard;
 document.addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(b){b.parentElement.querySelectorAll("button").forEach(x=>x.classList.remove("selected"));b.classList.add("selected")}});
 ["name","goal","condition","medicationName","assessmentGoal","f1","f2","f3","f4"].forEach(id=>$(id).addEventListener("input",()=>{if($(id).value.length>1000)$(id).value=$(id).value.slice(0,1000)}));
 $("age").addEventListener("input",()=>{$("age").value=$("age").value.replace(/[^0-9۰-۹]/g,"").slice(0,3)});
@@ -776,15 +784,7 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
   };
 
   const originalOpenDay=openDay;
-  openDay=function(n){
-    const s=load();
-    if(!s.profile||!s.assessment){show(!s.profile?"profile":"assessment");return}
-    const completed=Array.isArray(s.completed)?s.completed.map(Number).filter(Number.isFinite):[];
-    const maxCompleted=completed.length?Math.max(...completed):0;
-    const max=maxCompleted+1;
-    if(n>max){showAppModal({title:"این روز هنوز قفل است",message:"برای باز شدن این روز، ابتدا روز فعلی را کامل و ثبت کن.",type:"info",primaryText:"متوجه شدم"});return}
-    originalOpenDay(n);
-  };
+  openDay=function(n){const s=load();if(!s.profile||!s.assessment){show(!s.profile?"profile":"assessment");return}const max=(s.completed.length?Math.max(...s.completed):0)+1;if(n>max){showAppModal({title:"این روز هنوز قفل است",message:"برای باز شدن این روز، ابتدا روز فعلی را کامل و ثبت کن.",type:"info",primaryText:"متوجه شدم"});return}originalOpenDay(n)};
 
   const baseRenderDailyScore=renderDailyScore;
   renderDailyScore=function(sel){baseRenderDailyScore(sel);const box=$("dailyScore");box.classList.remove("validation-invalid","validation-valid");if(sel!=null)box.classList.add("validation-valid");box.addEventListener("daily-score-change",()=>{box.classList.remove("validation-invalid");box.classList.add("validation-valid")},{once:false})};
@@ -796,38 +796,37 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
     if(dailySelected===null){score.classList.add("validation-invalid");score.classList.remove("validation-valid");errors.push({el:score,label:"شدت مشکل امروز",message:"یک عدد از ۰ تا ۱۰ انتخاب کن."})}else{score.classList.add("validation-valid");score.classList.remove("validation-invalid")}
     const fb=getFeedback();if(!fb.length){details.classList.add("is-invalid");details.classList.remove("is-valid");details.open=true;errors.push({el:details,label:"بازخورد امروزت",message:"حداقل یک بازخورد را انتخاب کن تا روز بعد دقیق‌تر تنظیم شود."})}else{details.classList.add("is-valid");details.classList.remove("is-invalid")}
     if(errors.length){showValidationErrors(errors,"برای ثبت امروز، این موارد را کامل کن");return}
-
-    // فقط ثبت وضعیت روز جاری؛ ساخت و نمایش روز بعد را به openDay می‌سپاریم.
-    // این ترتیب باعث می‌شود برگشت به روزهای قبل و ثبت مجدد آنها نیز بدون گیر کردن، به روز بعد برگردد.
-    const savedDay=currentDay;
-    let s=load();
-    s.feedbacks=s.feedbacks||{};
-    s.scores=s.scores||{};
-    s.shown=s.shown||{};
-    if(!Array.isArray(s.completed))s.completed=[];
-    s.feedbacks[savedDay]=fb;
-    s.scores[savedDay]=dailySelected;
-    if(!s.completed.includes(savedDay))s.completed.push(savedDay);
-    s.completed=[...new Set(s.completed.map(Number).filter(Number.isFinite))].sort((a,b)=>a-b);
-    save(s);
-
+    let s=load();s.feedbacks=s.feedbacks||{};s.feedbacks[currentDay]=fb;s.scores[currentDay]=dailySelected;if(!s.completed.includes(currentDay))s.completed.push(currentDay);s.completed.sort((a,b)=>a-b);if(currentDay<28)s.shown[currentDay+1]=buildDay(s,currentDay+1);save(s);
     const fbText=fb.join("، "),encouragement=encouragementForFeedback(dailySelected,fb);
-    if(savedDay<28){
-      const nextDay=savedDay+1;
-      // دکمه جداگانه‌ای ساخته نمی‌شود؛ حرکت به روز بعد همین‌جا انجام می‌شود.
-      setTimeout(()=>openDay(nextDay),0);
+    $("feedback").innerHTML=currentDay<28?`<div class="result-card"><b>بازخورد امروز ثبت شد</b><br><span>نمره شدت مشکل: ${fa(dailySelected)} از ۱۰</span><br><span>بازخورد: ${fbText}</span><p>${encouragement}</p></div>`:`<div class="result-card"><b>۲۸ روز کامل شد</b><p>${encouragement}</p><button type="button" id="finalBtn" class="primary-btn">رفتن به ارزیابی نهایی ←</button></div>`;
+    if(currentDay<28){
+      openDay(currentDay+1);
     }else{
-      $("feedback").innerHTML=`<div class="result-card"><b>۲۸ روز کامل شد</b><p>${encouragement}</p><button type="button" id="finalBtn" class="primary-btn">رفتن به ارزیابی نهایی ←</button></div>`;
       $("feedback").classList.remove("hidden");
       setTimeout(()=>$("finalBtn")?.addEventListener("click",()=>showFinal()),0);
     }
   };
 
+  function buildServiceRecommendation(s){
+    const score=Number(s.final?.score||0), age=Number(s.profile?.age||0);
+    let online=0;
+    if(score<10) online=4; else if(score<30) online=3; else if(score<60) online=2; else if(score<90) online=1;
+    const inPerson=(age>=23&&age<=63)?1:0;
+    const cards=[];
+    if(online>0) cards.push(`<div class="service-card"><span class="service-icon">💻</span><div><strong>${fa(online)} جلسه مشاوره آنلاین</strong><small>برای ادامه بررسی و کار هدفمند روی موضوع ثبت‌شده در مسیر</small></div></div>`);
+    if(inPerson) cards.push(`<div class="service-card"><span class="service-icon">🧠</span><div><strong>۱ جلسه هیپنوتراپی حضوری</strong><small>برای ادامه فرایند تخصصی بر اساس نتیجه مسیر</small></div></div>`);
+    if(!cards.length) cards.push(`<div class="service-card"><span class="service-icon">💬</span><div><strong>ادامه مسیر از طریق پشتیبانی مرکز</strong><small>برای انتخاب مناسب‌ترین گام بعدی با توجه به شرایط ثبت‌شده</small></div></div>`);
+    const problem=s.profile?.problem||"موضوع ثبت‌شده";
+    return `<div class="recommendation-box"><div class="recommendation-head"><span class="badge">پیشنهاد ادامه مسیر</span><h3>بر اساس اطلاعات ثبت‌شده در ابتدای مسیر و نتیجه ارزیابی نهایی</h3><p>موضوع «${problem}» در پیشنهاد ادامه مسیر در نظر گرفته شده است.</p></div>${cards.join("")}</div>`;
+  }
+
   finish=function(){
     const errors=validateQuestionSet("finalQs","سؤال ارزیابی نهایی");const labels={f1:"سه تغییر واقعی که مشاهده کردی",f2:"مهم‌ترین چیزی که یاد گرفتی",f3:"برای ادامه چه کاری را می‌خواهی حفظ کنی؟",f4:"چه چیزی هنوز نیاز به کار دارد؟"};
     for(const id of ["f1","f2","f3","f4"]){const el=$(id),err=goalError(el,"این کادر را با متن فارسی کامل کن.");if(err){setFieldState(el,false,err);errors.push({el,label:labels[id],message:err})}else setFieldState(el,true,"")}
     if(errors.length){showValidationErrors(errors,"ارزیابی نهایی هنوز کامل نشده");return}
-    let s=load(),a=collectQs("finalQs");s.final={answers:a,score:Math.round(a.reduce((x,y)=>x+y,0)/(a.length*10)*100)};save(s);$("finalResult").innerHTML=`نتیجه خودارزیابی تو ${fa(s.final.score)} از ۱۰۰ است. این عدد فقط برای مقایسه وضعیت شروع و پایان مسیر استفاده می‌شود.`;show("done")
+    let s=load(),a=collectQs("finalQs");s.final={answers:a,score:Math.round(a.reduce((x,y)=>x+y,0)/(a.length*10)*100)};save(s);
+    $("finalResult").innerHTML=`<div class="final-score-card"><span>امتیاز ارزیابی نهایی</span><strong>${fa(s.final.score)}</strong><small>از ۱۰۰</small></div>${buildServiceRecommendation(s)}`;
+    show("done");
   };
 
   $("profileNext").onclick=saveProfile;$("assessmentNext").onclick=saveAssessment;$("completeDay").onclick=completeDay;$("finish").onclick=finish;
