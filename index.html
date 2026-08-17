@@ -68,7 +68,7 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
 
 <section id="home" class="card home">
  <img class="heroLogo" src="logo.png" alt="مرکز هیپنوتراپی شفا">
- <div class="badge">🌱 مسیر ۲۸ روزه</div>
+ <div class="badge">🌱 مرحله اول · صفحه نخست</div>
  <h2>بازسازی ذهن</h2>
  <h3>هر روز فقط یک قدم؛ اما ۲۸ قدم پشت سر هم.</h3>
  <p class="lead">این مسیر با چند سؤال کوتاه شروع می‌شود تا بفهمیم روی چه موضوعی می‌خواهی کار کنی. بعد، هر روز یک تمرین ساده و یک راهکار عملی می‌بینی. پاسخ و نمره هر روزت روی روز بعد اثر می‌گذارد.</p> 
@@ -114,9 +114,15 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
  <div class="form-actions"><button type="button" id="profileBack" class="btn back-btn">بازگشت</button><button id="profileNext" class="btn primary">ادامه و ارزیابی اولیه →</button></div>
 </section>
 
+<section id="assessmentForm" class="card hidden">
+ <span class="badge">مرحله ۲ · فرم ارزیابی اولیه</span><h2>فرم ارزیابی اولیه</h2>
+ <p id="assessmentFormIntro" class="muted"></p><div id="assessmentQs"></div>
+ <div class="form-actions"><button type="button" id="assessmentFormBack" class="btn back-btn">بازگشت</button><button id="assessmentFormNext" class="btn primary">ادامه →</button></div>
+</section>
+
 <section id="assessment" class="card hidden">
- <span class="badge">مرحله ۲ · ارزیابی اولیه</span><h2>از وضعیت امروزت یک تصویر بسازیم</h2>
- <p id="assessmentIntro" class="muted"></p><div id="assessmentQs"></div>
+ <span class="badge">مرحله ۳ · جمع‌بندی ارزیابی اولیه</span><h2>از وضعیت امروزت یک تصویر بسازیم</h2>
+ <p id="assessmentIntro" class="muted"></p>
  <label>هدف اصلی تو در این مسیر</label><textarea id="assessmentGoal" maxlength="1000"></textarea>
  <div class="form-actions"><button type="button" id="assessmentBack" class="btn back-btn">بازگشت</button><button id="assessmentNext" class="btn primary">ثبت ارزیابی و شروع روز ۱</button></div>
 </section>
@@ -126,7 +132,7 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
  <div id="summary" class="muted"></div>
  <div class="metric"><div class="metricBox"><strong id="dashPercent">۰٪</strong><span>پیشرفت مسیر</span></div><div class="metricBox"><strong id="dashDays">۰/۲۸</strong><span>روز تکمیل‌شده</span></div></div>
  <button id="continueBtn" class="btn primary big">ادامه مسیر →</button>
- <button id="booksBtn" class="btn gold">📚 کتاب‌های «از حقیقت تا واقعیت»</button>
+ <button id="booksBtn" class="btn gold">📚 کتابخانه اختصاصی</button>
  <a class="btn telegram" href="https://t.me/Healing_Hypnotherapy_Center" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">📢 ورود به کانال مرکز هیپنوتراپی شفا</a>
  <button id="supportBtn" class="btn secondary">💬 پشتیبانی و نوبت‌دهی</button>
  <h3>روزهای مسیر</h3><div class="grid" id="days"></div>
@@ -162,7 +168,7 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
 </details>
 <button id="completeDay" class="btn primary">ثبت امروز و رفتن به روز بعد</button>
  <div id="feedback" class="feedback hidden"></div>
- <div class="metric"><button id="prevDay" class="btn secondary">← روز قبل</button><button id="dayDash" class="btn secondary">داشبورد</button></div>
+ <div class="metric"><button id="prevDay" class="btn secondary">← روز قبل</button><button id="dayBack" class="btn back-btn">↩ بازگشت</button><button id="dayDash" class="btn secondary">داشبورد</button></div>
 </section>
 
 <section id="books" class="card hidden">
@@ -222,10 +228,13 @@ let CONTENT=null,currentDay=1,dailySelected=null;
 const KEY="maseer28_state_v32";
 const $=id=>document.getElementById(id);
 const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
-const fresh=()=>({started:false,profile:null,assessment:null,completed:[],feedbacks:{},scores:{},shown:{},final:null});
+const fresh=()=>({started:false,profile:null,assessment:null,assessmentDraft:null,completed:[],feedbacks:{},scores:{},shown:{},final:null});
 function load(){try{return JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){return fresh()}}
 function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
-function show(id){["home","profile","assessment","dashboard","day","books","support","final","done"].forEach(x=>$(x).classList.toggle("hidden",x!==id));window.scrollTo({top:0,behavior:"smooth"});update()}
+let currentScreen=null;
+const screenHistory=[];
+function show(id,opts={}){const track=opts.track!==false;if(track&&currentScreen&&currentScreen!==id)screenHistory.push(currentScreen);["home","profile","assessmentForm","assessment","dashboard","day","books","support","final","done"].forEach(x=>$(x).classList.toggle("hidden",x!==id));currentScreen=id;window.scrollTo({top:0,behavior:"smooth"});update()}
+function goBack(){const target=screenHistory.length?screenHistory.pop():"home";show(target,{track:false})}
 function update(){const s=load(),n=s.completed.length,p=Math.round(n/28*100);$("bar").style.width=p+"%";$("percent").textContent=fa(p)+"٪";$("progressText").textContent=`روز ${fa(n)} از ۲۸`}
 function isPersianOnly(v){
  const t=String(v||"").trim();
@@ -240,7 +249,7 @@ function start(){
   let s=load();
   if(!s.started){s.started=true;save(s);show("profile");return}
   if(!s.profile){show("profile");return}
-  if(!s.assessment){show("assessment");return}
+  if(!s.assessment){show(s.assessmentDraft?"assessment":"assessmentForm");return}
   if(s.final){show("done");return}
   showDashboard();
 }
@@ -281,11 +290,7 @@ $("goal").classList.remove("invalid");
  if($("condition").value.trim()&&!isPersianOnly($("condition").value)){alert("کادر نکته مهم فقط کلمات فارسی را می‌پذیرد.");return}
  let s=load();s.profile={name,age,phone,problem,duration,durationYears:years?Number(years):0,durationMonths:months?Number(months):0,goal:$("goal").value.trim(),condition:$("condition").value.trim(),medicalCondition:$("medicalCondition").value,medical,medication,medicationName};s.assessment=null;s.completed=[];s.feedbacks={};s.scores={};s.shown={};s.final=null;save(s);
  $("assessmentIntro").textContent=`برای «${problem}» چند سؤال کوتاه می‌پرسیم. هدف تو «${s.profile.goal}» است و این اطلاعات در انتخاب تمرین‌های مسیر استفاده می‌شود.`;renderQs("assessmentQs",[]);$("assessmentGoal").value=s.profile.goal;show("assessment")}
-function saveAssessment(){const a=collectQs("assessmentQs");if(a.some(v=>v===null)){alert("به همه سؤال‌ها پاسخ بده.");return}if(!isPersianOnly($("assessmentGoal").value.trim())){
- alert("کادر هدف ارزیابی باید فقط متن فارسی و حداکثر ۱۰۰۰ نویسه داشته باشد.");
- $("assessmentGoal").classList.add("invalid"); return;
-}
-$("assessmentGoal").classList.remove("invalid");let s=load();s.assessment={answers:a,avg:a.reduce((x,y)=>x+y,0)/a.length,goal:$("assessmentGoal").value.trim()};save(s);showDashboard()}
+function saveAssessment(){const s=load(),draft=s.assessmentDraft;if(!draft){show("assessmentForm");return}if(!isPersianOnly($("assessmentGoal").value.trim())){alert("کادر هدف ارزیابی باید فقط متن فارسی و حداکثر ۱۰۰۰ نویسه داشته باشد.");$("assessmentGoal").classList.add("invalid");return}$("assessmentGoal").classList.remove("invalid");s.assessment={answers:draft.answers,avg:draft.avg,goal:$("assessmentGoal").value.trim()};s.assessmentDraft=null;save(s);showDashboard()}
 function feedbackMode(s,day){
  if(day<=1)return"شروع";
  const fb=(s.feedbacks&&s.feedbacks[day])||[], prev=(s.feedbacks&&s.feedbacks[day-1])||[];
@@ -309,7 +314,7 @@ function buildDay(s,day){const c=CONTENT.categories[s.profile.problem],idx=choos
  if(avg<=3)ex+=" لازم نیست فشار زیادی به خودت وارد کنی؛ فقط بخش ساده و قابل‌تحملش را انجام بده.";
  const intro=`تمرکز امروز: ${c.goal.replace(/^مسیر خودیاری ۲۸ روزه برای /,"").replace(/\.$/,"")}. هدف شخصی تو «${goal}» است. لحن امروز ${goalTone(s)} تنظیم شده است.`;
  return {stage:idx,title:st[0],exercise:ex,action:ac,intro,mode,method:c.method}}
-function openDay(n){let s=load();if(!s.profile||!s.assessment){show(!s.profile?"profile":"assessment");return}const max=(s.completed.length?Math.max(...s.completed):0)+1;if(n>max){alert("این روز هنوز فعال نشده است.");return}currentDay=n;let pair=s.shown[n];if(!pair){pair=buildDay(s,n);s.shown[n]=pair;save(s)}$("dayBadge").textContent=`روز ${fa(n)} از ۲۸ · ${s.profile.problem}`;$("dayTitle").textContent=`${pair.title}`;$("dayIntro").textContent=pair.intro;$("exercise").textContent=pair.exercise;$("action").textContent=pair.action;renderDailyScore(s.scores[n]);renderFeedbackOptions((s.feedbacks&&s.feedbacks[n])||[]);$("feedback").classList.add("hidden");show("day")}
+function openDay(n){let s=load();if(!s.profile||!s.assessment){if(!s.profile)show("profile");else if(s.assessmentDraft)show("assessment");else show("assessmentForm");return}const max=(s.completed.length?Math.max(...s.completed):0)+1;if(n>max){alert("این روز هنوز فعال نشده است.");return}currentDay=n;let pair=s.shown[n];if(!pair){pair=buildDay(s,n);s.shown[n]=pair;save(s)}$("dayBadge").textContent=`روز ${fa(n)} از ۲۸ · ${s.profile.problem}`;$("dayTitle").textContent=`${pair.title}`;$("dayIntro").textContent=pair.intro;$("exercise").textContent=pair.exercise;$("action").textContent=pair.action;renderDailyScore(s.scores[n]);renderFeedbackOptions((s.feedbacks&&s.feedbacks[n])||[]);$("feedback").classList.add("hidden");show("day")}
 const FEEDBACK_OPTIONS=["حالم بهتر شد","کمی بهتر شدم","تغییری احساس نکردم","حالم بدتر شد","تمرین برایم تکراری بود","انجام تمرین برایم سخت بود","فرصت کافی برای انجامش نداشتم","تمرین برایم قابل‌فهم بود","متوجه نشدم دقیقاً چه کاری باید انجام بدهم","احساس کردم تمرین به مشکل اصلی من مربوط بود","احساس نکردم تمرین به مشکل من کمک کند","دوست دارم تمرین روز بعد متفاوت باشد"];
 const FEEDBACK_GROUPS=[
  {title:"حال امروز",items:FEEDBACK_OPTIONS.slice(0,4)},
@@ -410,7 +415,7 @@ function completeDay(){
 function showDashboard(){const s=load();$("dashTitle").textContent=s.final?"مسیر کامل شده":"مسیر شخصی تو";$("summary").innerHTML=`<div class="pill">مشکل: ${s.profile?.problem||""}</div><div class="pill">هدف: ${s.profile?.goal||""}</div><p>تمرین‌های تو بر اساس مشکل، هدف و ارزیابی اولیه ساخته می‌شوند و بازخورد روزانه هم روز بعد را تغییر می‌دهد.</p>`;$("dashPercent").textContent=fa(Math.round(s.completed.length/28*100))+"٪";$("dashDays").textContent=fa(s.completed.length)+"/۲۸";$("continueBtn").textContent=s.final?"مسیر جدید":"ادامه مسیر →";$("days").innerHTML="";for(let i=1;i<=28;i++){const b=document.createElement("button");b.className="day "+(s.completed.includes(i)?"done ":"")+(i===Math.min(28,(s.completed.length?Math.max(...s.completed):0)+1)?"current":"");b.textContent=fa(i);b.disabled=i>((s.completed.length?Math.max(...s.completed):0)+1);if(!b.disabled)b.onclick=()=>openDay(i);$("days").appendChild(b)}if(s.final){$("summary").innerHTML+=`<div class="resource"><b>نتیجه نهایی:</b> ${fa(s.final.score)} از ۱۰۰</div>`;$("continueBtn").textContent="شروع مسیر تازه"}show("dashboard")}
 function showFinal(){renderQs("finalQs",[] ,true);show("final")}
 function finish(){let s=load(),a=collectQs("finalQs");if(a.some(v=>v===null)){alert("به همه سؤال‌های ارزیابی نهایی پاسخ بده.");return}for(const id of ["f1","f2","f3","f4"])if(!persianField(id,"این کادر"))return;s.final={answers:a,score:Math.round(a.reduce((x,y)=>x+y,0)/(a.length*10)*100)};save(s);$("finalResult").innerHTML=`نتیجه خودارزیابی تو ${fa(s.final.score)} از ۱۰۰ است. این عدد فقط برای مقایسه وضعیت شروع و پایان مسیر استفاده می‌شود.`;show("done")}
-function newJourney(){const s=load();s.assessment=null;s.completed=[];s.feedbacks={};s.scores={};s.shown={};s.final=null;save(s);show("assessment")}
+function newJourney(){const s=load();s.assessment=null;s.assessmentDraft=null;s.completed=[];s.feedbacks={};s.scores={};s.shown={};s.final=null;save(s);show("assessmentForm")}
 function boot(c){
   CONTENT=c;renderProblems();
   const s=load();
@@ -420,7 +425,7 @@ function boot(c){
   update();
 }
 function init(){if(location.protocol==="file:"){boot(EMBEDDED_CONTENT);return}fetch("content.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("content");return r.json()}).then(boot).catch(()=>boot(EMBEDDED_CONTENT))}
-$("startBtn").onclick=start;$("howBtn").onclick=()=>$("modal").classList.remove("hidden");$("closeModal").onclick=()=>$("modal").classList.add("hidden");$("profileNext").onclick=saveProfile;$("assessmentNext").onclick=saveAssessment;$("continueBtn").onclick=()=>{const s=load();if(s.final){newJourney();return}if(!s.profile){show("profile");return}if(!s.assessment){show("assessment");return}openDay(Math.min(28,(s.completed.length||0)+1));};$("booksBtn").onclick=()=>show("books");$("supportBtn").onclick=()=>show("support");$("booksBack").onclick=showDashboard;$("supportBack").onclick=showDashboard;$("completeDay").onclick=completeDay;$("prevDay").onclick=()=>openDay(Math.max(1,currentDay-1));$("dayDash").onclick=showDashboard;$("finish").onclick=finish;$("doneDash").onclick=showDashboard;
+$("startBtn").onclick=start;$("howBtn").onclick=()=>$("modal").classList.remove("hidden");$("closeModal").onclick=()=>$("modal").classList.add("hidden");$("profileNext").onclick=saveProfile;$("assessmentFormNext").onclick=saveAssessmentForm;$("assessmentNext").onclick=saveAssessment;$("continueBtn").onclick=()=>{const s=load();if(s.final){newJourney();return}if(!s.profile){show("profile");return}if(!s.assessment){show(s.assessmentDraft?"assessment":"assessmentForm");return}openDay(Math.min(28,(s.completed.length||0)+1));};$("booksBtn").onclick=()=>show("books");$("supportBtn").onclick=()=>show("support");$("booksBack").onclick=showDashboard;$("supportBack").onclick=showDashboard;$("completeDay").onclick=completeDay;$("prevDay").onclick=()=>openDay(Math.max(1,currentDay-1));$("dayBack").onclick=goBack;$("dayDash").onclick=showDashboard;$("finish").onclick=finish;$("doneDash").onclick=showDashboard;
 document.addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(b){b.parentElement.querySelectorAll("button").forEach(x=>x.classList.remove("selected"));b.classList.add("selected")}});
 ["name","goal","condition","medicationName","assessmentGoal","f1","f2","f3","f4"].forEach(id=>$(id).addEventListener("input",()=>{if($(id).value.length>1000)$(id).value=$(id).value.slice(0,1000)}));
 $("age").addEventListener("input",()=>{$("age").value=$("age").value.replace(/[^0-9۰-۹]/g,"").slice(0,3)});
@@ -765,8 +770,8 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
     const duration=(years||months)?`${years?fa(Number(years))+" سال":""}${years&&months?" و ":""}${months?fa(Number(months))+" ماه":""}`:"";
     const medical=$("medicalCondition").value==="دارم"?[...document.querySelectorAll('input[name="medical"]:checked')].map(x=>x.value):[];
     const medication=$("medication").value,medicationName=$("medicationName").value.trim();
-    let s=load();s.profile={name,age,phone,problem,duration,durationYears:years?Number(years):0,durationMonths:months?Number(months):0,goal:$("goal").value.trim(),condition:$("condition").value.trim(),medicalCondition:$("medicalCondition").value,medical,medication,medicationName};s.assessment=null;s.completed=[];s.feedbacks={};s.scores={};s.shown={};s.final=null;save(s);
-    $("assessmentIntro").textContent=`برای «${problem}» چند سؤال کوتاه می‌پرسیم. هدف تو «${s.profile.goal}» است و این اطلاعات در انتخاب تمرین‌های مسیر استفاده می‌شود.`;renderQs("assessmentQs",[]);$("assessmentGoal").value=s.profile.goal;setFieldState($("assessmentGoal"),true,"");show("assessment")
+    let s=load();s.profile={name,age,phone,problem,duration,durationYears:years?Number(years):0,durationMonths:months?Number(months):0,goal:$("goal").value.trim(),condition:$("condition").value.trim(),medicalCondition:$("medicalCondition").value,medical,medication,medicationName};s.assessment=null;s.assessmentDraft=null;s.completed=[];s.feedbacks={};s.scores={};s.shown={};s.final=null;save(s);
+    $("assessmentFormIntro").textContent=`برای «${problem}» چند سؤال کوتاه می‌پرسیم. هدف تو «${s.profile.goal}» است و این اطلاعات در انتخاب تمرین‌های مسیر استفاده می‌شود.`;renderQs("assessmentQs",[]);$("assessmentGoal").value=s.profile.goal;setFieldState($("assessmentGoal"),true,"");show("assessmentForm")
   };
 
   function validateQuestionSet(containerId,prefix){
@@ -777,14 +782,21 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
   ["f1","f2","f3","f4"].forEach(id=>liveText($(id),()=>goalError($(id),"این کادر را با متن فارسی کامل کن.")));
   document.addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(!b)return;const n=b.closest(".notice");if(n){n.classList.remove("invalid-block");n.classList.add("is-complete")}});
 
-  saveAssessment=function(){
-    const errors=validateQuestionSet("assessmentQs","سؤال");const ge=goalError($("assessmentGoal"),"هدف اصلی خودت را برای این مسیر بنویس.");if(ge){setFieldState($("assessmentGoal"),false,ge);errors.push({el:$("assessmentGoal"),label:"هدف اصلی تو در این مسیر",message:ge})}else setFieldState($("assessmentGoal"),true,"");
+  saveAssessmentForm=function(){
+    const errors=validateQuestionSet("assessmentQs","سؤال");
     if(errors.length){showValidationErrors(errors,"ارزیابی اولیه هنوز کامل نشده");return}
-    const a=collectQs("assessmentQs"),s=load();s.assessment={answers:a,avg:a.reduce((x,y)=>x+y,0)/a.length,goal:$("assessmentGoal").value.trim()};save(s);showDashboard()
+    const a=collectQs("assessmentQs"),s=load();s.assessmentDraft={answers:a,avg:a.reduce((x,y)=>x+y,0)/a.length};save(s);
+    $("assessmentIntro").textContent="پاسخ‌های ارزیابی اولیه ثبت شد. حالا یک هدف روشن برای ادامه مسیرت مشخص کن.";$("assessmentGoal").value=s.profile?.goal||"";setFieldState($("assessmentGoal"),true,"");show("assessment");
+  };
+
+  saveAssessment=function(){
+    const s=load(),draft=s.assessmentDraft;if(!draft){show("assessmentForm");return}
+    const ge=goalError($("assessmentGoal"),"هدف اصلی خودت را برای این مسیر بنویس.");if(ge){setFieldState($("assessmentGoal"),false,ge);showValidationErrors([{el:$("assessmentGoal"),label:"هدف اصلی تو در این مسیر",message:ge}],"هدف مسیر هنوز کامل نشده");return}
+    setFieldState($("assessmentGoal"),true,"");s.assessment={answers:draft.answers,avg:draft.avg,goal:$("assessmentGoal").value.trim()};s.assessmentDraft=null;save(s);showDashboard();
   };
 
   const originalOpenDay=openDay;
-  openDay=function(n){const s=load();if(!s.profile||!s.assessment){show(!s.profile?"profile":"assessment");return}const max=(s.completed.length?Math.max(...s.completed):0)+1;if(n>max){showAppModal({title:"این روز هنوز قفل است",message:"برای باز شدن این روز، ابتدا روز فعلی را کامل و ثبت کن.",type:"info",primaryText:"متوجه شدم"});return}originalOpenDay(n)};
+  openDay=function(n){const s=load();if(!s.profile||!s.assessment){if(!s.profile)show("profile");else if(s.assessmentDraft)show("assessment");else show("assessmentForm");return}const max=(s.completed.length?Math.max(...s.completed):0)+1;if(n>max){showAppModal({title:"این روز هنوز قفل است",message:"برای باز شدن این روز، ابتدا روز فعلی را کامل و ثبت کن.",type:"info",primaryText:"متوجه شدم"});return}originalOpenDay(n)};
 
   const baseRenderDailyScore=renderDailyScore;
   renderDailyScore=function(sel){baseRenderDailyScore(sel);const box=$("dailyScore");box.classList.remove("validation-invalid","validation-valid");if(sel!=null)box.classList.add("validation-valid");box.addEventListener("daily-score-change",()=>{box.classList.remove("validation-invalid");box.classList.add("validation-valid")},{once:false})};
@@ -829,8 +841,8 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
     show("done");
   };
 
-  $("profileNext").onclick=saveProfile;$("assessmentNext").onclick=saveAssessment;$("completeDay").onclick=completeDay;$("finish").onclick=finish;
-  $("profileBack")?.addEventListener("click",()=>show("home"));$("assessmentBack")?.addEventListener("click",()=>show("profile"));
+  $("profileNext").onclick=saveProfile;$("assessmentFormNext").onclick=saveAssessmentForm;$("assessmentNext").onclick=saveAssessment;$("completeDay").onclick=completeDay;$("finish").onclick=finish;
+  $("profileBack")?.addEventListener("click",goBack);$("assessmentFormBack")?.addEventListener("click",goBack);$("assessmentBack")?.addEventListener("click",goBack);
 })();
 </script>
 
