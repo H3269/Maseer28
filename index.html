@@ -156,7 +156,7 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
 </details>
 <button id="completeDay" class="btn primary">ثبت امروز و رفتن به روز بعد</button>
  <div id="feedback" class="feedback hidden"></div>
- <div class="metric"><button id="prevDay" class="btn secondary">← روز قبل</button><button id="dayDash" class="btn secondary">داشبورد</button></div>
+ <div class="metric"><button id="prevDay" class="btn secondary">← روز قبل</button><button id="nextDayNav" class="btn secondary">روز بعد →</button><button id="dayDash" class="btn secondary">داشبورد</button></div>
 </section>
 
 <section id="books" class="card hidden">
@@ -300,7 +300,7 @@ function feedbackMode(s,day){
 }
 function goalTone(s){const g=s.profile.goal||"";if(/آرام|استرس|اضطراب|ترس/.test(g))return"آرام و مرحله‌ای";if(/اعتماد|قاطع|مرز/.test(g))return"قاطع و عملی";if(/رابطه|ارتباط/.test(g))return"ارتباطی و روشن";return"ساده و قابل‌انجام"}
 function chooseStage(s,day){const mode=feedbackMode(s,day-1);let base=day-1;if(mode==="تغییر راهبرد")base=(base+7)%28;else if(mode==="کاهش فشار")base=(base+3)%28;else if(mode==="تثبیت")base=(base+11)%28;else if(mode==="پیشروی")base=(base+5)%28;else if(mode==="ادامه")base=(base+1)%28;
- const used=new Set(Object.values(s.shown||{}).map(x=>x.stage));for(let k=0;k<28;k++){const idx=(base+k)%28;if(!used.has(idx))return idx}return base}
+ const used=new Set(Object.values(s.shown||{}).filter(x=>x&&Number.isFinite(Number(x.stage))).map(x=>Number(x.stage)));for(let k=0;k<28;k++){const idx=(base+k)%28;if(!used.has(idx))return idx}return base}
 function buildDay(s,day){const c=CONTENT.categories[s.profile.problem],idx=chooseStage(s,day),st=STAGES[idx],goal=s.profile.goal,avg=s.assessment?.avg??5,mode=feedbackMode(s,day-1);
  let ex=st[1].replaceAll("{p}",s.profile.problem),ac=st[2].replaceAll("{p}",s.profile.problem);
  if(mode==="تغییر راهبرد"){ac="این بار روش قبلی را تکرار نکن. "+ac}
@@ -308,7 +308,7 @@ function buildDay(s,day){const c=CONTENT.categories[s.profile.problem],idx=choos
  if(avg<=3)ex+=" لازم نیست فشار زیادی به خودت وارد کنی؛ فقط بخش ساده و قابل‌تحملش را انجام بده.";
  const intro=`تمرکز امروز: ${c.goal.replace(/^مسیر خودیاری ۲۸ روزه برای /,"").replace(/\.$/,"")}. هدف شخصی تو «${goal}» است. لحن امروز ${goalTone(s)} تنظیم شده است.`;
  return {stage:idx,title:st[0],exercise:ex,action:ac,intro,mode,method:c.method}}
-function openDay(n){let s=load();if(!s.profile||!s.assessment){show(!s.profile?"profile":"assessment");return}const max=s.completed.length+1;if(n>max){alert("این روز هنوز فعال نشده است.");return}currentDay=n;let pair=s.shown[n];if(!pair){pair=buildDay(s,n);s.shown[n]=pair;save(s)}$("dayBadge").textContent=`روز ${fa(n)} از ۲۸ · ${s.profile.problem}`;$("dayTitle").textContent=`${pair.title}`;$("dayIntro").textContent=pair.intro;$("exercise").textContent=pair.exercise;$("action").textContent=pair.action;renderDailyScore(s.scores[n]);renderFeedbackOptions((s.feedbacks&&s.feedbacks[n])||[]);$("feedback").classList.add("hidden");show("day")}
+function openDay(n){let s=load();if(!s.profile||!s.assessment){show(!s.profile?"profile":"assessment");return}const max=s.completed.length+1;if(n>max){alert("این روز هنوز فعال نشده است.");return}currentDay=n;let pair=s.shown[n];if(!pair){pair=buildDay(s,n);s.shown[n]=pair;save(s)}$("dayBadge").textContent=`روز ${fa(n)} از ۲۸ · ${s.profile.problem}`;$("dayTitle").textContent=`${pair.title}`;$("dayIntro").textContent=pair.intro;$("exercise").textContent=pair.exercise;$("action").textContent=pair.action;renderDailyScore(s.scores[n]);renderFeedbackOptions((s.feedbacks&&s.feedbacks[n])||[]);$("feedback").classList.add("hidden");const nextBtn=$("nextDayNav");if(nextBtn){const max=s.completed.length+1;nextBtn.disabled=n>=max;}show("day")}
 const FEEDBACK_OPTIONS=["حالم بهتر شد","کمی بهتر شدم","تغییری احساس نکردم","حالم بدتر شد","تمرین برایم تکراری بود","انجام تمرین برایم سخت بود","فرصت کافی برای انجامش نداشتم","تمرین برایم قابل‌فهم بود","متوجه نشدم دقیقاً چه کاری باید انجام بدهم","احساس کردم تمرین به مشکل اصلی من مربوط بود","احساس نکردم تمرین به مشکل من کمک کند","دوست دارم تمرین روز بعد متفاوت باشد"];
 const FEEDBACK_GROUPS=[
  {title:"حال امروز",items:FEEDBACK_OPTIONS.slice(0,4)},
@@ -412,7 +412,7 @@ function finish(){let s=load(),a=collectQs("finalQs");if(a.some(v=>v===null)){al
 function newJourney(){const s=load();s.assessment=null;s.completed=[];s.feedbacks={};s.scores={};s.shown={};s.final=null;save(s);show("assessment")}
 function boot(c){CONTENT=c;renderProblems();const s=load();if(!s.started)show("home");else if(!s.profile)show("profile");else if(!s.assessment)show("assessment");else showDashboard();update()}
 function init(){if(location.protocol==="file:"){boot(EMBEDDED_CONTENT);return}fetch("content.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("content");return r.json()}).then(boot).catch(()=>boot(EMBEDDED_CONTENT))}
-$("startBtn").onclick=start;$("howBtn").onclick=()=>$("modal").classList.remove("hidden");$("closeModal").onclick=()=>$("modal").classList.add("hidden");$("profileNext").onclick=saveProfile;$("assessmentNext").onclick=saveAssessment;$("continueBtn").onclick=()=>{const s=load();if(s.final){newJourney();return}if(!s.profile){show("profile");return}if(!s.assessment){show("assessment");return}openDay(Math.min(28,(s.completed.length||0)+1));};$("booksBtn").onclick=()=>show("books");$("supportBtn").onclick=()=>show("support");$("booksBack").onclick=showDashboard;$("supportBack").onclick=showDashboard;$("completeDay").onclick=completeDay;$("prevDay").onclick=()=>openDay(Math.max(1,currentDay-1));$("dayDash").onclick=showDashboard;$("finish").onclick=finish;$("doneDash").onclick=showDashboard;
+$("startBtn").onclick=start;$("howBtn").onclick=()=>$("modal").classList.remove("hidden");$("closeModal").onclick=()=>$("modal").classList.add("hidden");$("profileNext").onclick=saveProfile;$("assessmentNext").onclick=saveAssessment;$("continueBtn").onclick=()=>{const s=load();if(s.final){newJourney();return}if(!s.profile){show("profile");return}if(!s.assessment){show("assessment");return}openDay(Math.min(28,(s.completed.length||0)+1));};$("booksBtn").onclick=()=>show("books");$("supportBtn").onclick=()=>show("support");$("booksBack").onclick=showDashboard;$("supportBack").onclick=showDashboard;$("completeDay").onclick=completeDay;$("prevDay").onclick=()=>openDay(Math.max(1,currentDay-1));$("nextDayNav").onclick=()=>{const s=load();const max=s.completed.length+1;if(currentDay<max)openDay(currentDay+1);};$("dayDash").onclick=showDashboard;$("finish").onclick=finish;$("doneDash").onclick=showDashboard;
 document.addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(b){b.parentElement.querySelectorAll("button").forEach(x=>x.classList.remove("selected"));b.classList.add("selected")}});
 ["name","goal","condition","medicationName","assessmentGoal","f1","f2","f3","f4"].forEach(id=>$(id).addEventListener("input",()=>{if($(id).value.length>1000)$(id).value=$(id).value.slice(0,1000)}));
 $("age").addEventListener("input",()=>{$("age").value=$("age").value.replace(/[^0-9۰-۹]/g,"").slice(0,3)});
@@ -776,7 +776,15 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
   };
 
   const originalOpenDay=openDay;
-  openDay=function(n){const s=load();if(!s.profile||!s.assessment){show(!s.profile?"profile":"assessment");return}const max=s.completed.length+1;if(n>max){showAppModal({title:"این روز هنوز قفل است",message:"برای باز شدن این روز، ابتدا روز فعلی را کامل و ثبت کن.",type:"info",primaryText:"متوجه شدم"});return}originalOpenDay(n)};
+  openDay=function(n){
+    const s=load();
+    if(!s.profile||!s.assessment){show(!s.profile?"profile":"assessment");return}
+    const completed=Array.isArray(s.completed)?s.completed.map(Number).filter(Number.isFinite):[];
+    const maxCompleted=completed.length?Math.max(...completed):0;
+    const max=maxCompleted+1;
+    if(n>max){showAppModal({title:"این روز هنوز قفل است",message:"برای باز شدن این روز، ابتدا روز فعلی را کامل و ثبت کن.",type:"info",primaryText:"متوجه شدم"});return}
+    originalOpenDay(n);
+  };
 
   const baseRenderDailyScore=renderDailyScore;
   renderDailyScore=function(sel){baseRenderDailyScore(sel);const box=$("dailyScore");box.classList.remove("validation-invalid","validation-valid");if(sel!=null)box.classList.add("validation-valid");box.addEventListener("daily-score-change",()=>{box.classList.remove("validation-invalid");box.classList.add("validation-valid")},{once:false})};
@@ -788,12 +796,28 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
     if(dailySelected===null){score.classList.add("validation-invalid");score.classList.remove("validation-valid");errors.push({el:score,label:"شدت مشکل امروز",message:"یک عدد از ۰ تا ۱۰ انتخاب کن."})}else{score.classList.add("validation-valid");score.classList.remove("validation-invalid")}
     const fb=getFeedback();if(!fb.length){details.classList.add("is-invalid");details.classList.remove("is-valid");details.open=true;errors.push({el:details,label:"بازخورد امروزت",message:"حداقل یک بازخورد را انتخاب کن تا روز بعد دقیق‌تر تنظیم شود."})}else{details.classList.add("is-valid");details.classList.remove("is-invalid")}
     if(errors.length){showValidationErrors(errors,"برای ثبت امروز، این موارد را کامل کن");return}
-    let s=load();s.feedbacks=s.feedbacks||{};s.feedbacks[currentDay]=fb;s.scores[currentDay]=dailySelected;if(!s.completed.includes(currentDay))s.completed.push(currentDay);s.completed.sort((a,b)=>a-b);if(currentDay<28)s.shown[currentDay+1]=buildDay(s,currentDay+1);save(s);
+
+    // فقط ثبت وضعیت روز جاری؛ ساخت و نمایش روز بعد را به openDay می‌سپاریم.
+    // این ترتیب باعث می‌شود برگشت به روزهای قبل و ثبت مجدد آنها نیز بدون گیر کردن، به روز بعد برگردد.
+    const savedDay=currentDay;
+    let s=load();
+    s.feedbacks=s.feedbacks||{};
+    s.scores=s.scores||{};
+    s.shown=s.shown||{};
+    if(!Array.isArray(s.completed))s.completed=[];
+    s.feedbacks[savedDay]=fb;
+    s.scores[savedDay]=dailySelected;
+    if(!s.completed.includes(savedDay))s.completed.push(savedDay);
+    s.completed=[...new Set(s.completed.map(Number).filter(Number.isFinite))].sort((a,b)=>a-b);
+    save(s);
+
     const fbText=fb.join("، "),encouragement=encouragementForFeedback(dailySelected,fb);
-    $("feedback").innerHTML=currentDay<28?`<div class="result-card"><b>بازخورد امروز ثبت شد</b><br><span>نمره شدت مشکل: ${fa(dailySelected)} از ۱۰</span><br><span>بازخورد: ${fbText}</span><p>${encouragement}</p></div>`:`<div class="result-card"><b>۲۸ روز کامل شد</b><p>${encouragement}</p><button type="button" id="finalBtn" class="primary-btn">رفتن به ارزیابی نهایی ←</button></div>`;
-    if(currentDay<28){
-      openDay(currentDay+1);
+    if(savedDay<28){
+      const nextDay=savedDay+1;
+      // دکمه جداگانه‌ای ساخته نمی‌شود؛ حرکت به روز بعد همین‌جا انجام می‌شود.
+      setTimeout(()=>openDay(nextDay),0);
     }else{
+      $("feedback").innerHTML=`<div class="result-card"><b>۲۸ روز کامل شد</b><p>${encouragement}</p><button type="button" id="finalBtn" class="primary-btn">رفتن به ارزیابی نهایی ←</button></div>`;
       $("feedback").classList.remove("hidden");
       setTimeout(()=>$("finalBtn")?.addEventListener("click",()=>showFinal()),0);
     }
