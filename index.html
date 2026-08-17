@@ -4,13 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#173f4f">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>مسیر ۲۸ روزه بازسازی ذهن | مرکز هیپنوتراپی شفا</title>
 <style>
 :root{--navy:#173f4f;--navy2:#2f6f70;--gold:#d4a854;--cream:#fff8e9;--violet:#f5f0fa;--green:#eaf6ef;--blue:#edf7f7;--text:#203039;--muted:#66777f;--line:#dde7e6}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#fdfefe,#eef5f2);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#fdfefe,#eef5f2);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;padding-bottom:env(safe-area-inset-bottom)}button,input,textarea,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}.top{padding-top:max(16px,calc(16px + env(safe-area-inset-top)))}.btn:focus-visible,.reader-tool:focus-visible,.day:focus-visible{outline:3px solid rgba(212,168,84,.35);outline-offset:2px}
 .app{max-width:680px;margin:auto;padding:12px 14px 36px}.top{background:linear-gradient(145deg,var(--navy),var(--navy2));color:#fff;border-radius:26px;padding:16px;box-shadow:0 12px 28px #173f4f24;position:sticky;top:7px;z-index:10}.brand{display:flex;align-items:center;gap:12px}.logo{width:62px;height:62px;border-radius:50%;overflow:hidden;background:#fff;border:2px solid var(--gold);flex:none}.logo img{width:100%;height:100%;object-fit:cover}.small{font-size:12px;color:#e2f0ef}.top h1{font-size:20px;margin:3px 0}.progress{height:8px;background:#ffffff30;border-radius:20px;margin-top:14px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--gold),#f1d99a);transition:.25s}.stats{display:flex;justify-content:space-between;color:#e2f0ef;font-size:12px;margin-top:7px}
 .card{background:#fff;border-radius:22px;padding:20px;margin-top:14px;box-shadow:0 7px 22px #173f4f12}.home{text-align:center;padding:8px 8px 20px}.heroLogo{width:94px;height:94px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);box-shadow:0 8px 24px #173f4f1c;margin:6px auto 10px;display:block}.home h2{font-size:32px;margin:4px 0 5px;color:var(--navy)}.home h3{font-size:16px;margin:4px 0 18px}.lead{font-size:14px;line-height:2.1;color:#53666d}.muted{color:var(--muted);line-height:2}.badge{display:inline-block;background:#edf3f2;color:var(--navy);padding:5px 10px;border-radius:999px;font-size:11px;font-weight:800}
 .btn{width:100%;border:0;border-radius:16px;padding:14px 15px;margin-top:10px;font-weight:850}.primary{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;box-shadow:0 8px 18px #173f4f26}.primary.big{padding:16px;font-size:16px;border:2px solid var(--gold)}.secondary{background:#edf3f2;color:var(--navy)}.gold{background:linear-gradient(135deg,#fff5da,#f4dfaa);color:#5d4719;border:1px solid var(--gold)}.telegram{background:#eaf6f6;color:#245e63;border:1px solid #cbe4e2}.feedback-options{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px}.feedback-option{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #dce6e5;border-radius:13px;background:#fff;cursor:pointer;line-height:1.8}.feedback-option input{width:20px;height:20px;flex:none}.feedback-option.selected{border-color:var(--navy2);background:#edf7f7}.feedback-panel{margin-top:10px}.feedback-dropdown{margin-top:8px;padding:10px;border:1px solid #dce6e5;border-radius:14px;background:#fff}.secondary-btn{width:100%;border:1px solid #dce6e5;border-radius:14px;padding:12px;background:#f5f9f8;cursor:pointer;font-weight:700}.feedback-dropdown.feedback-panel{margin-top:12px;border:1px solid #d8e5e3;border-radius:16px;background:#fff;overflow:hidden}
@@ -88,12 +89,12 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
 <body>
 <div class="app">
 <header class="top">
- <div class="brand"><div class="logo"><img src="logo.png" alt="لوگوی مرکز هیپنوتراپی شفا"></div><div><div class="small">مرکز هیپنوتراپی شفا</div><h1>مسیر ۲۸ روزه بازسازی ذهن</h1><div class="small">یک قدم کوچک، هر روز</div></div></div>
+ <div class="brand"><div class="logo"><img src="logo.webp" alt="لوگوی مرکز هیپنوتراپی شفا"></div><div><div class="small">مرکز هیپنوتراپی شفا</div><h1>مسیر ۲۸ روزه بازسازی ذهن</h1><div class="small">یک قدم کوچک، هر روز</div></div></div>
  <div class="progress"><div class="bar" id="bar"></div></div><div class="stats"><span id="percent">۰٪</span><span id="progressText">روز ۰ از ۲۸</span></div>
 </header>
 
 <section id="home" class="card home">
- <img class="heroLogo" src="logo.png" alt="مرکز هیپنوتراپی شفا">
+ <img class="heroLogo" src="logo.webp" alt="مرکز هیپنوتراپی شفا">
  <div class="badge">🌱 مرحله اول · صفحه نخست</div>
  <h2>بازسازی ذهن</h2>
  <h3>هر روز فقط یک قدم؛ اما ۲۸ قدم پشت سر هم.</h3>
@@ -201,8 +202,8 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
  <span class="badge">📚 کتابخانه اختصاصی</span><h2>از حقیقت تا واقعیت</h2>
  <p class="muted books-intro">کتاب‌های این مجموعه را در محیط اختصاصی مطالعه کن. هر کتاب فقط هنگام انتخاب تو بارگذاری می‌شود تا مسیر ۲۸ روزه سریع و سبک باقی بماند.</p>
  <div class="book-grid">
-  <article class="book-card professional-book"><div class="book-cover-image"><img src="book1.png" alt="جلد اول کتاب از حقیقت تا واقعیت" loading="lazy"></div><div class="book-info"><span class="book-tag">جلد اول</span><h3>از حقیقت تا واقعیت</h3><p>نسخه الکترونیکی کتاب در محیط مطالعه اختصاصی.</p><div class="book-meta"><span>📖 مطالعه دیجیتال</span><span>📘 مطالعه متن کامل</span></div><button class="btn primary" data-book="1">📖 مشاهده کتاب</button></div></article>
-  <article class="book-card professional-book"><div class="book-cover-image"><img src="book2.png" alt="جلد دوم کتاب از حقیقت تا واقعیت؛ دگردیسی" loading="lazy"></div><div class="book-info"><span class="book-tag">جلد دوم · دگردیسی</span><h3>از حقیقت تا واقعیت</h3><p>جلد دوم مجموعه با عنوان «دگردیسی».</p><div class="book-meta"><span>📖 مطالعه دیجیتال</span><span>📘 مطالعه متن کامل</span></div><button class="btn primary" data-book="2">📖 مشاهده کتاب</button></div></article>
+  <article class="book-card professional-book"><div class="book-cover-image"><img src="book1.webp" alt="جلد اول کتاب از حقیقت تا واقعیت" loading="lazy"></div><div class="book-info"><span class="book-tag">جلد اول</span><h3>از حقیقت تا واقعیت</h3><p>نسخه الکترونیکی کتاب در محیط مطالعه اختصاصی.</p><div class="book-meta"><span>📖 مطالعه دیجیتال</span><span>📘 مطالعه متن کامل</span></div><button class="btn primary" data-book="1">📖 مشاهده کتاب</button></div></article>
+  <article class="book-card professional-book"><div class="book-cover-image"><img src="book2.webp" alt="جلد دوم کتاب از حقیقت تا واقعیت؛ دگردیسی" loading="lazy"></div><div class="book-info"><span class="book-tag">جلد دوم · دگردیسی</span><h3>از حقیقت تا واقعیت</h3><p>جلد دوم مجموعه با عنوان «دگردیسی».</p><div class="book-meta"><span>📖 مطالعه دیجیتال</span><span>📘 مطالعه متن کامل</span></div><button class="btn primary" data-book="2">📖 مشاهده کتاب</button></div></article>
  </div>
  <div id="bookReader" class="book-reader hidden" aria-live="polite">
   <div class="reader-head reader-head-pro"><button id="closeReader" class="btn secondary" type="button">← بازگشت به کتابخانه</button><strong id="readerTitle">مطالعه کتاب</strong></div>
@@ -230,6 +231,17 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
  <button class="btn secondary" id="supportBack">بازگشت به داشبورد</button>
 </section>
 
+<section id="journeyComplete" class="card hidden journey-complete">
+ <div class="journey-complete-mark">✓</div>
+ <span class="badge">🎉 پایان مسیر ۲۸ روزه</span>
+ <h2>تو تا اینجا آمدی</h2>
+ <p class="journey-lead">۲۸ روز را قدم‌به‌قدم پشت سر گذاشتی. شاید همه‌چیز دقیقاً مطابق انتظار پیش نرفته باشد؛ مهم این است که ادامه دادی، به خودت نگاه کردی و برای تغییر وقت گذاشتی.</p>
+ <p class="muted">حالا وقت آن است که ببینی این مسیر چه تغییری در تو ایجاد کرده است. در مرحله بعد، وضعیت امروزت را با نقطه شروع مسیر مقایسه می‌کنیم تا تصویر روشن‌تری از راه طی‌شده داشته باشی.</p>
+ <p class="journey-quote">این پایان مسیر نیست؛ پایان یک مرحله و شروع آگاهانه مرحله بعد است.</p>
+ <button id="goFinal" class="btn primary big">رفتن به ارزیابی نهایی ←</button>
+ <button id="journeyBack" class="btn secondary">↩ بازگشت به روز ۲۸</button>
+</section>
+
 <section id="final" class="card hidden">
  <span class="badge">روز ۲۸ · ارزیابی نهایی</span><h2>حالا تغییر را بررسی کنیم</h2>
  <p class="muted">این سؤال‌ها برای مقایسه وضعیت پایان با شروع مسیر هستند. سؤال پنجم با سؤال آغاز مسیر تکراری نیست.</p>
@@ -246,7 +258,7 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
  <button id="doneDash" class="btn primary">📊 مشاهده نتیجه در داشبورد</button>
 </section>
 
-<div class="footer">نسخه ۳۷ · مسیر ۲۸ روزه بازسازی ذهن · مرکز هیپنوتراپی شفا<br>برنامه آموزشی و خودمشاهده‌ای؛ جایگزین تشخیص یا درمان تخصصی نیست.</div>
+<div class="footer">نسخه ۳۸ · مسیر ۲۸ روزه بازسازی ذهن · مرکز هیپنوتراپی شفا<br>برنامه آموزشی و خودمشاهده‌ای؛ جایگزین تشخیص یا درمان تخصصی نیست.</div>
 </div>
 
 
@@ -274,7 +286,7 @@ function load(){try{return JSON.parse(localStorage.getItem(KEY))||fresh()}catch(
 function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
 let currentScreen=null;
 const screenHistory=[];
-function show(id,opts={}){const track=opts.track!==false;if(track&&currentScreen&&currentScreen!==id)screenHistory.push(currentScreen);["home","profile","assessmentForm","assessment","dashboard","day","books","support","final","done"].forEach(x=>$(x).classList.toggle("hidden",x!==id));currentScreen=id;window.scrollTo({top:0,behavior:"smooth"});update()}
+function show(id,opts={}){const track=opts.track!==false;if(track&&currentScreen&&currentScreen!==id)screenHistory.push(currentScreen);["home","profile","assessmentForm","assessment","dashboard","day","journeyComplete","books","support","final","done"].forEach(x=>$(x).classList.toggle("hidden",x!==id));currentScreen=id;window.scrollTo({top:0,behavior:"smooth"});update()}
 function goBack(){const target=screenHistory.length?screenHistory.pop():"home";show(target,{track:false})}
 function update(){const s=load(),n=s.completed.length,p=Math.round(n/28*100);$("bar").style.width=p+"%";$("percent").textContent=fa(p)+"٪";$("progressText").textContent=`روز ${fa(n)} از ۲۸`}
 function isPersianOnly(v){
@@ -338,15 +350,16 @@ function feedbackMode(s,day){
  const score=Number(s.scores[day]), prevScore=Number(s.scores[day-1]);
  const negative=fb.some(x=>["تغییری احساس نکردم","حالم بدتر شد","انجام تمرین برایم سخت بود","متوجه نشدم دقیقاً چه کاری باید انجام بدهم","احساس نکردم تمرین به مشکل من کمک کند"].includes(x));
  const repeat=fb.includes("تمرین برایم تکراری بود");
- const same=score===prevScore&&JSON.stringify(fb.slice().sort())===JSON.stringify(prev.slice().sort());
- if(negative||repeat||(same&&day>=3))return"تغییر راهبرد";
+ const same=JSON.stringify(fb.slice().sort())===JSON.stringify(prev.slice().sort());
+ const wantsDifferent=fb.includes("دوست دارم تمرین روز بعد متفاوت باشد");
+ if(negative||repeat||wantsDifferent||(same&&day>=3))return"تغییر راهبرد";
  if(score>=8)return"فشار بالا";
  if(score<=3)return"تثبیت";
  if(score<prevScore)return"پیشروی";
  return"ادامه";
 }
 function goalTone(s){const g=s.profile.goal||"";if(/آرام|استرس|اضطراب|ترس/.test(g))return"آرام و مرحله‌ای";if(/اعتماد|قاطع|مرز/.test(g))return"قاطع و عملی";if(/رابطه|ارتباط/.test(g))return"ارتباطی و روشن";return"ساده و قابل‌انجام"}
-function chooseStage(s,day){const mode=feedbackMode(s,day-1);let base=day-1;if(mode==="تغییر راهبرد")base=(base+7)%28;else if(mode==="کاهش فشار")base=(base+3)%28;else if(mode==="تثبیت")base=(base+11)%28;else if(mode==="پیشروی")base=(base+5)%28;else if(mode==="ادامه")base=(base+1)%28;
+function chooseStage(s,day){const mode=feedbackMode(s,day-1);let base=day-1;if(mode==="تغییر راهبرد")base=(base+7)%28;else if(mode==="تثبیت")base=(base+11)%28;else if(mode==="پیشروی")base=(base+5)%28;else if(mode==="ادامه")base=(base+1)%28;
  const used=new Set(Object.values(s.shown||{}).map(x=>x.stage));for(let k=0;k<28;k++){const idx=(base+k)%28;if(!used.has(idx))return idx}return base}
 function buildDay(s,day){const c=CONTENT.categories[s.profile.problem],idx=chooseStage(s,day),st=STAGES[idx],goal=s.profile.goal,avg=s.assessment?.avg??5,mode=feedbackMode(s,day-1);
  let ex=st[1].replaceAll("{p}",s.profile.problem),ac=st[2].replaceAll("{p}",s.profile.problem);
@@ -435,7 +448,7 @@ function encouragementForFeedback(score,fb){
 function showDashboard(){const s=load();$("dashTitle").textContent=s.final?"مسیر کامل شده":"مسیر شخصی تو";$("summary").innerHTML=`<div class="pill">مشکل: ${s.profile?.problem||""}</div><div class="pill">هدف: ${s.profile?.goal||""}</div><p>تمرین‌های تو بر اساس مشکل، هدف و ارزیابی اولیه ساخته می‌شوند و بازخورد روزانه هم روز بعد را تغییر می‌دهد.</p>`;$("dashPercent").textContent=fa(Math.round(s.completed.length/28*100))+"٪";$("dashDays").textContent=fa(s.completed.length)+"/۲۸";$("continueBtn").textContent=s.final?"مسیر جدید":"ادامه مسیر →";$("days").innerHTML="";for(let i=1;i<=28;i++){const b=document.createElement("button");b.className="day "+(s.completed.includes(i)?"done ":"")+(i===Math.min(28,(s.completed.length?Math.max(...s.completed):0)+1)?"current":"");b.textContent=fa(i);b.disabled=i>((s.completed.length?Math.max(...s.completed):0)+1);if(!b.disabled)b.onclick=()=>openDay(i);$("days").appendChild(b)}if(s.final){$("summary").innerHTML+=`<div class="resource"><b>نتیجه نهایی:</b> ${fa(s.final.score)} از ۱۰۰</div>`;$("continueBtn").textContent="شروع مسیر تازه"}show("dashboard")}
 function showFinal(){renderQs("finalQs",[] ,true);show("final")}
 function finish(){let s=load(),a=collectQs("finalQs");if(a.some(v=>v===null)){alert("به همه سؤال‌های ارزیابی نهایی پاسخ بده.");return}for(const id of ["f1","f2","f3","f4"])if(!persianField(id,"این کادر"))return;s.final={answers:a,score:Math.round(a.reduce((x,y)=>x+y,0)/(a.length*10)*100)};save(s);$("finalResult").innerHTML=`نتیجه خودارزیابی تو ${fa(s.final.score)} از ۱۰۰ است. این عدد فقط برای مقایسه وضعیت شروع و پایان مسیر استفاده می‌شود.`;show("done")}
-function newJourney(){const s=load();s.assessment=null;s.assessmentDraft=null;s.completed=[];s.feedbacks={};s.scores={};s.shown={};s.final=null;save(s);show("assessmentForm")}
+function newJourney(){const s=load();s.started=true;s.profile=null;s.assessment=null;s.assessmentDraft=null;s.completed=[];s.feedbacks={};s.scores={};s.shown={};s.final=null;save(s);screenHistory.length=0;["name","age","phone","goal","condition","medicalList","medicationName","assessmentGoal","f1","f2","f3","f4"].forEach(id=>{const el=$(id);if(el&&"value" in el)el.value=""});if($("problem"))$("problem").value="";if($("durationYears"))$("durationYears").value="";if($("durationMonths"))$("durationMonths").value="";if($("medicalCondition"))$("medicalCondition").value="";if($("medication"))$("medication").value="";document.querySelectorAll('input[name="medical"]').forEach(x=>x.checked=false);show("profile",{track:false})}
 function boot(c){
   CONTENT=c;renderProblems();
   const s=load();
@@ -444,7 +457,8 @@ function boot(c){
   show("home");
   update();
 }
-function init(){if(location.protocol==="file:"){boot(EMBEDDED_CONTENT);return}fetch("content.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("content");return r.json()}).then(boot).catch(()=>boot(EMBEDDED_CONTENT))}
+function initTelegram(){try{const tg=window.Telegram?.WebApp;if(!tg)return;tg.ready();tg.expand();if(tg.BackButton){tg.BackButton.onClick(()=>{if(currentScreen==="day")show("profile",{track:false});else if(screenHistory.length)goBack();else tg.close()})}}catch(e){}}
+function init(){initTelegram();if(location.protocol==="file:"){boot(EMBEDDED_CONTENT);return}fetch("content.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("content");return r.json()}).then(boot).catch(()=>boot(EMBEDDED_CONTENT))}
 
 document.addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(b){b.parentElement.querySelectorAll("button").forEach(x=>x.classList.remove("selected"));b.classList.add("selected")}});
 ["name","goal","condition","medicationName","assessmentGoal","f1","f2","f3","f4"].forEach(id=>$(id).addEventListener("input",()=>{if($(id).value.length>1000)$(id).value=$(id).value.slice(0,1000)}));
@@ -828,14 +842,17 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
     if(dailySelected===null){score.classList.add("validation-invalid");score.classList.remove("validation-valid");errors.push({el:score,label:"شدت مشکل امروز",message:"یک عدد از ۰ تا ۱۰ انتخاب کن."})}else{score.classList.add("validation-valid");score.classList.remove("validation-invalid")}
     const fb=getFeedback();if(!fb.length){details.classList.add("is-invalid");details.classList.remove("is-valid");details.open=true;errors.push({el:details,label:"بازخورد امروزت",message:"حداقل یک بازخورد را انتخاب کن تا روز بعد دقیق‌تر تنظیم شود."})}else{details.classList.add("is-valid");details.classList.remove("is-invalid")}
     if(errors.length){showValidationErrors(errors,"برای ثبت امروز، این موارد را کامل کن");return}
-    let s=load();s.feedbacks=s.feedbacks||{};s.feedbacks[currentDay]=fb;s.scores[currentDay]=dailySelected;if(!s.completed.includes(currentDay))s.completed.push(currentDay);s.completed.sort((a,b)=>a-b);if(currentDay<28)s.shown[currentDay+1]=buildDay(s,currentDay+1);save(s);
+    let s=load();s.feedbacks=s.feedbacks||{};s.scores=s.scores||{};s.shown=s.shown||{};s.feedbacks[currentDay]=fb;s.scores[currentDay]=dailySelected;if(!s.completed.includes(currentDay))s.completed.push(currentDay);s.completed.sort((a,b)=>a-b);
+    if(currentDay<28)s.shown[currentDay+1]=buildDay(s,currentDay+1);
+    save(s);
     const fbText=fb.join("، "),encouragement=encouragementForFeedback(dailySelected,fb);
-    $("feedback").innerHTML=currentDay<28?`<div class="result-card"><b>بازخورد امروز ثبت شد</b><br><span>نمره شدت مشکل: ${fa(dailySelected)} از ۱۰</span><br><span>بازخورد: ${fbText}</span><p>${encouragement}</p></div>`:`<div class="result-card"><b>۲۸ روز کامل شد</b><p>${encouragement}</p><button type="button" id="finalBtn" class="primary-btn">رفتن به ارزیابی نهایی ←</button></div>`;
     if(currentDay<28){
+      $("feedback").innerHTML=`<div class="result-card"><b>امروز با موفقیت ثبت شد</b><br><span>نمره شدت مشکل: ${fa(dailySelected)} از ۱۰</span><br><span>بازخورد: ${fbText}</span><p>${encouragement}</p></div>`;
+      $("feedback").classList.remove("hidden");
       openDay(currentDay+1);
     }else{
-      $("feedback").classList.remove("hidden");
-      setTimeout(()=>$("finalBtn")?.addEventListener("click",()=>showFinal()),0);
+      $("feedback").classList.add("hidden");
+      show("journeyComplete");
     }
   };
 
@@ -858,7 +875,9 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
     for(const id of ["f1","f2","f3","f4"]){const el=$(id),err=goalError(el,"این کادر را با متن فارسی کامل کن.");if(err){setFieldState(el,false,err);errors.push({el,label:labels[id],message:err})}else setFieldState(el,true,"")}
     if(errors.length){showValidationErrors(errors,"ارزیابی نهایی هنوز کامل نشده");return}
     let s=load(),a=collectQs("finalQs");s.final={answers:a,score:Math.round(a.reduce((x,y)=>x+y,0)/(a.length*10)*100)};save(s);
-    $("finalResult").innerHTML=`<div class="final-score-card"><span>امتیاز ارزیابی نهایی</span><strong>${fa(s.final.score)}</strong><small>از ۱۰۰</small></div>${buildServiceRecommendation(s)}`;
+    const startScore=Number(s.assessment?.avg||0);
+    const startPct=Math.round((startScore/10)*100);
+    $("finalResult").innerHTML=`<div class="final-score-card"><span>امتیاز ارزیابی نهایی</span><strong>${fa(s.final.score)}</strong><small>از ۱۰۰</small></div><div class="comparison-card"><div class="comparison-title">تصویر عددی مسیر</div><div class="comparison-row"><span>شروع</span><div class="comparison-track"><i style="width:${Math.max(0,Math.min(100,startPct))}%"></i></div><b>${fa(startScore.toFixed(1))} از ۱۰</b></div><div class="comparison-row"><span>پایان</span><div class="comparison-track"><i style="width:${Math.max(0,Math.min(100,s.final.score))}%"></i></div><b>${fa(s.final.score)} از ۱۰۰</b></div><p class="muted">این دو عدد از دو ارزیابی متفاوت به دست آمده‌اند و برای مشاهده تصویر کلی مسیر نمایش داده می‌شوند.</p></div>${buildServiceRecommendation(s)}`;
     show("done");
   };
 
@@ -876,7 +895,7 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
   on("booksBtn",()=>show("books"));
   on("supportBtn",()=>show("support"));
   on("booksBack",goBack);on("supportBack",goBack);on("completeDay",completeDay);
-  on("prevDay",()=>openDay(Math.max(1,currentDay-1)));on("dayBack",goBack);on("dayDash",showDashboard);on("finish",finish);on("doneDash",showDashboard);
+  on("prevDay",()=>openDay(Math.max(1,currentDay-1)));on("dayBack",()=>show("profile",{track:false}));on("dayDash",showDashboard);on("finish",finish);on("doneDash",showDashboard);on("goFinal",showFinal);on("journeyBack",()=>openDay(28));
 })();
 </script>
 
@@ -1043,6 +1062,13 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
 @media(max-width:520px){.reader-page{padding:24px 16px 28px;--reader-font:17px}.reader-page p{line-height:2.18;text-align:right;margin-bottom:18px}.reader-page .reader-section-title{font-size:calc(var(--reader-font) + 1px);padding:11px 12px}.reader-head-pro{padding:11px!important}.reader-tool{font-size:10px;padding:7px 9px}}
 </style>
 
+<style>/* V38 · Final polish */
+.journey-complete{text-align:center;padding:28px 22px 24px;background:linear-gradient(180deg,#fffdf8,#fff)}
+.journey-complete-mark{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;margin:2px auto 14px;background:linear-gradient(135deg,#e7f5ed,#f7ead0);border:1px solid #d7dfc9;color:#287352;font-size:28px;font-weight:950;box-shadow:0 10px 25px rgba(40,115,82,.10)}
+.journey-complete h2{color:var(--navy);font-size:28px;margin:12px 0 10px}.journey-lead{color:#53666d;line-height:2.15;font-size:14px;margin:0 auto 12px;max-width:570px}.journey-quote{margin:18px auto;padding:13px 15px;border-right:4px solid var(--gold);border-radius:14px;background:#fff8e9;color:#5d4a25;line-height:2;font-weight:750;max-width:560px}.journey-complete .btn{max-width:560px;margin-left:auto;margin-right:auto}
+.comparison-card{margin:12px 0 0;padding:16px;border:1px solid #e0e9e6;border-radius:20px;background:#fbfdfc}.comparison-title{font-weight:900;color:#245a60;margin-bottom:12px}.comparison-row{display:grid;grid-template-columns:70px 1fr 42px;align-items:center;gap:8px;margin-top:10px;font-size:11px;color:#657673}.comparison-row b{color:#245a60;text-align:left}.comparison-track{height:9px;border-radius:999px;background:#e7eeeb;overflow:hidden}.comparison-track i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#d4a854,#2f7776);transition:width .5s ease}
+@media(max-width:430px){.journey-complete{padding:24px 16px 20px}.journey-complete h2{font-size:25px}.comparison-row{grid-template-columns:60px 1fr 36px}}
+</style>
 <script>
 // Professional text reader. Book text is loaded only after the user opens a book.
 (function(){
