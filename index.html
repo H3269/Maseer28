@@ -464,7 +464,7 @@ function showDashboard(){
 }
 function showFinal(){renderQs("finalQs",[] ,true);show("final")}
 function finish(){let s=load(),a=collectQs("finalQs");if(a.some(v=>v===null)){alert("به همه سؤال‌های ارزیابی نهایی پاسخ بده.");return}for(const id of ["f1","f2","f3","f4"])if(!persianField(id,"این کادر"))return;s.final={answers:a,score:Math.round(a.reduce((x,y)=>x+y,0)/(a.length*10)*100)};save(s);$("finalResult").innerHTML=`نتیجه خودارزیابی تو ${fa(s.final.score)} از ۱۰۰ است. این عدد فقط برای مقایسه وضعیت شروع و پایان مسیر استفاده می‌شود.`;show("done")}
-function newJourney(){const s=load();s.assessment=null;s.assessmentDraft=null;s.completed=[];s.feedbacks={};s.scores={};s.shown={};s.final=null;save(s);show("assessmentForm")}
+function newJourney(){const s=load();s.started=true;s.profile=null;s.assessment=null;s.assessmentDraft=null;s.completed=[];s.feedbacks={};s.scores={};s.shown={};s.final=null;save(s);screenHistory.length=0;show("profile",{track:false})}
 function boot(c){
   CONTENT=c;renderProblems();
   const s=load();
