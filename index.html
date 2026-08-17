@@ -47,6 +47,11 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
 @media(max-width:520px){.form-actions{grid-template-columns:1fr}.form-actions .back-btn{order:2}.app-modal-head{padding:18px 17px 8px}.app-modal-body{padding:4px 17px 7px}.app-modal-actions{padding:12px 17px 17px}.smart-select-list{max-height:220px}}
 
 </style>
+<style>
+/* Book library test layer — does not alter the 28-day logic */
+.book-grid{display:grid;grid-template-columns:1fr;gap:14px;margin:16px 0}.book-card{display:flex;gap:14px;align-items:stretch;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:12px;overflow:hidden}.book-cover{width:92px;min-width:92px;min-height:132px;border-radius:12px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:8px;box-sizing:border-box;box-shadow:0 8px 20px rgba(0,0,0,.18)}.cover-one{background:linear-gradient(145deg,#173b4d,#7b5d27);color:#fff}.cover-two{background:linear-gradient(145deg,#2c1c43,#8b5e34);color:#fff}.book-cover span{font-weight:800;font-size:14px;line-height:1.5}.book-cover small{margin-top:8px;font-size:10px;opacity:.9}.book-info{flex:1;display:flex;flex-direction:column;align-items:flex-start}.book-info h3{margin:5px 0 4px}.book-info p{margin:0 0 12px;font-size:13px;line-height:1.7;color:var(--muted,#aaa)}.book-tag{font-size:11px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.08)}.book-reader{margin:14px 0;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:#111}.book-reader .reader-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px;background:rgba(255,255,255,.06)}.reader-note{font-size:11px;padding:8px 12px;color:#bbb;background:#171717}.book-reader iframe{display:block;width:100%;height:68vh;min-height:480px;border:0;background:#fff}.book-reader.hidden{display:none!important}
+@media (min-width:700px){.book-grid{grid-template-columns:1fr 1fr}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -155,10 +160,24 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
 </section>
 
 <section id="books" class="card hidden">
- <span class="badge">کتابخانه آموزشی</span><h2>کتاب‌های «از حقیقت تا واقعیت»</h2>
- <p class="muted">برای دریافت هر جلد، به پشتیبانی مرکز پیام بده.</p>
- <div class="resource"><h3>📘 جلد اول</h3><a class="btn telegram" href="https://t.me/Hypnotherapy_admin" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">درخواست جلد اول</a></div>
- <div class="resource"><h3>📕 جلد دوم</h3><a class="btn telegram" href="https://t.me/Hypnotherapy_admin" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">درخواست جلد دوم</a></div>
+ <span class="badge">📚 کتابخانه آموزشی</span>
+ <h2>کتاب‌های «از حقیقت تا واقعیت»</h2>
+ <p class="muted">این بخش در این نسخه برای تست تجربه مطالعه ساخته شده است. پرداخت و فعال‌سازی خودکار در مرحله بعد اضافه می‌شود.</p>
+ <div class="book-grid">
+  <article class="book-card">
+   <div class="book-cover cover-one"><span>از حقیقت<br>تا واقعیت</span><small>جلد اول</small></div>
+   <div class="book-info"><span class="book-tag">جلد اول</span><h3>از حقیقت تا واقعیت</h3><p>نسخه آزمایشی کتاب‌خوان موبایلی.</p><button class="btn primary" data-book="1">📖 مطالعه آزمایشی</button></div>
+  </article>
+  <article class="book-card">
+   <div class="book-cover cover-two"><span>از حقیقت<br>تا واقعیت</span><small>دگردیسی · جلد دوم</small></div>
+   <div class="book-info"><span class="book-tag">جلد دوم</span><h3>دگردیسی</h3><p>نسخه آزمایشی کتاب‌خوان موبایلی.</p><button class="btn primary" data-book="2">📖 مطالعه آزمایشی</button></div>
+  </article>
+ </div>
+ <div id="bookReader" class="book-reader hidden" aria-live="polite">
+   <div class="reader-head"><button id="closeReader" class="btn secondary">← بازگشت به کتابخانه</button><strong id="readerTitle">مطالعه کتاب</strong></div>
+   <div class="reader-note">نسخه آزمایشی · در این مرحله پرداخت فعال نیست.</div>
+   <iframe id="bookFrame" title="کتاب دیجیتال" loading="lazy"></iframe>
+ </div>
  <a class="btn telegram" href="https://t.me/Healing_Hypnotherapy_Center" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">📢 ورود به کانال مرکز</a>
  <button class="btn secondary" id="booksBack">بازگشت به داشبورد</button>
 </section>
@@ -928,4 +947,29 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
 }
 </style>
 
+<script>
+// Book library test layer: lazy-loads only the selected PDF and leaves the 28-day engine untouched.
+(function(){
+  const frame=document.getElementById('bookFrame');
+  const reader=document.getElementById('bookReader');
+  const title=document.getElementById('readerTitle');
+  const booksSection=document.getElementById('books');
+  const titles={1:'از حقیقت تا واقعیت — جلد اول',2:'از حقیقت تا واقعیت — دگردیسی (جلد دوم)'};
+  const files={1:'book1.pdf',2:'book2.pdf'};
+  document.querySelectorAll('[data-book]').forEach(btn=>btn.addEventListener('click',()=>{
+    const id=btn.dataset.book;
+    title.textContent=titles[id];
+    frame.src=files[id];
+    reader.classList.remove('hidden');
+    booksSection.querySelectorAll('.book-grid,.books-intro').forEach(el=>el.style.display='none');
+    reader.scrollIntoView({behavior:'smooth',block:'start'});
+  }));
+  document.getElementById('closeReader')?.addEventListener('click',()=>{
+    frame.src='about:blank';
+    reader.classList.add('hidden');
+    booksSection.querySelector('.book-grid').style.display='grid';
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+})();
+</script>
 </body></html>
