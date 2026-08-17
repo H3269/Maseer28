@@ -201,15 +201,14 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
  <span class="badge">📚 کتابخانه اختصاصی</span><h2>از حقیقت تا واقعیت</h2>
  <p class="muted books-intro">کتاب‌های این مجموعه را در محیط اختصاصی مطالعه کن. هر کتاب فقط هنگام انتخاب تو بارگذاری می‌شود تا مسیر ۲۸ روزه سریع و سبک باقی بماند.</p>
  <div class="book-grid">
-  <article class="book-card professional-book"><div class="book-cover-image"><img src="book1.png" alt="جلد اول کتاب از حقیقت تا واقعیت" loading="lazy"></div><div class="book-info"><span class="book-tag">جلد اول</span><h3>از حقیقت تا واقعیت</h3><p>نسخه الکترونیکی کتاب در محیط مطالعه اختصاصی.</p><div class="book-meta"><span>📖 مطالعه دیجیتال</span><span>🧪 نسخه آزمایشی مطالعه</span></div><button class="btn primary" data-book="1">📖 مشاهده کتاب</button></div></article>
-  <article class="book-card professional-book"><div class="book-cover-image"><img src="book2.png" alt="جلد دوم کتاب از حقیقت تا واقعیت؛ دگردیسی" loading="lazy"></div><div class="book-info"><span class="book-tag">جلد دوم · دگردیسی</span><h3>از حقیقت تا واقعیت</h3><p>جلد دوم مجموعه با عنوان «دگردیسی».</p><div class="book-meta"><span>📖 مطالعه دیجیتال</span><span>🧪 نسخه آزمایشی مطالعه</span></div><button class="btn primary" data-book="2">📖 مشاهده کتاب</button></div></article>
+  <article class="book-card professional-book"><div class="book-cover-image"><img src="book1.png" alt="جلد اول کتاب از حقیقت تا واقعیت" loading="lazy"></div><div class="book-info"><span class="book-tag">جلد اول</span><h3>از حقیقت تا واقعیت</h3><p>نسخه الکترونیکی کتاب در محیط مطالعه اختصاصی.</p><div class="book-meta"><span>📖 مطالعه دیجیتال</span><span>🧪 نسخه متنی بهینه‌شده</span></div><button class="btn primary" data-book="1">📖 مشاهده کتاب</button></div></article>
+  <article class="book-card professional-book"><div class="book-cover-image"><img src="book2.png" alt="جلد دوم کتاب از حقیقت تا واقعیت؛ دگردیسی" loading="lazy"></div><div class="book-info"><span class="book-tag">جلد دوم · دگردیسی</span><h3>از حقیقت تا واقعیت</h3><p>جلد دوم مجموعه با عنوان «دگردیسی».</p><div class="book-meta"><span>📖 مطالعه دیجیتال</span><span>🧪 نسخه متنی بهینه‌شده</span></div><button class="btn primary" data-book="2">📖 مشاهده کتاب</button></div></article>
  </div>
  <div id="bookReader" class="book-reader hidden" aria-live="polite">
   <div class="reader-head reader-head-pro"><button id="closeReader" class="btn secondary" type="button">← بازگشت به کتابخانه</button><strong id="readerTitle">مطالعه کتاب</strong></div>
   <div class="reader-toolbar">
     <button id="readerTocBtn" class="reader-tool" type="button">☰ فهرست</button>
     <button id="readerSearchBtn" class="reader-tool" type="button">⌕ جستجو</button>
-    <button id="readerPdfBtn" class="reader-tool" type="button">PDF</button>
     <button id="readerFontDown" class="reader-tool" type="button">A−</button>
     <button id="readerFontUp" class="reader-tool" type="button">A+</button>
   </div>
@@ -1051,7 +1050,6 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
 <script>
 // Professional text reader. Book text is loaded only after the user opens a book.
 (function(){
-  const frameBookFiles={1:'book1.pdf',2:'book2.pdf'};
   const dataFiles={1:'book1_text.json',2:'book2_text.json'};
   const titles={1:'از حقیقت تا واقعیت — جلد اول',2:'از حقیقت تا واقعیت — دگردیسی (جلد دوم)'};
   const stateKey='maseer28_book_reader_v1';
@@ -1093,7 +1091,7 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
     try{
       const res=await fetch(dataFiles[id],{cache:'force-cache'});if(!res.ok)throw new Error('book data');data=await res.json();
       const saved=getSaved();pageIndex=Number(saved[activeId]||0);if(pageIndex<0||pageIndex>=data.pages.length)pageIndex=0;renderToc();renderPage();
-    }catch(e){$r('readerPage').innerHTML='<div class="reader-empty">متن کتاب بارگذاری نشد. می‌توانی نسخه PDF را باز کنی.</div>';}
+    }catch(e){$r('readerPage').innerHTML='<div class="reader-empty">متن کتاب بارگذاری نشد. لطفاً دوباره تلاش کن.</div>';}
   }
   function search(){
     if(!data)return;const q=normalizeText($r('readerSearchInput').value).trim().toLowerCase();const box=$r('readerSearchResults');
@@ -1111,7 +1109,6 @@ input.is-invalid,textarea.is-invalid,select.is-invalid,.smart-select-control.is-
   $r('readerSearchGo')?.addEventListener('click',search);$r('readerSearchInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')search()});
   $r('readerFontDown')?.addEventListener('click',()=>{fontSize=Math.max(15,fontSize-1);setFont()});
   $r('readerFontUp')?.addEventListener('click',()=>{fontSize=Math.min(24,fontSize+1);setFont()});
-  $r('readerPdfBtn')?.addEventListener('click',()=>{if(activeId)window.open(frameBookFiles[activeId],'_blank','noopener')});
 })();
 </script>
 </body></html>
