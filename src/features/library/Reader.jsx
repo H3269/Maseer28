@@ -182,11 +182,16 @@ export default function Reader({ book, onClose, initialSourcePage = null, target
   }, [version, settings.fontStep, target, initialSourcePage, initialPage, book]);
 
   useLayoutEffect(() => {
-    if (!version) return undefined;
-    const frame = requestAnimationFrame(() => rebuild(preserveSourceRef.current));
+  if (!version) return undefined;
+
+  const frame = requestAnimationFrame(() => {
+    const preserveSource = preserveSourceRef.current;
     preserveSourceRef.current = null;
-    return () => cancelAnimationFrame(frame);
-  }, [version, settings.fontStep, rebuild]);
+    rebuild(preserveSource);
+  });
+
+  return () => cancelAnimationFrame(frame);
+}, [version, settings.fontStep, rebuild]);
 
   useEffect(() => {
     const onResize = () => {
