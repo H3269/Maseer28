@@ -11,6 +11,12 @@ import {
 
 const READER_SETTINGS_KEY = 'maseer28_reader_settings_v64';
 const READER_PROGRESS_KEY = 'maseer28_reader_progress_v66';
+const READER_SOUND_KEY = 'maseer28_reader_sound_v2';
+const PAGE_FLIP_SOUND_PATH = 'assets/sounds/page-flip-professional.mp3';
+// The current physical-page sound has ~304ms of leading silence and ends at ~1.645s.
+// Start at the first audible paper movement so the visual turn and sound begin together.
+const PAGE_FLIP_AUDIO_START = 0.304;
+const PAGE_FLIP_AUDIO_END = 1.645;
 
 const LEGACY_META = {
   1: { title: 'از حقیقت تا واقعیت', subtitle: 'جلد اول' },
@@ -38,15 +44,37 @@ function progressMap() {
 
 function bookKey(book) { return book.legacyId || book.id; }
 
+function soundMap() {
+  try { return JSON.parse(localStorage.getItem(READER_SOUND_KEY) || '{}') || {}; }
+  catch { return {}; }
+}
+
+function loadBookSoundEnabled(book) {
+  return soundMap()[bookKey(book)] !== false;
+}
+
+function saveBookSoundEnabled(book, enabled) {
+  try {
+    const map = soundMap();
+    map[bookKey(book)] = Boolean(enabled);
+    localStorage.setItem(READER_SOUND_KEY, JSON.stringify(map));
+  } catch { /* noop */ }
+}
+
+function pageFlipSoundUrl() {
+  try {
+    // Relative to the current GitHub Pages deployment, so it also works
+    // when the repository name is Maseer28-V1 instead of Maseer28.
+    return new URL(PAGE_FLIP_SOUND_PATH, document.baseURI).href;
+  } catch {
+    return PAGE_FLIP_SOUND_PATH;
+  }
+}
+
 function saveProgress(book, page, total, source) {
   try {
     const map = progressMap();
-    map[bookKey(book)] = {
-      page,
-      total,
-      source: Number.isFinite(Number(source)) ? Number(source) : 1,
-      updatedAt: new Date().toISOString()
-    };
+    map[bookKey(book)] = { page, total, source: Number(source) || 1, updatedAt: new Date().toISOString() };
     localStorage.setItem(READER_PROGRESS_KEY, JSON.stringify(map));
   } catch { /* storage can be unavailable in embedded browsers */ }
 }
@@ -72,7 +100,7 @@ function calcMetrics(root, article, fontStep, targetVisible) {
   });
   const target = root.querySelector('#bookTarget');
   if (targetVisible && target) fixed += target.getBoundingClientRect().height + 5;
-  const spare = Math.max(260, root.clientHeight - fixed - 14);
+  const spare = Math.max(260, root.clientHeight - fixed);
   const linePx = Math.max(20, Math.min(52, Math.floor(spare / READER_LINES_PER_PAGE)));
   const base = Math.max(15, Math.min(22, Math.round(linePx * 0.47)));
   const fontPx = Math.max(13, base + fontStep);
@@ -98,6 +126,7 @@ export default function Reader({ book, onClose, initialSourcePage = null, target
   const [pageIndex, setPageIndex] = useState(0);
   const [tocOpen, setTocOpen] = useState(false);
   const [settings, setSettings] = useState(loadSettings);
+  const [soundEnabled, setSoundEnabled] = useState(() => loadBookSoundEnabled(book));
   const [error, setError] = useState('');
   const rootRef = useRef(null);
   const articleRef = useRef(null);
@@ -106,10 +135,15 @@ export default function Reader({ book, onClose, initialSourcePage = null, target
   const activePointer = useRef(null);
   const preserveSourceRef = useRef(null);
   const firstLayoutRef = useRef(true);
+  const pageFlipAudioRef = useRef(null);
+  const flipSheetRef = useRef(null);
+  const flipCleanupRef = useRef(null);
 
   useEffect(() => {
     let alive = true;
     setVersion(null); setLayout(null); setError(''); firstLayoutRef.current = true;
+    setSoundEnabled(loadBookSoundEnabled(book));
+    if (flipCleanupRef.current) flipCleanupRef.current();
     libraryRepository.getVersion(book.activeVersionId).then((row) => {
       if (!row) throw new Error('نسخه فعال کتاب پیدا نشد.');
       if (alive) setVersion(row);
@@ -138,17 +172,9 @@ export default function Reader({ book, onClose, initialSourcePage = null, target
       else if (Number.isFinite(explicit) && explicit > 1) nextPage = pageForSource(nextLayout, explicit);
       else if (initialPage != null && Number.isFinite(Number(initialPage))) nextPage = Math.max(0, Math.min(nextLayout.pageCount - 1, Number(initialPage)));
       else {
-  const stored = progressMap()[bookKey(book)];
-
-  if (stored && Number.isFinite(Number(stored.page))) {
-    nextPage = Math.max(
-      0,
-      Math.min(nextLayout.pageCount - 1, Number(stored.page))
-    );
-  } else {
-    nextPage = 0;
-  }
-}
+        const stored = progressMap()[bookKey(book)];
+        nextPage = stored?.source ? pageForSource(nextLayout, stored.source) : 0;
+      }
       firstLayoutRef.current = false;
     } else if (preserveSource != null && Number(preserveSource) > 0) nextPage = pageForSource(nextLayout, preserveSource);
     else nextPage = 0;
@@ -188,15 +214,102 @@ export default function Reader({ book, onClose, initialSourcePage = null, target
     saveProgress(book, pageIndex, layout.pageCount, source || 1);
   }, [book, layout, current, pageIndex]);
 
-  const next = useCallback(() => {
-    if (!layout || pageIndex >= layout.pageCount - 1) return;
-    setPageIndex((value) => value + 1);
-  }, [layout, pageIndex]);
+  const playPageFlipSound = useCallback(() => {
+    if (!soundEnabled) return 0;
+    try {
+      if (!pageFlipAudioRef.current) {
+        pageFlipAudioRef.current = new Audio(pageFlipSoundUrl());
+        pageFlipAudioRef.current.preload = 'auto';
+        pageFlipAudioRef.current.volume = 0.58;
+      }
+      const audio = pageFlipAudioRef.current;
+      audio.pause();
+      audio.currentTime = PAGE_FLIP_AUDIO_START;
+      const promise = audio.play();
+      if (promise?.catch) promise.catch(() => {});
+      return (PAGE_FLIP_AUDIO_END - PAGE_FLIP_AUDIO_START) * 1000;
+    } catch {
+      return 0;
+    }
+  }, [soundEnabled]);
 
-  const prev = useCallback(() => {
-    if (!layout || pageIndex <= 0) return;
-    setPageIndex((value) => value - 1);
-  }, [layout, pageIndex]);
+  const togglePageSound = useCallback(() => {
+    setSoundEnabled((enabled) => {
+      const nextEnabled = !enabled;
+      if (!nextEnabled && pageFlipAudioRef.current) {
+        try { pageFlipAudioRef.current.pause(); pageFlipAudioRef.current.currentTime = 0; } catch {}
+      }
+      saveBookSoundEnabled(book, nextEnabled);
+      return nextEnabled;
+    });
+  }, [book]);
+
+  const turnPage = useCallback((direction, targetPage) => {
+    if (!layout) return;
+    const destination = targetPage == null
+      ? (direction === 'next' ? pageIndex + 1 : pageIndex - 1)
+      : Math.max(0, Math.min(layout.pageCount - 1, Number(targetPage)));
+    if (destination === pageIndex || destination < 0 || destination >= layout.pageCount) return;
+    if (flipCleanupRef.current) flipCleanupRef.current();
+
+    // Start the sound first and use its audible duration for the exact same turn.
+    const soundDuration = playPageFlipSound();
+    const duration = soundDuration || 760;
+    const article = articleRef.current;
+    const root = rootRef.current;
+
+    if (article && root) {
+      const rootRect = root.getBoundingClientRect();
+      const pageRect = article.getBoundingClientRect();
+      const sheet = article.cloneNode(true);
+      sheet.removeAttribute('id');
+      sheet.className = `${article.className} readerFlipSheet`;
+      sheet.setAttribute('aria-hidden', 'true');
+      sheet.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+      Object.assign(sheet.style, {
+        top: `${pageRect.top - rootRect.top}px`,
+        left: `${pageRect.left - rootRect.left}px`,
+        width: `${pageRect.width}px`,
+        height: `${pageRect.height}px`,
+        margin: '0',
+        padding: getComputedStyle(article).padding,
+        zIndex: '9999',
+        position: 'absolute',
+        pointerEvents: 'none',
+        // Persian reader: the next sheet is turned from LEFT to RIGHT.
+        transformOrigin: direction === 'next' ? '100% 50%' : '0% 50%',
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden'
+      });
+      root.appendChild(sheet);
+      flipSheetRef.current = sheet;
+
+      const sign = direction === 'next' ? 1 : -1;
+      const animation = sheet.animate([
+        { transform: 'perspective(1600px) rotateY(0deg)', opacity: 1, filter: 'brightness(1)', boxShadow: '0 4px 14px rgba(0,0,0,.08)' },
+        { transform: `perspective(1600px) rotateY(${sign * 92}deg) translateZ(18px)`, opacity: .97, filter: 'brightness(.94)', boxShadow: `${sign * 24}px 12px 40px rgba(0,0,0,.24)`, offset: .48 },
+        { transform: `perspective(1600px) rotateY(${sign * 180}deg)`, opacity: 0, filter: 'brightness(1)', boxShadow: '0 0 0 rgba(0,0,0,0)' }
+      ], { duration, easing: 'cubic-bezier(.18,.72,.25,1)', fill: 'both' });
+
+      let finished = false;
+      const cleanup = () => {
+        if (finished) return;
+        finished = true;
+        try { animation.cancel(); } catch {}
+        sheet.remove();
+        if (flipSheetRef.current === sheet) flipSheetRef.current = null;
+        if (flipCleanupRef.current === cleanup) flipCleanupRef.current = null;
+      };
+      flipCleanupRef.current = cleanup;
+      animation.finished.then(cleanup).catch(cleanup);
+      window.setTimeout(cleanup, duration + 100);
+    }
+
+    setPageIndex(destination);
+  }, [layout, pageIndex, playPageFlipSound]);
+
+  const next = useCallback(() => turnPage('next'), [turnPage]);
+  const prev = useCallback(() => turnPage('prev'), [turnPage]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -254,6 +367,14 @@ export default function Reader({ book, onClose, initialSourcePage = null, target
         <button type="button" onClick={() => changeFont(-1)} aria-label="کوچک کردن متن">A−</button>
         <div id="readerChapterLabel" className="readerChapterLabel">{layout ? chapterLabel : 'مطالعه'}</div>
         <button type="button" onClick={() => changeFont(1)} aria-label="بزرگ کردن متن">A+</button>
+        <button
+          id="readerSoundButton"
+          type="button"
+          className={soundEnabled ? 'readerSoundButton soundOn' : 'readerSoundButton soundOff'}
+          onClick={togglePageSound}
+          aria-label={soundEnabled ? 'خاموش کردن صدای ورق زدن' : 'روشن کردن صدای ورق زدن'}
+          title={soundEnabled ? 'صدای ورق زدن: روشن' : 'صدای ورق زدن: خاموش'}
+        >{soundEnabled ? '🔊' : '🔇'}</button>
         <button id="readerThemeButton" type="button" onClick={cycleTheme} aria-label="تغییر زمینه مطالعه">{settings.theme === 'light' ? '◐' : settings.theme === 'sepia' ? '☀' : '☾'}</button>
       </div>
       <div id="bookTarget" className={`readerTarget${target ? '' : ' hidden'}`}>
@@ -321,14 +442,20 @@ export default function Reader({ book, onClose, initialSourcePage = null, target
       </article>
       {tocOpen && <div id="bookTocPanel" className="bookTocPanel open">
         <h3>{Number(book.legacyId) === 4 ? 'پیوست‌ها' : 'فهرست مطالب'}</h3>
-        {(layout?.chapterAnchors || []).map((entry) => <div className="bookTocEntry" key={`${entry.page}-${entry.title}`} onClick={() => { setPageIndex(entry.page); setTocOpen(false); }}><b>{entry.title}</b><span>صفحه {fa(entry.page + 1)}</span></div>)}
+        {(layout?.chapterAnchors || []).map((entry) => <div className="bookTocEntry" key={`${entry.page}-${entry.title}`} onClick={() => {
+            if (entry.page !== pageIndex) turnPage(entry.page > pageIndex ? 'next' : 'prev', entry.page);
+            setTocOpen(false);
+          }}><b>{entry.title}</b><span>صفحه {fa(entry.page + 1)}</span></div>)}
         {layout && !(layout.chapterAnchors || []).length && <p className="muted">فهرست مطالب در دسترس نیست.</p>}
         <button className="bookTocClose" onClick={() => setTocOpen(false)}>بستن فهرست</button>
       </div>}
       <div className="readerBottombar">
         <button className="readerPageArrow readerNextArrow" type="button" onClick={next} disabled={!layout || pageIndex >= total - 1} aria-label="صفحه بعد" title="صفحه بعد">←</button>
         <button className="readerBottomIcon" onClick={() => setTocOpen((value) => !value)} aria-label="فهرست مطالب">☷</button>
-        <input id="readerPageRange" dir="rtl" style={{ direction: 'rtl' }} className="readerPageRange" type="range" min="1" max={Math.max(1, total)} value={Math.min(total, pageIndex + 1)} step="1" onChange={(e) => setPageIndex(Math.max(0, Math.min(total - 1, Number(e.target.value) - 1)))} aria-label="جابجایی بین صفحات" />
+        <input id="readerPageRange" dir="rtl" style={{ direction: 'rtl' }} className="readerPageRange" type="range" min="1" max={Math.max(1, total)} value={Math.min(total, pageIndex + 1)} step="1" onChange={(e) => {
+          const destination = Math.max(0, Math.min(total - 1, Number(e.target.value) - 1));
+          turnPage(destination > pageIndex ? 'next' : 'prev', destination);
+        }} aria-label="جابجایی بین صفحات" />
         <button id="readerPageCounter" className="readerPageCounter" onClick={() => setTocOpen((value) => !value)}>{fa(pageIndex + 1)} / {fa(total)}</button>
         <button className="readerPageArrow readerPrevArrow" type="button" onClick={prev} disabled={!layout || pageIndex <= 0} aria-label="صفحه قبل" title="صفحه قبل">→</button>
       </div>
