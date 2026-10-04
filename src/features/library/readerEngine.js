@@ -227,6 +227,17 @@ function headingBlockIsNarrativeContinuation(text, previousText) {
   return /[.!؟!…]$/u.test(t) && t.length > 42;
 }
 
+function structuralHeadingFreshPage(text, block, level) {
+  const t = norm(text);
+  if (!t) return false;
+  // A heading that is explicitly structural in the source is a page opener in
+  // every volume. This is the common rule that makes books 1–4 behave alike.
+  if (level <= 2) return true;
+  if (/^(?:فصل|بخش|پیوست|ضمیمه|هفته|روز)\s+/u.test(t)) return true;
+  if (/^(?:تمرین|کاربرگ|جمع[‌ -]?بندی|نتیجه[‌ -]?گیری|سخن(?:\s+پایانی|\s+آخر)|پیام(?:\s+پایانی|\s+نویسنده)?|آخرین تمرین|پایان مسیر|یک سؤال نهایی|یادآوری)$/u.test(t)) return true;
+  return false;
+}
+
 function readerKind(text, block, context = {}) {
   const t = norm(text);
   if (!t) return { kind: 'body', level: 0 };
@@ -237,8 +248,10 @@ function readerKind(text, block, context = {}) {
   if (block?.type === 'heading' && headingBlockIsNarrativeContinuation(t, context.previousText)) return { kind: 'body', level: 0 };
   if (block?.type === 'heading') {
     const level = Math.max(1, Math.min(3, Number(block.level) || 3));
+    const freshPage = structuralHeadingFreshPage(t, block, level);
     if (level === 1) return { kind: 'heading1', level, freshPage: true };
-    if (level === 2) return { kind: 'heading', level };
+    if (level === 2) return { kind: 'heading', level, freshPage };
+    if (freshPage) return { kind: 'subheading', level, freshPage: true };
     return { kind: 'subheading', level };
   }
   if (block?.type === 'list') return { kind: 'list', level: 0 };
@@ -246,10 +259,10 @@ function readerKind(text, block, context = {}) {
   if (/^(?:فصل|پیوست)\s+/u.test(t)) return { kind: 'body', level: 0 };
   if (/^ضمیمه\s+/u.test(t)) return { kind: 'heading1', level: 1, freshPage: true, toc: Number(context.bookId) === 3 };
   if (/^اصل\s+(?:اول|دوم|سوم|چهارم|پنجم|ششم|هفتم|هشتم|نهم|دهم|یازدهم|دوازدهم|سیزدهم|چهاردهم|[۰-۹0-9]+)(?:\s*[:：]|\s|$)/u.test(t)) return { kind: 'subheading', level: 3 };
-  if (/^روز\s*[۰-۹0-9]+$/u.test(t)) return { kind: 'dayTitle', level: 2 };
-  if (/^(?:هفته\s+(?:اول|دوم|سوم|چهارم|[۰-۹0-9]+)|روش ثبت هر روز|روش استفاده(?: از کتاب)?|یک سؤال نهایی|یادآوری|جمله پایانی|سخن آخر|آخرین تمرین|سخن پایانی|پیام پایانی|دعوت به ادامه مسیر)$/u.test(t)) return { kind: 'subheading', level: 2 };
+  if (/^روز\s*[۰-۹0-9]+$/u.test(t)) return { kind: 'dayTitle', level: 2, freshPage: true };
+  if (/^(?:هفته\s+(?:اول|دوم|سوم|چهارم|[۰-۹0-9]+)|روش ثبت هر روز|روش استفاده(?: از کتاب)?|یک سؤال نهایی|یادآوری|جمله پایانی|سخن آخر|آخرین تمرین|سخن پایانی|پیام پایانی|دعوت به ادامه مسیر)$/u.test(t)) return { kind: 'subheading', level: 2, freshPage: true };
   if (LABEL_RE.test(t)) return { kind: 'label', level: 3 };
-  if (STRONG_HEADING_RE.test(t) || PREFIX_HEADING_RE.test(t)) return { kind: 'heading', level: 2 };
+  if (STRONG_HEADING_RE.test(t) || PREFIX_HEADING_RE.test(t)) return { kind: 'heading', level: 2, freshPage: true };
   if (context.knownHeadings?.has(t)) return { kind: 'subheading', level: 3, inferred: true };
   if (/^[۰-۹0-9]+[.)]\s+.{2,60}$/u.test(t)) return { kind: 'label', level: 3 };
   if (shortHeadingCandidate(t, context.nextText, context.bookId)) return { kind: 'subheading', level: 3, inferred: true };
