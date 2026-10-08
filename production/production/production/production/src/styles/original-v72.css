@@ -4058,9 +4058,6 @@
   font-weight: 720 !important;
 }
 
-#bookReader .readerFixedLine.introMeta { color: var(--reader-muted) !important; }
-#bookReader .readerFixedLine.poemEmphasis { font-size: calc(var(--reader-font-size) * 1.12) !important; font-weight: 850 !important; color: var(--reader-muted) !important; }
-
 #bookReader .readerFixedLine.label {
   font-size: var(--reader-font-size) !important;
   font-weight: 620 !important;
