@@ -3753,20 +3753,12 @@
     }
   
 
-    
-    /* V22 · justify only continuing text lines */
-    #bookReader .readerFixedLine.body.lineContinue,
-    #bookReader .readerFixedLine.list.lineContinue {
-      text-align: justify !important;
-      text-align-last: justify !important;
-      text-justify: inter-word !important;
-      word-spacing: normal !important;
-      letter-spacing: 0 !important;
-    }
-
-    /* Keep paragraph endings and short sentences natural */
+    /* V22 · final Persian reader contract for all four books.
+   Visual/navigation only — embedded book content is untouched. */
     #bookReader .readerFixedLine.body,
     #bookReader .readerFixedLine.list,
+    #bookReader .readerFixedLine.body.lineContinue,
+    #bookReader .readerFixedLine.list.lineContinue,
     #bookReader .readerFixedLine.body.lineEnd,
     #bookReader .readerFixedLine.list.lineEnd,
     #bookReader .readerFixedLine.body.sentenceEnd,
