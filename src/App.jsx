@@ -85,7 +85,7 @@ function MainApp() {
   const { books, loading: libraryLoading, error: libraryError } = useLibrary();
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}content/path-content.json`)
+    fetch(`${import.meta.env.BASE_URL}content/path-content.json?v=20261020-book5`, { cache: 'no-store' })
       .then((response) => { if (!response.ok) throw new Error('فایل محتوای مسیر پیدا نشد.'); return response.json(); })
       .then(setContent)
       .catch((error) => setLoadError(error?.message || 'خطا در بارگذاری برنامه'));
@@ -231,7 +231,7 @@ function MainApp() {
     }
 
     const chosen = activeDay;
-    const record = { score: Number(score), feedback, feedbackText: makeFeedback(feedback, score), exerciseId: chosen?.id || '', updatedAt: new Date(trustedNow).toISOString() };
+    const record = { score: Number(score), feedback, feedbackText: makeFeedback(feedback, score, chosen, category?.name, currentDay), exerciseId: chosen?.id || '', updatedAt: new Date(trustedNow).toISOString() };
     patchJourney((previous) => ({ ...previous, completed: [...new Set([...(previous.completed || []), currentDay])].sort((a, b) => a - b), answers: { ...(previous.answers || {}), [currentDay]: answer }, daily: { ...(previous.daily || {}), [currentDay]: record } }));
     setResultDay(currentDay);
     navigate('dailyResult');
@@ -336,7 +336,7 @@ function MainApp() {
       {screen === 'assessment' && <AssessmentScreen initial={journey.assessmentData?.answers} onSave={saveAssessment} onValidation={showValidation} />}
       {screen === 'dashboard' && <Dashboard journey={journey} userProfile={userProfile} onEditProfile={() => openProfileEditor('dashboard')} onCurrent={openCurrentDay} onBooks={() => openBooks('dashboard')} onArchive={() => navigate('archive')} onSupport={() => openSupport('dashboard')} onChannel={() => window.open(content.channelUrl, '_blank', 'noopener,noreferrer')} />}
       {screen === 'day' && <DayScreen day={currentDay} problem={journey.profileData?.problem || ''} data={activeDay} record={journey.daily?.[currentDay]} savedAnswer={journey.answers?.[currentDay] || ''} onDashboard={() => navigate('dashboard')} onPrevious={() => currentDay <= 1 ? navigate('dashboard') : openDay(currentDay - 1)} onComplete={completeDay} onNext={() => openDay(currentDay + 1)} completed={journey.completed.includes(currentDay)} onValidation={showValidation} />}
-      {screen === 'dailyResult' && <DailyResult day={resultDay || journey.completed.length || currentDay} journey={journey} data={resultData} sourceLabel={recommendationSource} onDashboard={() => navigate('dashboard')} onNext={openDay} onFinal={() => navigate('final')} onBook={(rec) => openRecommendedBook(resultDay || currentDay, rec)} />}
+      {screen === 'dailyResult' && <DailyResult day={resultDay || journey.completed.length || currentDay} journey={journey} data={resultData} problem={category?.name} sourceLabel={recommendationSource} onDashboard={() => navigate('dashboard')} onNext={openDay} onFinal={() => navigate('final')} onBook={(rec) => openRecommendedBook(resultDay || currentDay, rec)} />}
       {screen === 'books' && <LibraryPage books={books} loading={libraryLoading} error={libraryError} onOpenBook={(book) => openBook(book)} onBack={() => navigate(libraryReturn)} />}
       {screen === 'support' && <Support content={content} onBack={() => navigate(supportReturn)} />}
       {screen === 'final' && <FinalAssessment initial={journey.final} onSave={finishFinal} onValidation={showValidation} />}
@@ -352,12 +352,21 @@ function MainApp() {
   );
 }
 
-function makeFeedback(feedback, score) {
-  const map = {
-    better: 'نشانه‌ای از بهبود ثبت کردی. دقیق شو که کدام رفتار یا تصمیم به این تغییر کمک کرد.',
-    same: 'تغییر کمی ثبت شده است. فعلاً به‌جای فشار بیشتر، محرک و مانع اصلی را دقیق‌تر مشاهده کن.',
-    worse: 'امروز دشواری بیشتری ثبت کردی. هدف شکست دادن احساس نیست؛ شدت را مدیریت کن و اگر وضعیت نگران‌کننده است از متخصص کمک بگیر.',
-    hard: 'سخت بودن تمرین یک داده مهم است. تمرین را کوچک‌تر و قابل‌تحمل‌تر کن و فقط یک بخش را انجام بده.',
+function makeFeedback(feedback, score, dayData, problem, day) {
+  const topic = String(problem || 'موضوع امروز').trim();
+  const title = String(dayData?.title || 'تمرین امروز').split('·')[0].trim();
+  const stage = Number(day) <= 7
+    ? 'فعلاً هدف اصلی شناخت دقیق الگوست، نه تغییر فوری آن.'
+    : Number(day) <= 14
+      ? 'یک تغییر کوچک و قابل مشاهده را امتحان کن.'
+      : Number(day) <= 21
+        ? 'بررسی کن این مهارت در موقعیت دیگری هم به کارت می‌آید یا نه.'
+        : 'روی حفظ مهارت و برنامه‌ریزی برای روزهای دشوار تمرکز کن.';
+  const messages = {
+    better: 'نشانه‌ای از بهبود ثبت کردی. بررسی کن چه رفتار یا شرایطی احتمالاً به آن کمک کرد؛ نتیجه را به یک علت قطعی نسبت نده.',
+    same: 'فعلاً تغییر محسوسی ثبت نشده است. یک مانع مشخص را جدا کن و ببین چه چیزی هنوز مثل قبل پیش می‌رود.',
+    worse: 'دشواری بیشتر را جدی بگیر و فشار تمرین را بالا نبر. به گام کوچک‌تر و امن‌تر برگرد؛ اگر بدترشدن ادامه دارد یا نگران‌کننده است، کمک حرفه‌ای بگیر.',
+    hard: 'شاید اندازه یا زمان تمرین مناسب نبوده است. فعلاً به مشاهده و نوشتن کوتاه بسنده کن و خودت را مجبور به موقعیت دشوار نکن.',
   };
-  return `${map[feedback] || ''} امتیاز امروز: ${fa(score)} از ۱۰.`;
+  return `در مسیر «${topic}»، تمرین «${title}» را با امتیاز ${fa(score)} از ۱۰ ثبت کردی. ${messages[feedback] || 'نتیجه امروز را بدون قضاوت ثبت کن.'} ${stage}`;
 }
