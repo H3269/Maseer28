@@ -259,6 +259,18 @@ function readerKind(text, block, context = {}) {
   if (Number(context.bookId) === 1 && /^هویت\.?$/u.test(t)) return { kind: 'heading', level: 2, freshPage: true };
   if (Number(context.bookId) === 1 && /^روش استفاده از(?: این)? کتاب$/u.test(t)) return { kind: 'heading', level: 2, freshPage: true };
 
+  // Book 5: workbook titles and chapter-end exercises begin on a fresh page.
+  if (Number(context.bookId) === 5 && /^کاربرگ\s+(?:اول|دوم|سوم|چهارم|پنجم|ششم|هفتم)(?:\s*[:：]|$)/u.test(t)) return { kind: 'heading', level: 2, freshPage: true, practice: true };
+  if (Number(context.bookId) === 5 && /^تمرین\s+پایانی\s+فصل\s+/u.test(t)) return { kind: 'exerciseTitle', level: 2, freshPage: true, practice: true };
+  if (Number(context.bookId) === 5 && /^سخن\s+پایانی\s+کتاب$/u.test(t)) return { kind: 'heading', level: 2, freshPage: true };
+  // The chapter 26 summary title is styled as a heading but stays with its body.
+  if (Number(context.bookId) === 5 && /^جمع[‌\u200c -]?بندی\s+فصل\s+بیست[‌\u200c -]?و?[‌\u200c -]?ششم$/u.test(t)) return { kind: 'heading', level: 2, freshPage: false };
+
+  // Book 5 front matter: keep these named sections at the top of a fresh page.
+  if (Number(context.bookId) === 5 && /^(?:زندگی زیباست چشمی باز کن|پیشگفتار|مقدمه)$/u.test(t)) return { kind: 'heading1', level: 1, freshPage: true };
+  // Numbered subsection titles in book 5 are headings; their following prose remains body text.
+  if (Number(context.bookId) === 5 && /^[۰-۹0-9]{1,3}\s*[ـ.٫-]\s*[۰-۹0-9]{1,3}[.ـ]?\s+\S/u.test(t)) return { kind: 'heading', level: 2 };
+
   if (isFrontMatterTitle(t)) return { kind: 'heading1', level: 1, freshPage: true };
   if (PRACTICE_PAGE_BREAK_RE.test(t)) return { kind: 'exerciseTitle', level: 2, freshPage: true, practice: true };
   if (practiceSubtitleCandidate(t, context.previousText)) return { kind: 'exerciseSubtitle', level: 3, practiceSubtitle: true };
@@ -415,8 +427,14 @@ function isTocStop(text, nextText, seenChapters) {
   return false;
 }
 
-function tocStyle(kind) {
+function tocStyle(kind, bookId) {
   if (kind === 'tocTitle') return { factor: 1.42, weight: 950 };
+  // Book 5's contents entries use the same type size as ordinary body text.
+  if (Number(bookId) === 5) {
+    if (kind === 'tocPart') return { factor: 1, weight: 850 };
+    if (kind === 'tocChapter') return { factor: 1, weight: 800 };
+    return { factor: 1, weight: 480 };
+  }
   if (kind === 'tocPart') return { factor: 1.12, weight: 850 };
   if (kind === 'tocChapter') return { factor: 1.18, weight: 800 };
   return { factor: .94, weight: 480 };
@@ -550,7 +568,7 @@ export function buildLegacyReaderLayout({ book, bookId, cover = '', width, fontP
 
 
   function tocWrappedLineCount(text, kind) {
-    const style = tocStyle(kind);
+    const style = tocStyle(kind, bookId);
     const indent = kind === 'tocSub' ? Math.max(12, Math.min(24, width * .025)) : 0;
     m.font(m.fontPx * style.factor, style.weight);
     return Math.max(1, wrap(editorialReaderText(text), Math.max(100, m.available - indent), m.ctx).length);
@@ -573,7 +591,7 @@ export function buildLegacyReaderLayout({ book, bookId, cover = '', width, fontP
   function addTocEntry(text, kind, source) {
     const visible = editorialReaderText(text);
     if (!visible) return;
-    const style = tocStyle(kind);
+    const style = tocStyle(kind, bookId);
     const indent = kind === 'tocSub' ? Math.max(12, Math.min(24, width * .025)) : 0;
     m.font(m.fontPx * style.factor, style.weight);
     const wrapped = wrap(visible, Math.max(100, m.available - indent), m.ctx);
@@ -691,11 +709,18 @@ export function buildLegacyReaderLayout({ book, bookId, cover = '', width, fontP
         lastTocKind = '';
       }
       if (tocActive && source < firstChapterSource) {
-        if (isTocStop(text, nextText, tocSeenChapters)) {
+        // The book 5 contents are followed by a standalone introduction heading.
+        // End the contents before that heading so the introduction is laid out as prose.
+        if (Number(bookId) === 5 && /^مقدمه$/u.test(text)) {
           tocActive = false;
           lastTocKind = '';
           if (lines.length) flush();
-        } else if (block?.type !== 'table' && block?.type !== 'separator') {
+        }
+        if (tocActive && isTocStop(text, nextText, tocSeenChapters)) {
+          tocActive = false;
+          lastTocKind = '';
+          if (lines.length) flush();
+        } else if (tocActive && block?.type !== 'table' && block?.type !== 'separator') {
           const kind = tocKind(text);
           if (kind === 'tocChapter') {
             const need = tocChapterNeed(blocks, i);
