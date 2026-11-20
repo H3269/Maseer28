@@ -1,0 +1,270 @@
+{
+  "schema_version": "1.0.0",
+  "content_version": "2026-11-19-path-content-v2",
+  "metadata": {
+    "version": "2026-11-19-path-content-v2",
+    "channelUrl": "https://t.me/Healing_Hypnotherapy_Center",
+    "meditationUrl": "https://t.me/Healing_Hypnotherapy_Center/11",
+    "supportUrl": "https://t.me/Hypnotherapy_admin",
+    "bookSupportUrl": "https://t.me/Hypnotherapy_admin",
+    "stageCount": 28,
+    "problemCount": 34,
+    "scientific_basis": [
+      "پایش خود و ثبت الگوهای رفتاری",
+      "مداخلات رفتاری و شناختی مبتنی بر CBT",
+      "فعال‌سازی رفتاری در مسیرهای مرتبط",
+      "مواجهه تدریجی فقط در مسیرها و موقعیت‌های مناسب و کم‌خطر",
+      "حل مسئله و خودمدیریتی",
+      "مهارت‌های تنظیم هیجان و ارتباط بین‌فردی",
+      "پیشگیری از لغزش و برنامه‌ریزی ادامه مسیر"
+    ],
+    "scope_note": "این مسیر برنامه ساختاریافته خودمشاهده، آموزش مهارت و تمرین رفتاری است و جایگزین تشخیص یا درمان تخصصی نیست.",
+    "libraryBooks": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "topics": [
+    {
+      "topic_id": "T01",
+      "key": "خشم",
+      "name": "خشم",
+      "basePath": "topics/T01.json",
+      "overridePath": "overrides/T01.json"
+    },
+    {
+      "topic_id": "T02",
+      "key": "اضطراب",
+      "name": "اضطراب",
+      "basePath": "topics/T02.json",
+      "overridePath": "overrides/T02.json"
+    },
+    {
+      "topic_id": "T03",
+      "key": "ترس",
+      "name": "ترس",
+      "basePath": "topics/T03.json",
+      "overridePath": "overrides/T03.json"
+    },
+    {
+      "topic_id": "T04",
+      "key": "نفرت",
+      "name": "نفرت",
+      "basePath": "topics/T04.json",
+      "overridePath": "overrides/T04.json"
+    },
+    {
+      "topic_id": "T05",
+      "key": "حسادت",
+      "name": "حسادت",
+      "basePath": "topics/T05.json",
+      "overridePath": "overrides/T05.json"
+    },
+    {
+      "topic_id": "T06",
+      "key": "غم و سوگ",
+      "name": "غم و سوگ",
+      "basePath": "topics/T06.json",
+      "overridePath": "overrides/T06.json"
+    },
+    {
+      "topic_id": "T07",
+      "key": "احساس گناه",
+      "name": "احساس گناه",
+      "basePath": "topics/T07.json",
+      "overridePath": "overrides/T07.json"
+    },
+    {
+      "topic_id": "T08",
+      "key": "وابستگی عاطفی",
+      "name": "وابستگی عاطفی",
+      "basePath": "topics/T08.json",
+      "overridePath": "overrides/T08.json"
+    },
+    {
+      "topic_id": "T09",
+      "key": "اهمال‌کاری",
+      "name": "اهمال‌کاری",
+      "basePath": "topics/T09.json",
+      "overridePath": "overrides/T09.json"
+    },
+    {
+      "topic_id": "T10",
+      "key": "بی‌خوابی و مشکلات خواب",
+      "name": "بی‌خوابی و مشکلات خواب",
+      "basePath": "topics/T10.json",
+      "overridePath": "overrides/T10.json"
+    },
+    {
+      "topic_id": "T11",
+      "key": "عادت‌های تکراری",
+      "name": "عادت‌های تکراری",
+      "basePath": "topics/T11.json",
+      "overridePath": "overrides/T11.json"
+    },
+    {
+      "topic_id": "T12",
+      "key": "مرزبندی و نه گفتن",
+      "name": "مرزبندی و نه گفتن",
+      "basePath": "topics/T12.json",
+      "overridePath": "overrides/T12.json"
+    },
+    {
+      "topic_id": "T13",
+      "key": "تنهایی",
+      "name": "تنهایی",
+      "basePath": "topics/T13.json",
+      "overridePath": "overrides/T13.json"
+    },
+    {
+      "topic_id": "T14",
+      "key": "کمبود انگیزه",
+      "name": "کمبود انگیزه",
+      "basePath": "topics/T14.json",
+      "overridePath": "overrides/T14.json"
+    },
+    {
+      "topic_id": "T15",
+      "key": "اعتمادبه‌نفس پایین",
+      "name": "اعتمادبه‌نفس پایین",
+      "basePath": "topics/T15.json",
+      "overridePath": "overrides/T15.json"
+    },
+    {
+      "topic_id": "T16",
+      "key": "افکار منفی و نشخوار فکری",
+      "name": "افکار منفی و نشخوار فکری",
+      "basePath": "topics/T16.json",
+      "overridePath": "overrides/T16.json"
+    },
+    {
+      "topic_id": "T17",
+      "key": "مشکلات رابطه",
+      "name": "مشکلات رابطه",
+      "basePath": "topics/T17.json",
+      "overridePath": "overrides/T17.json"
+    },
+    {
+      "topic_id": "T18",
+      "key": "نفرت از خود",
+      "name": "نفرت از خود",
+      "basePath": "topics/T18.json",
+      "overridePath": "overrides/T18.json"
+    },
+    {
+      "topic_id": "T19",
+      "key": "خودسرزنشی",
+      "name": "خودسرزنشی",
+      "basePath": "topics/T19.json",
+      "overridePath": "overrides/T19.json"
+    },
+    {
+      "topic_id": "T20",
+      "key": "کمال‌گرایی",
+      "name": "کمال‌گرایی",
+      "basePath": "topics/T20.json",
+      "overridePath": "overrides/T20.json"
+    },
+    {
+      "topic_id": "T21",
+      "key": "اجتناب",
+      "name": "اجتناب",
+      "basePath": "topics/T21.json",
+      "overridePath": "overrides/T21.json"
+    },
+    {
+      "topic_id": "T22",
+      "key": "استرس",
+      "name": "استرس",
+      "basePath": "topics/T22.json",
+      "overridePath": "overrides/T22.json"
+    },
+    {
+      "topic_id": "T23",
+      "key": "احساس بی‌ارزشی",
+      "name": "احساس بی‌ارزشی",
+      "basePath": "topics/T23.json",
+      "overridePath": "overrides/T23.json"
+    },
+    {
+      "topic_id": "T24",
+      "key": "مشکل در کنترل هیجان",
+      "name": "مشکل در کنترل هیجان",
+      "basePath": "topics/T24.json",
+      "overridePath": "overrides/T24.json"
+    },
+    {
+      "topic_id": "T25",
+      "key": "رنجش و کینه",
+      "name": "رنجش و کینه",
+      "basePath": "topics/T25.json",
+      "overridePath": "overrides/T25.json"
+    },
+    {
+      "topic_id": "T26",
+      "key": "شرم",
+      "name": "شرم",
+      "basePath": "topics/T26.json",
+      "overridePath": "overrides/T26.json"
+    },
+    {
+      "topic_id": "T27",
+      "key": "ترس از قضاوت",
+      "name": "ترس از قضاوت",
+      "basePath": "topics/T27.json",
+      "overridePath": "overrides/T27.json"
+    },
+    {
+      "topic_id": "T28",
+      "key": "ترس از شکست",
+      "name": "ترس از شکست",
+      "basePath": "topics/T28.json",
+      "overridePath": "overrides/T28.json"
+    },
+    {
+      "topic_id": "T29",
+      "key": "ترس از طرد شدن",
+      "name": "ترس از طرد شدن",
+      "basePath": "topics/T29.json",
+      "overridePath": "overrides/T29.json"
+    },
+    {
+      "topic_id": "T30",
+      "key": "شک و تردید",
+      "name": "شک و تردید",
+      "basePath": "topics/T30.json",
+      "overridePath": "overrides/T30.json"
+    },
+    {
+      "topic_id": "T31",
+      "key": "کنترل‌گری",
+      "name": "کنترل‌گری",
+      "basePath": "topics/T31.json",
+      "overridePath": "overrides/T31.json"
+    },
+    {
+      "topic_id": "T32",
+      "key": "بی‌انگیزگی",
+      "name": "بی‌انگیزگی",
+      "basePath": "topics/T32.json",
+      "overridePath": "overrides/T32.json"
+    },
+    {
+      "topic_id": "T33",
+      "key": "خودانتقادی",
+      "name": "خودانتقادی",
+      "basePath": "topics/T33.json",
+      "overridePath": "overrides/T33.json"
+    },
+    {
+      "topic_id": "T34",
+      "key": "مشکل دیگر",
+      "name": "مشکل دیگر",
+      "basePath": "topics/T34.json",
+      "overridePath": "overrides/T34.json"
+    }
+  ]
+}
