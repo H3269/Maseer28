@@ -1,6 +1,6 @@
 {
-  "version": "1.2.14",
-  "publishedAt": "2026-11-26T09:40:48.114Z",
+  "version": "1.2.15",
+  "publishedAt": "2026-11-26T10:17:02.888Z",
   "channel": "production",
-  "sourceCommit": "9f663b74b3df5e9e4e7b36d79423214485e75665"
+  "sourceCommit": "ce28f23cecc9fbb672fd294f24029dee74b208dc"
 }
